@@ -1,0 +1,605 @@
+{
+  "survey_scrape_info": {
+    "download_date": "22/03/2017",
+    "scrape_date": "18/05/2017",
+    "file_name": "ex_sel007-ft0003.pdf",
+    "folder_name": "007 - Low Carbon Survey Questionnaire Examples 201612"
+  },
+  "segment": [
+    {
+      "segment_type": "survey",
+      "text": "Low Carbon and Renewable Energy Economy Survey",
+      "context": "If actual figures are not available, please provide informed estimates. Once complete, the questionnaire can be returned by post or fax using the details in the box below.",
+      "survey_number": "007",
+      "form_type": "0003",
+      "reporting_period": {
+        "start": "01/01/2016",
+        "end": "31/12/2016"
+      },
+      "segment": [
+        {
+          "ID": "Section A",
+          "text": "Section A - Reporting period",
+          "question": [
+            {
+              "ID": "1a",
+              "tracking_code": "10",
+              "text": "Are you able to report for the calendar year ending December 2016?",
+              "type": "boolean",
+              "routing": [
+                {
+                  "value": "Yes",
+                  "destination": "201"
+                },
+                {
+                  "value": "No",
+                  "destination": "11"
+                }
+              ]
+            }
+          ],
+          "segment": {
+            "text": "What are the dates of the 12 month period that you will be reporting for?",
+            "context": "Your return should relate to a business year that ends between 6 April 2016 and 5 April 2017",
+            "type": "dmy_date",
+            "question": [
+              {
+                "text": "From:",
+                "tracking_code": "11"
+              },
+              {
+                "text": "To:",
+                "tracking_code": "12"
+              }
+            ]
+          }
+        },
+        {
+          "ID": "Section B",
+          "text": "Section B - Low carbon and renewable energy sectors",
+          "context": "Please answer the questions referring to the business named on the front of this questionnaire. If this business is part of a wider business group structure, please exclude other members of the group.",
+          "segment": [
+            {
+              "ID": "2",
+              "text": "Did the business named on the front of this questionnaire operate in any of the below sectors in the reporting period given in Section A?",
+              "context": "Please read question 3 before selecting the sector to identify if the sector is relevant ie if you had any turnover, imports, exports, employment or expenditure on capital assets within the sector.",
+              "question": [
+                {
+                  "ID": "Offshore wind",
+                  "text": "Offshore wind (CODE - 01)",
+                  "context": "The production of electricity from Offshore wind renewable sources and/or the design, and/or production, and/or installation of infrastructure for this purpose. Including operations and maintenance.",
+                  "tracking_code": "201",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Onshore wind",
+                  "text": "Onshore wind (CODE - 02)",
+                  "context": "The production of electricity from Onshore wind renewable sources and/or the design, and/or production, and/or installation of infrastructure for this purpose. Including operations and maintenance.",
+                  "tracking_code": "202",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Solar photovoltaic",
+                  "text": "Solar photovoltaic (CODE - 03)",
+                  "context": "The production of electricity from Solar renewable sources and/or the design, and/or production, and/or installation of infrastructure for this purpose. Including operations and maintenance.",
+                  "tracking_code": "203",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Hydropower",
+                  "text": "Hydropower (CODE - 04)",
+                  "context": "The production of electricity from Hydropower renewable sources and/or the design, and/or production, and/or installation of infrastructure for this purpose. Including operations and maintenance.",
+                  "tracking_code": "204",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Other renewable electricity",
+                  "text": "Other renewable electricity (CODE - 05)",
+                  "context": "The production of electricity from wave and/or tidal and/or geothermal renewable sources and/or the design, and/or production, and/or installation of infrastructure for this purpose. Including operations and maintenance.",
+                  "tracking_code": "205",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Bioenergy",
+                  "text": "Bioenergy (CODE - 06)",
+                  "context": "The production of energy from renewable bioenergy sources and/or the design, and/or production, and/or installation of infrastructure for this purpose. Including operations and maintenance. Bioenergy is liquid biofuels, solid biomass and biogas eg biomethane, vegetable oil, peanut oil and energy crops. This sector includes gasification and anaerobic digestion.",
+                  "tracking_code": "206",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Alternative fuels",
+                  "text": "Alternative fuels (CODE - 07)",
+                  "context": "The production of fuels for low carbon and renewable energy use and/or the design, and/or production, and/or installation of infrastructure for this purpose which is not classed as bioenergy. Including Hydrogen. Excluding compressed natural gas and LPG.",
+                  "tracking_code": "207",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Renewable heat",
+                  "text": "Renewable heat (CODE - 08)",
+                  "context": "The design, and/or production, and/or installation of infrastructure for generating heat directly through solar thermal, geothermal or other means. Including operations and maintenance. Including Ground source and Air source heat pumps. Excluding generating electricity which is then used to generate heat.",
+                  "tracking_code": "208",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Renewable combined heat and power",
+                  "text": "Renewable combined heat and power (CODE - 09)",
+                  "context": "The design, and/or production, and/or installation of infrastructure for generating heat directly through solar, thermal, geothermal or other means where the renewable sources both generate direct heat and electricity. Including operations and maintenance.",
+                  "tracking_code": "209",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Energy efficient lighting",
+                  "text": "Energy efficient lighting (CODE - 10)",
+                  "context": "The design, and/or manufacture and/or installation of energy efficient bulbs, tubes, fittings etc designed for the purpose of using less energy to produce the same or greater amount of light.",
+                  "tracking_code": "210",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Energy efficient products",
+                  "text": "Energy efficient products (CODE - 11)",
+                  "context": "The design, and/or manufacture and/or installation of energy efficient products.",
+                  "tracking_code": "211",
+                  "type": "boolean_2",
+                  "include":[
+                    "Energy efficient doors and windows",
+                    "Heating and ventilation such as condensing boilers, ventilation and heating recovery,",
+                    "Insulation such as loft, external wall, roof insulation",
+                    "Reducing energy consumption for heat or air conditioning by minimising “leakage” of heat",
+                    "Energy efficient building materials or technologies",
+                    "Sustainable buildings and architecture",
+                    "Either materials with greater insulation properties or durability properties or those requiring significantly less carbon emission in their manufacture or recycling waste materials in their manufacture"
+                  ],
+                  "exclude":[
+                    "'Smart' goods such as TV's and freezers."
+                  ]
+                },
+                {
+                  "ID": "Energy monitoring, saving or control systems",
+                  "text": "Energy monitoring, saving or control systems (CODE - 12)",
+                  "context": "The design, and/or manufacture and/or installation of systems that reduce energy consumption through effective heat or energy management. Include equipment and related systems for doing this.",
+                  "tracking_code": "212",
+                  "type": "boolean_2",
+                  "include":[
+                    "Smart heating controls",
+                    "Condensation control",
+                    "Control system components",
+                    "Energy management systems",
+                    "Energy management software"
+                  ]
+                },
+                {
+                  "ID": "Low carbon consultancy financial and advisory services",
+                  "text": "Low carbon consultancy financial and advisory services (CODE - 13)",
+                  "context": "Expert advice and education on: reducing carbon consumption, engaging in low carbon industrial activities, carbon credits and funding systems for low carbon activities and services.",
+                  "tracking_code": "213",
+                  "type": "boolean_2",
+                  "include":[
+                    "environmental energy consultants, accountancy and legal advice."
+                  ]
+                },
+                {
+                  "ID": "Low emission vehicles and infrastructure",
+                  "text": "Low emission vehicles and infrastructure (CODE - 14)",
+                  "context": "Design and manufacture of vehicles with specific technology to significantly reduce or remove emissions.",
+                  "tracking_code": "214",
+                  "type": "boolean_2",
+                  "include":[
+                    "installation of infrastructure to support these vehicles.",
+                    "hybrid vehicles, electric vehicles, fuel cell vehicles or other technologies."
+                  ],
+                  "exclude":[
+                    "small efficiency improvements such as lighter bodywork or aerodynamics."
+                  ]
+                },
+                {
+                  "ID": "Carbon capture and storage",
+                  "text": "Carbon capture and storage (CODE - 15)",
+                  "context": "Capturing waste CO2 at point of emission and depositing it where it will not enter the atmosphere. Activity of doing this and/or the design, and/or manufacture and/or installation of infrastructure for this purpose.",
+                  "tracking_code": "215",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "Nuclear power",
+                  "text": "Nuclear power (CODE - 16)",
+                  "context": "The production of electricity from nuclear power and/or the design, and/or production, and/or installation of infrastructure for this purpose.",
+                  "tracking_code": "216",
+                  "type": "boolean_2",
+                  "include":[
+                    "operations and maintenance."
+                  ],
+                  "exclude":[
+                    "decommissioning."
+                  ]
+                },
+                {
+                  "ID": "Fuel cells and energy storage systems",
+                  "text": "Fuel cells and energy storage systems (CODE - 17)",
+                  "context": "The design, and/or manufacture and/or installation of energy storage systems, flywheel energy storage, fuel cells, batteries and any other form of energy storage system.",
+                  "tracking_code": "217",
+                  "type": "boolean_2"
+                },
+                {
+                  "ID": "None of the above",
+                  "text": "None of the above",
+                  "tracking_code": "218",
+                  "type": "boolean_2",
+                  "routing":[
+                    {"value":"YES",
+                    "destination":"60"}
+                  ],
+				  "validation":"if any tracking_code 201:217 YES, 218 is NULL"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ID": "Section C",
+          "text":"Section C - Turnover, imports, exports, employment and capital assets",
+          "context":"You have now selected the sectors that the business operates in. Please complete section C for each sector separately. Please enter the code and sector description (from Section B) at the top of each question 3 for all sectors that apply.",
+          "segment":[
+            {
+              "ID":"3",
+              "text":"Please provide the amounts in the below sectors for the reporting period given.",
+              "context":"Enter code and description for the relevant sector",
+              "segment":[
+                {
+                  "question":
+                  [
+                {"ID":"Code",
+                  "text":"Code",
+                  "tracking_code":"30",
+                  "type":"single_select",
+                  "options":[
+                      "01",
+                      "02",
+                      "03",
+                      "04",
+                      "05",
+                      "06",
+                      "07",
+                      "08",
+                      "09",
+                      "10",
+                      "11",
+                      "12",
+                      "13",
+                      "14",
+                      "15",
+                      "16",
+                      "17"
+                      ]},
+                    {
+                      "ID":"Sector Description",
+                      "text":"Sector Description",
+                      "tracking_code":"c_1",
+                      "type":"open_text"
+                    }
+                  ]
+                },
+
+
+
+                {"segment": [
+                  {
+                    "ID":"a",
+                    "text":"turnover",
+                    "context":"Turnover consists of total takings or invoiced sales and receipts of the business in connection with the sale of goods and services. Figures should be given gross of indirect taxes, duties and levies (except VAT) invoiced to the customer",
+                    "include":[
+                      "Feed-in Tariffs"
+                    ],
+                    "exclude":[
+                      "Grants from any source",
+                      "Subsidies from UK public authorities (Renewable Obligation Certificates, Renewable Heat Incentives and Levy Exemption Certificates) and the European Union (EU)"
+                    ],
+                    "question":[
+                      {"text":"Mark 'X' for nil returns",
+                       "tracking_code":"31",
+                        "type":"boolean_2"
+                      },
+                      {
+                        "tracking_code":"32",
+                        "type":"pound_thousands"
+                      }
+                    ]
+                  },
+                  {
+                  "ID":"b",
+                  "text":"imports",
+                  "context":"Expenditure on import of goods/services from individuals, enterprises or other organisations based outside of the UK.",
+                  "exclude":[
+                    "the import of gas/electricity."
+                  ],
+                  "question":[
+                    {"text":"Mark 'X' for nil returns",
+                      "tracking_code":"35",
+                      "type":"boolean_2"
+                    },
+                    {
+                      "tracking_code":"36",
+                      "type":"pound_thousands"
+                    }
+                  ]
+                },
+                  {
+                    "ID":"c",
+                    "text":"exports",
+                    "context":"Income from the export of goods/services to individuals, enterprises or other organisations based outside of the UK.",
+                    "exclude":[
+                      "the export of gas/electricity."
+                    ],
+                    "question":[
+                      {"text":"Mark 'X' for nil returns",
+                        "tracking_code":"37",
+                        "type":"boolean_2"
+                      },
+                      {
+                        "tracking_code":"38",
+                        "type":"pound_thousands"
+                      }
+                    ]
+                  },
+                  {
+                    "ID":"d",
+                    "text":"employment",
+                    "segment":{
+                      "text":"During the 12 month reporting period, how many full time equivalents (FTEs) were working in this sector?",
+                      "context":[
+                        "An employee is anyone aged 16 years or over that your business pays from its payroll(s), in return for carrying out a full-time or part-time job or being on a training scheme.",
+                        "One FTE may be thought of as one person-year. "],
+                      "include":[
+                      "all employees paid directly from this business's payroll(s)."
+                    ],
+                      "question":[
+                        {
+                          "tracking_code":"39",
+                          "text":"Mark 'X' for nil returns",
+                          "type":"boolean_2"
+                      },
+                        {
+                          "tracking_code":"40",
+                          "type":"FTE"
+                        }
+                    ]}
+                  },
+                  {
+                    "ID":"e",
+                    "text":"capital assets",
+                    "context":"Provide the total value of acquisitions, and proceeds from the disposal of capital assets within the UK that are used repeatedly to facilitate production, or provide services, for more than one year. This is for capital assets within the low carbon and renewable energy sector only.",
+                    "note_id":"Detailed Guidance",
+					"exclude":[
+                      "Current repair and maintenance costs",
+                      "Structures that are used primarily as residences (dwellings)",
+                      "Utilities such as gas, electricity and water",
+                      "Research and development",
+                      "Costs of ongoing management of computer software and databases",
+                      "Works of art eg paintings and sculptures, even if acquired or disposed of by dealers,galleries or museums"
+                    ],
+                    "include":[
+                      "all assets of any value, even if this is below your Asset Register threshold.",
+                      "Land and land improvements or preparation, for own use",
+                      "Other natural resources and non-produced assets eg subsoil assets, crude oil, coal and water abstraction",
+                      "Non-produced assets eg goodwill, patents, licences, concessions, contracts, trade dress, mastheads, domain names, collective and certification marks",
+                      "Existing buildings and structures, for own use or where you are responsible for maintenance",
+                      "Major refurbishment, new build and construction work, for own use",
+                      "Construction of structures such as oil wells, platforms, mines, pipes, power lines, transport infrastructure, wind farms, turbines and steel frameworks",
+                      "Delivery, installation and decommissioning costs",
+                      "Transport assets and equipment eg new and used vehicles, special purpose vehicles, trailers, ships, boats, aircraft and railway rolling stock, motorcycles, bicycles, invalid carriages, parts, accessories and major repairs",
+                      "Computers and hardware devices eg printers, servers, monitors, keyboards and terminals",
+                      "Computer software programs and databases",
+                      "Telecommunication equipment eg phones, fax machines, switchboards, transmitters, CCTV equipment, TV cameras, burglar or fire alarms",
+                      "Electrical equipment and electronic appliances",
+                      "Furniture and office equipment",
+                      "Small tools",
+                      "General and special purpose equipment",
+                      "Fabricated products eg textile, leather, plastic and metal products",
+                      "Intellectual property assets eg recordings, films and performances, manuscripts and publications, plans, instructions and designs",
+                      "Transfer costs, professional charges, contracts and fees eg surveyors' fees, stamp duty, taxes and legal costs."
+                    ],
+                    "segment":[
+                      {"text":"For this reporting period, what was the total value of:",
+                        "segment":[
+                          {"ID":"i.",
+                            "text":"acquisitions of capital assets?",
+                            "question":[
+                              {
+                                "tracking_code":"41",
+                                "text":"Mark 'X' for nil returns",
+                                "type":"boolean_2"
+                              },
+                              {
+                                "tracking_code":"42",
+                                "type":"pound_thousands"
+                              }
+                            ]
+                          },
+                          {"ID":"ii.",
+                            "text":"proceeds from disposals of capital assets?",
+                            "question":[
+                              {
+                                "tracking_code":"43",
+                                "text":"Mark 'X' for nil returns",
+                                "type":"boolean_2"
+                              },
+                              {
+                                "tracking_code":"44",
+                                "type":"pound_thousands"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "ID":"f",
+                    "text":"regional breakdown",
+                    "context":"For ALL the activities undertaken in this sector, please estimate what percentage of the activities took place in England, Scotland, Wales or Northern Ireland.",
+                    "question":[
+                          {"ID":"England",
+                            "text":"England",
+                            "tracking_code":"50",
+                            "type":"percentage",
+							"validation":[
+							"= 100% - (51 + 52 + 53)",
+							"Must be >= 0 & <= 100"]
+                              },
+                          {"ID":"Scotland",
+                        "text":"Scotland",
+                        "tracking_code":"51",
+                        "type":"percentage",
+						"validation":[
+							"= 100% - (50 + 52 + 53)",
+							"Must be >= 0 & <= 100"]
+                          },
+                          {"ID":"Wales",
+                        "text":"Wales",
+                        "tracking_code":"52",
+                        "type":"percentage",
+						"validation":[
+							"= 100% - (50 + 51 + 53)",
+							"Must be >= 0 & <= 100"]
+                      },
+                          {"ID":"Northern Ireland",
+                        "text":"Northern Ireland",
+                        "tracking_code":"53",
+                        "type":"percentage",
+						"validation":[
+							"= 100% - (50 + 51 + 52)",
+							"Must be >= 0 & <= 100"]
+                      }
+                            ]
+                          }
+                        ]
+                  }
+              ]
+            }
+          ]
+        },
+        {
+          "ID": "Section D",
+        "text":"Section D - Feedback and Contact Details",
+        "segment":[
+          {"question":{
+            "ID":"4",
+            "text":"Please use the space below to provide additional information about the information that you have supplied and any comments on the questionnaire.",
+            "include":[
+              "Explanation of information provided",
+              "Ease of providing requested information",
+              "Suggestions of improvements to questionnaire (instructions, terminology, layout)"            ],
+            "type":"open_text",
+            "tracking_code":"60"
+          }},
+          {
+            "ID":"5",
+            "text":"How long has it taken you to complete this questionnaire?",
+            "context":"This question is voluntary",
+            "question":[
+              {
+                "tracking_code":"70",
+                "type":"hours"
+              },
+              {
+                "tracking_code":"71",
+                "type":"minutes"
+              }
+            ]
+          },
+          {"question":{
+            "ID":"6",
+            "text":"Contact information",
+            "context":"Please write the details of the person we should contact if we have any queries regarding the information returned on this questionnaire.",
+            "type":"contact_2",
+            "tracking_code":"c_2"
+          }}
+        ]
+        }
+      ]
+    }
+  ],
+  "notes":{
+    "note_id":"Detailed guidance",
+    "text":"Detailed guidance to help complete Section C question 3e",
+    "context":[
+      "This survey collects expenditure on the acquisition and proceeds from the disposal of capital assets that are used repeatedly to facilitate production, or provide services, for more than one year.",
+      "Note: information requested may not always be found on a register of capital assets, and should include all assets of any value, even if this is below your Asset Register threshold."
+      ],
+    "segment":[
+      {"ID":"Capital assets",
+       "includes":[
+         "Assets within the UK.",
+         "Assets that are used repeatedly to facilitate production, or provision of services, for more than one year.",
+         "The purchase costs and disposal proceeds of fixed assets, together with any other amounts treated as capital items for taxation purposes.",
+         "The total capital value of assets that have been bought on hire purchase in the period covered by the survey."
+       ],
+        "excludes":[
+          "Assets outside the UK.",
+          "Assets acquired in taking over an existing business or sold as part of a going concern.",
+          "Assets of a capital nature acquired for re-sale rather than for use within business eg stocks of vehicles held by motor traders.",
+          "Assets like TV adverts or copyrights.",
+          "Software licences of up to a year."
+        ]
+      },
+      {"ID":"Assets transfers and leasing",
+        "includes":[
+        "Assets acquired under finance lease ie you (the lessee) are responsible for repairs and maintenance.",
+          "Assets owned by the business but leased to another business under an operating lease ie you (lessor) are responsible for repairs and maintenance.",
+          "Any trade or transfer costs invoiced to you separately."
+        ],
+        "excludes":[
+          "Assets leased to another business transfers under finance lease ie repair and and leasing maintenance are carried out by the other business (lessee).",
+          "Assets acquired under an operating lease ie responsibility for repair and maintenance is borne by the owner (lessor) of the asset.",
+          "Asset transfers between companies owned by the same enterprise (except where the asset value is considered to be a 'new' acquisition or disposal within the company accounts)."
+        ]
+      },
+      {"ID":"Interest and instalment payments",
+        "excludes":[
+          "Interest and instalment payments instalment under finance leasing arrangements."
+        ]
+      },
+      {"ID":"Expenditure",
+        "includes":[
+          "Non-deductible VAT.",
+          "Expenditure on replacing assets destroyed in circumstances (eg fire) which have given rise to a successful insurance claim.",
+          "Expenditure on assets acquired for hiring, renting and other leasing purposes, but not finance leasing.",
+          "Capital expenditure at any site belonging to the business where operations have not yet begun."
+        ],
+        "excludes":[
+          "Deductible VAT.",
+          "Capital expenditure on assets for use outside the UK (except ships and aircraft)."
+        ]
+      },
+      {"ID":"Depreciation",
+        "excludes":[
+          "Allowances for depreciation."
+        ]
+      },
+      {"ID":"Receipts",
+        "includes":[
+          "Grants and allowances from government sources, statutory bodies or local authorities that have been used to acquire or create assets used in production.",
+          "Finance relating to Public Private Partnership / Private Finance Initiative that has been used to acquire assets."
+        ],
+        "excludes":[
+          "The proceeds from an insurance claim against the loss of fixed assets."
+        ]
+      },
+      {
+        "ID": "Additions and work in progress",
+        "includes": [
+          "Progress payment or deposits covering long-term contracts acquiring fixed assets."
+        ]
+      },
+      {
+        "ID": "Work carried out by staff",
+      "includes": [
+      "All work of a capital nature carried out by your own staff, including labour costs and the cost of purchases consumed in the work."
+      ]
+      },
+      {"ID": "Services associated with capital assets",
+      "includes":[
+      "Professional charges, installation costs, etc associated with capital assets must be reported with the asset value"
+      ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,926 @@
+{
+  "survey_scrape_info": {
+    "file_name": "ex_sel187-ft0031.pdf",
+    "folder_name": "187 - Questionnaire Examples 2016",
+    "download_date": "22/03/2017",
+    "scrape_date": "24/05/2017"
+  },
+  "segment": {
+    "segment_type": "survey",
+    "text": "E-commerce Survey 2016",
+    "survey_number": "187",
+    "form_type": "0031",
+    "reporting_period": {
+      "start": "01/01/2016",
+      "finish": "31/12/2016"
+    },
+    "notes": "If actual figures are not available, please provide informed estimates",
+    "inclusions":[
+      "England",
+      "Scotland",
+      "Wales",
+      "Northern Ireland"
+    ],
+    "exclusions":[
+      "Channel Islands",
+      "Isle of Man"
+    ],
+    "segment":[
+      {
+        "ID": "Section A",
+        "text": "Section A - Use of Computers",
+        "question":[
+          {
+            "ID": "1",
+            "text": "Does this business use computers?",
+            "inclusions": "personal computers, portable computers such as laptops, notebooks, netbooks, tablets and other portable devices such as smartphones and Personal Digital Assistants (PDAs)",
+            "exclusions": "terminals and computers solely used for Electronic Point of Sale (EPOS) and computer controlled machinery",
+            "type": "boolean",
+            "routing": [
+              {
+                "value": "Yes",
+                "destination": "023"
+              },
+              {
+                "value": "No",
+                "destination": "442"
+              }
+            ],
+            "tracking_code": "010"
+          },
+          {
+            "ID": "2",
+            "text": "What percentage of people in this business use computers, as defined in question 1, for their work?",
+            "inclusions": [
+              "employees, directors and proprietors",
+              "all agency staff on your payroll"
+            ],
+            "exclusions": "agency staff not on your payroll",
+            "context": "Please provide percentages to 1 decimal place where possible",
+            "type": "percentage_dec",
+            "tracking_code": "023"
+          }
+        ]
+      },
+      {
+        "ID": "Section B",
+        "text": "Section B - ICT Specialists and Skills",
+        "question":{
+            "ID": "3",
+            "text": "Does this business employ ICT/IT specialists?",
+            "context": "ICT/IT is the employees' main function. ICT/IT specialist skills involve developing, operating or maintaining ICT/IT systems or applications.",
+            "inclusions": "all agency staff on your payroll",
+            "exclusions": "agency staff not on your payroll",
+            "type": "boolean",
+            "tracking_code": "154"
+          },
+        "segment":{
+          "ID": "4",
+          "text": "During 2016, did this business provide any type of training to develop ICT/IT related skills of its employees?",
+          "question":[
+            {
+              "text": "Training for ICT/IT specialists",
+              "context": "If this business did not employ ICT/IT specialists please X 'No'",
+              "type": "boolean",
+              "tracking_code": "165"
+            },
+            {
+              "text": "Training for other employees",
+              "type": "boolean",
+              "tracking_code": "316"
+            }
+          ]
+        }
+      },
+      {
+        "ID": "Section B",
+        "text": "Section B - ICT Specialists and Skills",
+        "question":[
+          {
+            "ID": "5",
+            "text": "During 2016, did this business recruit or try to recruit ICT/IT specialists?",
+            "type": "boolean",
+            "routing": [
+              {
+                "value": "Yes",
+                "destination": "156"
+              },
+              {
+                "value": "No",
+                "destination": "038"
+              }
+            ],
+            "tracking_code": "155"
+          },
+          {
+            "ID": "6",
+            "text": "During 2016, did this business have vacancies for ICT/IT specialists that were difficult to fill?",
+            "type": "boolean",
+            "tracking_code": "156"
+          }
+        ]
+      },
+      {
+        "ID": "Section C",
+        "text": "Section C - Access and Use of the Internet",
+        "question": [
+          {
+            "ID": "7",
+            "text": "Does this business have internet access?",
+            "type": "boolean",
+            "routing": [
+              {
+                "value": "Yes",
+                "destination": "022"
+              },
+              {
+                "value": "No",
+                "destination": "190"
+              }
+            ],
+            "tracking_code": "038"
+          },
+          {
+            "ID": "8",
+            "text": "What percentage of people in this business use computers with internet access for their work?",
+            "inclusions": [
+              "employees, directors and proprietors",
+              "all agency staff on your payroll",
+              "personal computers, portable computers such as laptops, notebooks, netbooks, tablets and other portable devices such as smartphones and Personal Digital Assistants (PDAs)"
+            ],
+            "exclusions": [
+              "agency staff not on your payroll",
+              "access limited to external email only",
+              "terminals and computers solely used for Electronic Point of Sale (EPOS) and computer controlled machinery"
+            ],
+            "context": "Please provide percentages to 1 decimal place where possible",
+            "type": "percentage_dec",
+            "tracking_code": "022"
+          }
+        ],
+        "segment": {
+          "text": "Use of a Fixed Broadband Connection to the Internet for Business Purposes",
+          "question": {
+            "ID": "9",
+            "text": "Does this business use a fixed broadband connection to the internet, for example DSL, (ADSL, SDSL, VDSL), fibre optic technology (FTTP), cable technology?",
+            "type": "boolean",
+            "routing": [
+              {
+                "value": "Yes",
+                "destination": "277"
+              },
+              {
+                "value": "No",
+                "destination": "413"
+              }
+            ],
+            "tracking_code": "356"
+          },
+          "segment": {
+            "ID": "10",
+            "text": "What is the maximum contracted download speed of the fastest fixed internet connection of this business?",
+            "question": [
+              {
+                "text": "Less than 2Mbps",
+                "type": "boolean",
+                "tracking_code": "277",
+                "validation": "IF VALUE = 'YES' THEN 278 AND 279 AND 280 AND 281 = 'NO'"
+              },
+              {
+                "text": "2Mbps or more, but less than 10Mbps",
+                "type": "boolean",
+                "tracking_code": "278",
+                "validation": "IF VALUE = 'YES' THEN 277 AND 279 AND 280 AND 281 = 'NO'"
+              },
+              {
+                "text": "10Mbps or more, but less than 30Mbps",
+                "type": "boolean",
+                "tracking_code": "279",
+                "validation": "IF VALUE = 'YES' THEN 277 AND 278 AND 280 AND 281 = 'NO'"
+              },
+              {
+                "text": "30Mbps or more, but less than 100Mbps",
+                "type": "boolean",
+                "tracking_code": "280",
+                "validation": "IF VALUE = 'YES' THEN 277 AND 278 AND 279 AND 281 = 'NO'"
+              },
+              {
+                "text": "100Mbps or more",
+                "type": "boolean",
+                "tracking_code": "281",
+                "validation": "IF VALUE = 'YES' THEN 277 AND 278 AND 279 AND 280 = 'NO'"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "ID": "Section C",
+        "text": "Section C - Access and Use of the Internet",
+        "question":{
+          "ID": "11",
+          "text": "Is the speed of your fixed connection(s) to the internet usually sufficient for the business' actual needs?",
+          "type": "boolean",
+          "tracking_code": "452"
+        },
+        "segment":[
+          {
+            "text": "Use of a Fixed Broadband Connection to the Internet for Business Purposes",
+            "context": "A mobile connection to the internet means the use of portable devices connecting to the internet through mobile telephone networks for business purposes. Businesses provide portable devices and pay for all, or at least up to a limit, the subscription and the usage costs.",
+            "question":[
+              {
+                "ID": "12",
+                "text": "Does this business use a mobile broadband connection to the internet via a portable device using mobile telephone networks (3G, 4G or higher)?",
+                "inclusions": "via portable computers or other portable devices such as smartphones",
+                "type": "boolean",
+                "tracking_code": "413"
+              },
+              {
+                "ID": "13",
+                "text": "Does this business provide the persons employed with portable devices that allow a mobile telephone network connection to the internet for business purposes?",
+                "inclusions": "portable computers or other portable devices such as smartphones",
+                "type": "boolean",
+                "routing":[
+                  {
+                    "value": "Yes",
+                    "destination": "320"
+                  },
+                  {
+                    "value": "No",
+                    "destination": "080"
+                  }
+                ],
+                "tracking_code": "453"
+              },
+              {
+                "ID": "14",
+                "text": "What percentage of people in this business use portable devices provided by this business that allow a mobile telephone network connection to the internet for business purposes?",
+                "context": "Please provide percentages to 1 decimal place where possible",
+                "type": "percentage_dec",
+                "tracking_code": "320"
+              }
+            ]
+          },
+          {
+            "text": "Use of a Website",
+            "question":[
+              {
+                "ID": "15",
+                "text": "Does this business have a website, either its own or third party?",
+                "exclusions": "any online directory listings",
+                "type": "boolean",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "203"
+                  },
+                  {
+                    "value": "No",
+                    "destination": "454"
+                  }
+                ],
+                "tracking_code": "080"
+              }
+            ],
+            "segment":[
+              {
+                "ID": "16",
+                "text": "Does this business' website have any of the following?",
+                "question":[
+                  {
+                    "text": "Online ordering or reservation/booking, for example using a shopping cart",
+                    "type": "boolean",
+                    "tracking_code": "203"
+                  },
+                  {
+                    "text": "Description of goods or services, price lists",
+                    "type": "boolean",
+                    "tracking_code": "147"
+                  },
+                  {
+                    "text": "Order tracking",
+                    "type": "boolean",
+                    "tracking_code": "332"
+                  },
+                  {
+                    "text": "The possibility for visitors to customise or design the goods or services online",
+                    "type": "boolean",
+                    "tracking_code": "202"
+                  },
+                  {
+                    "text": "Personalised content for regular/repeat visitors",
+                    "type": "boolean",
+                    "tracking_code": "205"
+                  },
+                  {
+                    "text": "Links or references to this business' social media profiles",
+                    "type": "boolean",
+                    "tracking_code": "414"
+                  }
+                ]
+              },
+              {
+                "ID": "17",
+                "text": "During 2016, did this business arrange accommodation from a private individual, for example a room, apartment or house, via any website or 'app' using:",
+                "exclusions": "Office space or parking spaces.",
+                "questions":[
+                  {
+                    "text": "dedicated websites or 'apps', for example AirBnB, SpareRoom, onefinestay, HomeAway?",
+                    "type": "boolean",
+                    "tracking_code": "454"
+                  },
+                  {
+                    "text": "other websites or 'apps'?",
+                    "inclusions": "Social networks, for example Facebook, Twitter etc.",
+                    "type": "boolean",
+                    "tracking_code": "455"
+                  }
+                ]
+              },
+              {
+                "ID": "18",
+                "text": "During 2016, did this business arrange a transport service from a private individual, for example by car, via any website or 'app' using:",
+                "exclusions": "Parking spaces or delivered goods.",
+                "questions":[
+                  {
+                    "text": "dedicated websites or 'apps', for example Uber, Lyft, Liftshare, BlaBlaCar?",
+                    "type": "boolean",
+                    "tracking_code": "456"
+                  },
+                  {
+                    "text": "other websites or 'apps'?",
+                    "inclusions": "Social networks, for example Facebook, Twitter etc.",
+                    "type": "boolean",
+                    "tracking_code": "457"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "text": "Use of Social Media",
+            "context": "For the purpose of this survey, businesses using social media are those that have a user profile, an account or a user license depending on the requirements and the type of social media.",
+            "segment":[
+              {
+                "ID": "19",
+                "text": "Does this business use any of the following social media not solely used for paid adverts?",
+                "question":[
+                  {
+                    "text": "Social networks, for example Facebook, Linkedin, Xing, Viadeo, Yammer etc",
+                    "type": "boolean",
+                    "routing":
+                    [
+                      {
+                        "value":"Yes",
+                        "destination": "341"
+                      },
+                      {
+                        "value":"No",
+                        "destination": "190"
+                      }
+                    ],
+                    "tracking_code": "386"
+                  },
+                  {
+                    "text": "Business blogs or microblogs, for example Twitter, Present.ly etc.",
+                    "type": "boolean",
+                    "routing":
+                    [
+                      {
+                        "value":"Yes",
+                        "destination": "341"
+                      },
+                      {
+                        "value":"No",
+                        "destination": "190"
+                      }
+                    ],
+                    "tracking_code": "387"
+                  },
+                  {
+                    "text": "Multimedia content sharing websites, for example YouTube, Flickr, Picasa, SlideShare etc",
+                    "type": "boolean",
+                    "routing":
+                    [
+                      {
+                        "value":"Yes",
+                        "destination": "341"
+                      },
+                      {
+                        "value":"No",
+                        "destination": "190"
+                      }
+                    ],
+                    "tracking_code": "338"
+                  },
+                  {
+                    "text": "Wiki based knowledge sharing tools",
+                    "type": "boolean",
+                    "routing":
+                    [
+                      {
+                        "value":"Yes",
+                        "destination": "341"
+                      },
+                      {
+                        "value":"No",
+                        "destination": "190"
+                      }
+                    ],
+                    "tracking_code": "389"
+                  }
+                ]
+              },
+              {
+                "ID": "20",
+                "text": "Does this business use any of the above-mentioned social media to:",
+                "question":[
+                  {
+                    "text": "develop the business' image or market product, for example advertising or launching products?",
+                    "type": "boolean",
+                    "tracking_code": "341"
+                  },
+                  {
+                    "text": "obtain or respond to customer opinions, reviews or questions?",
+                    "type": "boolean",
+                    "tracking_code": "342"
+                  },
+                  {
+                    "text": "involve customers in the development or innovation of goods or services?",
+                    "type": "boolean",
+                    "tracking_code": "343"
+                  },
+                  {
+                    "text": "collaborate with business partners or other organisations for example, public authorities or non-government organisations?",
+                    "type": "boolean",
+                    "tracking_code": "344"
+                  },
+                  {
+                    "text": "recruit employees?",
+                    "type": "boolean",
+                    "tracking_code": "345"
+                  },
+                  {
+                    "text": "exchange views, opinions or knowledge within this business?",
+                    "type": "boolean",
+                    "tracking_code": "346"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ID": "Section D",
+        "text": "Section D - Sharing of Information Electronically within the Business",
+        "context":[
+          "ERP (Enterprise Resource Planning) is a software package, used to manage resources by sharing information among different functional areas, for example accounting, planning, production, marketing etc.",
+          "CRM (Customer Relationship Management) refers to any software application for managing information about customers."
+        ],
+        "question":{
+          "ID": "21",
+          "text": "Does this business use an ERP software package?",
+          "type": "boolean",
+          "tracking_code": "190"
+        },
+        "segment":{
+            "ID": "22",
+            "text": "Does this business use CRM software to:",
+            "question":[
+              {
+                "text": "collect, store and make information available about customers to internal business functions?",
+                "type": "boolean",
+                "tracking_code": "191"
+              },
+              {
+                "text": "analyse information about customers for marketing purposes, for example setting prices, sales promotion, choosing distribution channels etc?",
+                "type": "boolean",
+                "tracking_code": "197"
+              }
+            ]
+          }
+      },
+      {
+        "ID": "Section E",
+        "text": "Section E - Sharing Supply Chain Management Information Electronically",
+        "context": "Exchanging all types of information with businesses, either suppliers or customers, about the availability, production, development and distribution of goods and services. This information may be exchanged via websites, networks or other means of electronic data transfer, excluding emails not suitable for automated processing or manually typed.",
+        "question":{
+            "ID": "23",
+            "text": "Does this business share supply chain management information electronically, with other businesses, either suppliers or customers?",
+            "inclusions": "inventory levels, production plans, demand forecasts, delivery progress, planning or progression in the provision of services",
+            "exclusions": "manually typed email",
+            "type": "boolean",
+            "routing": [
+              {
+                "value": "Yes",
+                "destination": "259"
+              },
+              {
+                "value": "No",
+                "destination": "251"
+              }
+            ],
+            "tracking_code": "375"
+          },
+        "segment":{
+          "ID": "24",
+          "text": "How does this business share supply chain management information electronically?",
+          "question":[
+            {
+              "text": "Via websites, (either its own or those of its business partners) or web portals",
+              "type": "boolean",
+              "tracking_code": "259"
+            },
+            {
+              "text": "Via electronic transmission methods that allow the use of automated processing, for example EDI type systems, XML, EDIFACT",
+              "type": "boolean",
+              "tracking_code": "260"
+            }
+          ]
+        }
+
+      },
+      {
+        "ID": "Section F",
+        "text": "Section F - Use of Radio Frequency Identification (RFID) Technologies",
+        "context":[
+          "RFID is an automatic identification method to store and remotely retrieve data using RFID tags or transponders, including the use of Near Field Communication (NFC) connectivity standard.",
+          "An RFID tag is a device that can be applied to, or incorporated into, a product or an object and transmits data via radiowaves. NFC enables communication between devices within a short distance (approximately 10cm or less)"
+        ],
+        "segment":{
+          "ID": "25",
+          "text": "Does this business use Radio Frequency Identification (RFID) for the following purposes:",
+          "question":[
+            {
+              "text": "person identification or access control?",
+              "type": "boolean",
+              "tracking_code": "251"
+            },
+            {
+              "text": "as part of the production and service delivery process, for example monitoring and control of industrial production, supply chain and inventory tracking, service, maintenance or asset management?",
+              "type": "boolean",
+              "tracking_code": "246"
+            },
+            {
+              "text": "product identification, after the production process, for example theft control to prevent counterfeiting, allergen information etc?",
+              "type": "boolean",
+              "tracking_code": "245"
+            }
+
+          ]
+        }
+      },
+      {
+        "ID": "Section G",
+        "text": "Section G - E-Commerce",
+        "context": "E-Commerce is the sale or purchase of goods or services conducted over computer networks by methods specifically designed for the purpose of receiving or placing of orders. The payment and the delivery of the goods or services do not have to be conducted online. E-Commerce transactions exclude orders made by manually typed emails.",
+        "exclusions": "orders made by manually typed emails",
+        "segment":[
+          {
+            "text": "Web Sales",
+            "question":[
+              {
+                "ID": "26",
+                "text": "During 2016, did this business receive any orders from customers for goods or services via a website or 'app'?",
+                "inclusions": "orders received for utilities, goods, materials and services via an online store, web forms on a website or extranet or 'app'",
+                "exclusions":[
+                  "manually typed email, EDI, fax, automated telephone entry, phone (person to person) and conventional fax",
+                  "enquiries that did not result in receiving an order"
+                ],
+                "type": "boolean",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "235"
+                  },
+                  {
+                    "value": "No",
+                    "destination": "257"
+                  }
+                ],
+                "tracking_code": "234"
+              },
+              {
+                "ID": "27",
+                "text": "During 2016, of total turnover, what percentage resulted from orders received via a website or 'app'?",
+                "inclusions": "orders received for utilities, goods, materials and services",
+                "context": "Please provide percentages to 1 decimal place where possible",
+                "type": "percentage_dec",
+                "tracking_code": "235"
+              }
+            ],
+            "segment":[
+              {
+                "ID": "28",
+                "text": "During 2016, of the percentage given in question 27, what percentage was received from:",
+                "validation": "348 + 349 = '100'",
+                "question":[
+                  {
+                    "text": "sales to private customers (B2C)?",
+                    "type": "percentage_dec",
+                    "tracking_code": "348"
+                  },
+                  {
+                    "text": "sales to other businesses (B2B) and sales to public authorities (B2G)?",
+                    "type": "percentage_dec",
+                    "tracking_code": "349"
+                  }
+                ]
+              },
+              {
+                "ID": "29",
+                "text": "During 2016 via which websites or 'apps' did your business receive orders for goods or services?",
+                "routing":[
+                  {
+                    "value": "Yes",
+                    "destination": "460"
+                  },
+                  {
+                    "value": "No",
+                    "destination": "310"
+                  }
+                ],
+                "question":[
+                  {
+                    "text": "via this business's own website or 'app'",
+                    "inclusions": "parent or affiliate businesses, extranets",
+                    "type": "boolean",
+                    "tracking_code": "458"
+                  },
+                  {
+                    "text": "via an e-commerce market place website or 'app' used by several businesses for trading products, for example Booking, eBay, Amazon, Amazon Business, Alibaba, Rakuten, Etsy etc",
+                    "type": "boolean",
+                    "tracking_code": "459"
+                  }
+                ]
+              },
+              {
+                "ID": "30",
+                "text": "During 2016, what was the percentage breakdown of the turnover of orders received via a website or 'app' for the following:",
+                "validation": "460 + 461 = '100'",
+                "question":[
+                  {
+                    "text": "Via this business's own website or 'app'?",
+                    "type": "percentage_dec",
+                    "tracking_code": "460"
+                  },
+                  {
+                    "text": "Via an e-commerce market place website or 'app' used by several businesses for trading products, for example Booking, eBay, Amazon, Amazon Business, Alibaba, Rakuten, Etsy etc?",
+                    "type": "percentage_dec",
+                    "tracking_code": "461"
+                  }
+                ]
+              },
+              {
+                "ID": "31",
+                "text": "During 2016, did this business receive orders for goods or services placed via a website or 'app', by customers in the following geographical areas?",
+                "question": [
+                  {
+                    "text": "UK",
+                    "context": "The UK consists of England, Wales, Scotland and Northern Ireland and excludes the Channel Islands and the Isle of Man.",
+                    "type": "boolean",
+                    "tracking_code": "310"
+                  },
+                  {
+                    "text": "Other EU countries",
+                    "context": "Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden.",
+                    "type": "boolean",
+                    "routing":[
+                      {
+                        "value": "Yes",
+                        "destination": "462"
+                      },
+                      {
+                        "value": "No",
+                        "destination": "257"
+                      }
+                    ],
+                    "tracking_code": "311"
+                  },
+                  {
+                    "text": "Rest of the world",
+                    "type": "boolean",
+                    "tracking_code": "312"
+                  }
+                ]
+              },
+              {
+                "ID": "32",
+                "text": "During 2016, did this business experience any of the following difficulties when selling to other EU countries via a website or 'app'?",
+                "question":[
+                  {
+                    "text": "High costs of delivering or returning products",
+                    "type": "boolean",
+                    "tracking_code": "462"
+                  },
+                  {
+                    "text": "Difficulties relating to resolving complaints and disputes",
+                    "type": "boolean",
+                    "tracking_code": "463"
+                  },
+                  {
+                    "text": "Adapting product labelling for sales",
+                    "type": "boolean",
+                    "tracking_code": "464"
+                  },
+                  {
+                    "text": "Lack of knowledge of foreign languages for communication with customers",
+                    "type": "boolean",
+                    "tracking_code": "465"
+                  },
+                  {
+                    "text": "Restrictions from business partners to sell to certain EU countries",
+                    "type": "boolean",
+                    "tracking_code": "465"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "text": "EDI type Sales",
+            "question":[
+              {
+                "ID": "33",
+                "text": "During 2016, did this business receive any orders from customers for goods or services via EDI type messages (ie electronic transmission methods which allowed their automated processing, for example internet or non-internet EDI, XML, EDIFACT etc)?",
+                "inclusions": "orders received for utilities, goods, materials and services using internet and non-internet EDI and automated telephone entry",
+                "exclusions":[
+                  "manually typed email, orders received over a website or 'app' and other ICTs such as PC based fax, phone (person to person) and conventional fax",
+                  "enquiries that did not result in receiving an order"
+                ],
+                "type": "boolean",
+                "routing":[
+                  {
+                    "value": "Yes",
+                    "destination": "258"
+                  },
+                  {
+                    "value": "No",
+                    "destination": "254"
+                  }
+                ],
+                "tracking_code": "257"
+              },
+              {
+                "ID": "34",
+                "text": "During 2016, of total turnover, what percentage resulted from orders received via EDI type messages?",
+                "inclusions": "orders received for utilities, goods, materials and services",
+                "context": "Please provide percentages to 1 decimal place where possible",
+                "type": "percentage_dec",
+                "tracking_code": "258"
+              }
+            ],
+            "segment":{
+              "ID": "35",
+              "text": "During 2016, did this business receive orders for goods or services placed via EDI type messages by customers in the following geographical areas?",
+              "question": [
+                {
+                  "text": "UK",
+                  "context": "The UK consists of England, Wales, Scotland and Northern Ireland and excludes the Channel Islands and the Isle of Man.",
+                  "type": "boolean",
+                  "tracking_code": "313"
+                },
+                {
+                  "text": "Other EU countries",
+                  "context": "Austria, Belgium, Bulgaria, Croatia, Cyprus, Czech Republic, Denmark, Estonia, Finland, France, Germany, Greece, Hungary, Ireland, Italy, Latvia, Lithuania, Luxembourg, Malta, Netherlands, Poland, Portugal, Romania, Slovakia, Slovenia, Spain, Sweden.",
+                  "type": "boolean",
+                  "tracking_code": "314"
+                },
+                {
+                  "text": "Rest of the world",
+                  "type": "boolean",
+                  "tracking_code": "315"
+                }
+              ]
+            }
+          },
+          {
+            "text": "E-commerce Purchases",
+            "question":{
+              "ID": "36",
+              "text": "During 2016, did this business place any orders for goods or services, excluding capital goods, via websites, 'apps' or EDI type messages?",
+              "inclusions": "orders placed for utilities, goods, materials and services over websites or via web forms over the internet or an extranet, EDI, automated telephone entry",
+              "exclusions":[
+                "capital goods, via websites, 'apps' or EDI type messages",
+                "manually typed email, phone (person to person) and conventional fax",
+                "enquiries that did not result in placing an order"
+              ],
+              "type": "boolean",
+              "tracking_code": "254"
+            }
+          }
+        ]
+      },
+      {
+        "ID": "Section H",
+        "text": "Section H - Administrative Information",
+        "context":[
+          "The questions in Section H are voluntary",
+          "The following 3 questions should be completed by the person who spent the most time completing the e-commerce questionnaire."
+        ],
+        "segment":[
+          {
+            "ID": "37",
+            "text": "What is your position in the business?",
+            "question":[
+              {
+                "text": "Administrative or secretarial",
+                "type": "boolean",
+                "tracking_code": "442"
+              },
+              {
+                "text": "Associate professional or technical",
+                "type": "boolean",
+                "tracking_code": "443"
+              },
+              {
+                "text": "Manager or senior official",
+                "type": "boolean",
+                "tracking_code": "444"
+              },
+              {
+                "text": "Professional",
+                "type": "boolean",
+                "tracking_code": "445"
+              },
+              {
+                "text": "Director or Chief Executive",
+                "type": "boolean",
+                "tracking_code": "446"
+              },
+              {
+                "text": "Other (please specify in the box below)",
+                "type": "boolean",
+                "tracking_code": "447"
+              },
+              {
+                "context": "Other (please specify in the box below)",
+                "type": "open_text",
+                "tracking_code": "448"
+              }
+            ]
+
+          },
+          {
+            "ID": "38",
+            "text": "How long did it take you to complete the e-commerce questionnaire?",
+            "question":[
+              {
+                "type": "hours",
+                "tracking_code": "441"
+              },
+              {
+                "type": "minutes",
+                "tracking_code": "440"
+              }
+            ]
+          },
+          {
+            "ID": "39",
+            "text": "If there were any external costs involved in completing the e-commerce questionnaire, please report them below.",
+            "inclusions": "only external costs incurred in providing answers to the e-commerce questionnaire",
+            "question":[
+              {
+                "text": "Accountant/bookkeeper",
+                "type": "pound_pence",
+                "tracking_code": "449"
+              },
+              {
+                "text": "Other (please specify in the box below)",
+                "type": "pound_pence",
+                "tracking_code": "450"
+              },
+              {
+                "context": "Other (please specify in the box below)",
+                "type": "open_text",
+                "tracking_code": "451"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ID": "Section I",
+        "text": "Section I - Comments and Contact Details",
+        "question":[
+          {
+            "ID": "40",
+            "text": "In the box below, please add any comments that you would like to make.",
+            "type": "open_text",
+            "tracking-code": "500"
+          },
+          {
+            "ID": "41",
+            "text": "Please provide details of the person we should contact if we have any queries regarding the information returned on this questionnaire.",
+            "type": "contact_9",
+            "tracking-code": "C_1"
+          },
+          {
+            "type": "signature_date"
+          }
+        ]
+      }
+    ]
+  }
+}

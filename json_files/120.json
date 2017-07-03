@@ -1,0 +1,1736 @@
+{
+  "survey_scrape_info": {
+    "file_name": "ex_sel120-ft0001.pdf",
+    "folder_name": "120 - Questionnaire Example",
+    "download_date": "22/03/2017",
+    "scrape_date": "02/05/2017"
+  },
+  "segment": {
+    "segment_type": "survey",
+    "text": "Investment Trusts: Quarterly Return of Transactions",
+    "survey_number": "120",
+    "form_type": "0001",
+    "reporting_period": {
+      "start": "01/01/2016",
+      "finish": "31/03/2016"
+    },
+    "segment": [
+      {
+        "ID": "Investment Trusts: Transactions in assets during the quarter",
+        "context": [
+          "Please return the original questionnaire not a photocopy",
+          "Please take a copy for your retention",
+          "Please refer to the attached notes when completing the questionnaire"
+        ],
+        "question": {
+          "text": "Please list all trusts included within your fund:",
+          "type": "open_text",
+          "tracking_code": "C_1"
+        }
+      },
+      {
+        "ID": "Short Term Assets",
+        "note_ID": "Short-term assets",
+        "segment": [
+          {
+            "ID": "1",
+            "text": "Liquid assets",
+            "note_ID": "1.1 - 1.5 Cash and deposits in hand and balances held with banks.",
+            "type": "pound_mills_dec_balances",
+            "context": [
+              "Cash and Deposits in hand and balances held with banks"
+            ],
+            "question": [
+              {
+                "ID": "1.1",
+                "text": "Holdings of cash",
+                "tracking_code": "1000"
+              },
+              {
+                "ID": "1.4",
+                "text": "Balances held with foreign banks",
+                "tracking_code": "1005"
+              },
+              {
+                "ID": "1.5",
+                "text": "Other deposits",
+                "tracking_code": "1006"
+              }
+            ],
+            "segment": [
+              {
+                "ID": "1.2",
+                "text": "Balances held with banks in the UK",
+                "question": [
+                  {
+                    "ID": "1.2.1",
+                    "text": "sterling deposits",
+                    "tracking_code": "1001"
+                  },
+                  {
+                    "ID": "1.2.2",
+                    "text": "foreign currency deposits",
+                    "tracking_code": "1002"
+                  }
+                ]
+              },
+              {
+                "ID": "1.3",
+                "text": "Building society deposits",
+                "question": [
+                  {
+                    "ID": "1.3.1",
+                    "text": "sterling deposits",
+                    "tracking_code": "1003"
+                  },
+                  {
+                    "ID": "1.3.2",
+                    "text": "foreign currency deposits",
+                    "tracking_code": "1004"
+                  }
+                ]
+              }
+            ]
+
+          },
+          {
+            "ID": "2",
+            "text": "Money Market Instruments",
+            "type": "pound_mills_dec_balances",
+            "segment": [
+              {
+                "ID": "2.1",
+                "text": "Certificates of deposits issued by banks in the UK",
+                "question": [
+                  {
+                    "ID": "2.1.1",
+                    "text": "sterling",
+                    "tracking_code": "1007"
+                  },
+                  {
+                    "ID": "2.1.2",
+                    "text": "foreign currency",
+                    "tracking_code": "1008"
+                  }
+                ]
+              },
+              {
+                "ID": "2.3",
+                "text": "Money market instruments issued by HM Treasury",
+                "question": [
+                  {
+                    "ID": "2.3.1",
+                    "text": "sterling",
+                    "tracking_code": "1010"
+                  },
+                  {
+                    "ID": "2.3.2",
+                    "text": "other currencies e.g. Euro",
+                    "tracking_code": "1011"
+                  }
+                ]
+              },
+              {
+                "ID": "2.5",
+                "text": "Commercial paper/bills issued by UK companies",
+                "question": [
+                  {
+                    "ID": "2.5.1",
+                    "text": "sterling commercial paper issued by banks",
+                    "tracking_code": "1013"
+                  },
+                  {
+                    "ID": "2.5.2",
+                    "text": "foreign currency commercial paper issued by banks",
+                    "tracking_code": "1014"
+                  },
+                  {
+                    "ID": "2.5.3",
+                    "text": "sterling commercial paper issued by building societies",
+                    "tracking_code": "1015"
+                  },
+                  {
+                    "ID": "2.5.4",
+                    "text": "foreign currency commercial paper issued by building societies",
+                    "tracking_code": "1016"
+                  },
+                  {
+                    "ID": "2.5.5",
+                    "text": "sterling commercial paper issued by other financial institutions",
+                    "tracking_code": "1017"
+                  },
+                  {
+                    "ID": "2.5.6",
+                    "text": "other issues of UK commercial paper",
+                    "tracking_code": "1018"
+                  }
+                ]
+              }
+            ],
+            "question": [
+              {
+                "ID": "2.2",
+                "text": "Certificates of deposits issued by building societies",
+                "tracking_code": "1009"
+              },
+              {
+                "ID": "2.4",
+                "text": "UK Local Authority Debt and temporary money with LAs",
+                "note_ID": "2.4. UK local authority debt and temporary money with LAs.",
+                "tracking_code": "1012"
+              },
+              {
+                "ID": "2.6",
+                "text": "Other UK money market instruments",
+                "tracking_code": "1019"
+              },
+              {
+                "ID": "2.7",
+                "text": "Money market instruments issued by overseas residents",
+                "note_ID": "2.7 Money market instruments issued by overseas residents.",
+                "tracking_code": "1020"
+              },
+              {
+                "ID": "2.7.1",
+                "text": "of which issued by EU source",
+                "context": "Money market instruments issued by overseas residents",
+                "validation": "<=1020",
+                "tracking_code": "1021"
+              }
+            ]
+          },
+          {
+            "ID": "Other short-term assets",
+            "segment": [
+              {
+                "ID": "3.1",
+                "type": "pound_mills_dec_purchases",
+                "text": "Net transactions in derivatives",
+                "note_ID": "3.1 Net transactions in derivatives.",
+                "segment": [
+                  {
+                    "ID": "3.1.1",
+                    "text": "with UK counterparties",
+                    "question": [
+                      {
+                        "ID": "3.1.1.1",
+                        "text": "interest rate swaps contracts",
+                        "tracking_code": "3000"
+                      },
+                      {
+                        "ID": "3.1.1.2",
+                        "text": "forward rate agreement contracts",
+                        "tracking_code": "3001"
+                      },
+                      {
+                        "ID": "3.1.1.3",
+                        "text": "other contracts",
+                        "tracking_code": "3002"
+                      }
+                    ]
+                  },
+                  {
+                    "ID": "3.1.2",
+                    "text": "with overseas counterparties",
+                    "question": [
+                      {
+                        "ID": "3.1.2.1",
+                        "text": "interest rate swaps contracts",
+                        "tracking_code": "3003"
+                      },
+                      {
+                        "ID": "3.1.2.2",
+                        "text": "forward rate agreement contracts",
+                        "tracking_code": "3004"
+                      },
+                      {
+                        "ID": "3.1.2.3",
+                        "text": "other contracts",
+                        "tracking_code": "3005"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ],
+            "question": [
+              {
+                "ID": "3.2",
+                "text": "Other UK short-term assets (excluding derivatives)",
+                "type": "pound_mills_dec_balances",
+                "tracking_code": "1025"
+              },
+              {
+                "ID": "3.3",
+                "text": "Other overseas short-term assets (excluding derivatives)",
+                "tracking_code": "1026",
+                "type": "pound_mills_dec_balances"
+              },
+              {
+                "ID": "3.3.1",
+                "text": "of which issued by EU source",
+                "context": "Other overseas short-term assets (excluding derivatives)",
+                "type": "pound_mills_dec_balances",
+                "validation": "<=1026",
+                "tracking_code": "1027"
+              },
+              {
+                "ID": "3.4",
+                "text": "Amounts receivable from stockbrokers and securities dealers, less amounts payable",
+                "type": "pound_mills_dec_balances",
+                "note_ID": "3.4 Amounts receivable from stockbrokers and securities dealers, less amounts payable.",
+                "tracking_code": "1089"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "ID": "Longer Term Investments",
+        "note_ID": "Longer term investments.",
+        "segment": [
+          {
+            "ID": "4",
+            "text": "UK public sector investment",
+            "note_ID": "4.3 UK local authority securities and negotiable bonds.",
+            "segment": [
+              {
+                "ID": "4.1",
+                "text": "UK government securities denominated in sterling:",
+                "type": "matrix",
+                "question": {
+                  "row_count": "5",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "4.1.1",
+                      "text": "0 up to 3 years maturity"
+                    },
+                    {
+                      "row_index": "2",
+                      "ID": "4.1.2",
+                      "text": "3 up to 7 years maturity"
+                    },
+                    {
+                      "row_index": "3",
+                      "ID": "4.1.3",
+                      "text": "7 up to 15 years maturity"
+                    },
+                    {
+                      "row_index": "4",
+                      "ID": "4.1.4",
+                      "text": "over 15 years and undated maturity"
+                    },
+                    {
+                      "row_index": "5",
+                      "ID": "4.1.5",
+                      "text": "index-linked securities"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Assets acquired during current quarter at cost",
+                      "type": "pound_mills_dec_assets_acquired"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Assets realised during current quarter proceeds",
+                      "type": "pound_mills_dec_assets_realised"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3006"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3007"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3008"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3009"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3010"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3011"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "tracking_code": "3012"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "3013"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "1",
+                      "tracking_code": "3014"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "2",
+                      "tracking_code": "3015"
+                    }
+                  ]
+                }
+              },
+              {
+                "ID": "4.2",
+                "text": "UK government securities denominated in foreign currency",
+                "type": "matrix",
+                "question": {
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "4.2",
+                      "text": "UK government securities denominated in foreign currency"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Assets acquired during current quarter at cost",
+                      "type": "pound_mills_dec_assets_acquired"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Assets realised during current quarter proceeds",
+                      "type": "pound_mills_dec_assets_realised"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3016"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3017"
+                    }
+                  ]
+                }
+              },
+              {
+                "ID": "4.3",
+                "text": "UK local authority securities and negotiable bonds",
+                "note_ID": "4.3 UK local authority securities and negotiable bonds.",
+                "type": "matrix",
+                "question": {
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "4.3",
+                      "text": "UK local authority securities and negotiable bonds"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Assets acquired during current quarter at cost",
+                      "type": "pound_mills_dec_assets_acquired"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Assets realised during current quarter proceeds",
+                      "type": "pound_mills_dec_assets_realised"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3018"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3019"
+                    }
+                  ]
+                }
+              },
+              {
+                "ID": "4.4",
+                "text": "Other public sector investments",
+                "type": "matrix",
+                "question": {
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "4.4",
+                      "text": "Other public sector investments"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Assets acquired during current quarter at cost",
+                      "type": "pound_mills_dec_assets_acquired"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Assets realised during current quarter proceeds",
+                      "type": "pound_mills_dec_assets_realised"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3024"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3025"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "ID": "5",
+            "text": "Overseas government, provincial and municipal securities",
+            "note_ID": "5. Overseas government, provincial and municipal securities.",
+            "segment": [
+              {
+                "ID": "(including transactions in the UK in sterling)",
+                "type": "matrix",
+                "question": {
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "text": "(including transactions in the UK in sterling)"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Assets acquired during current quarter at cost",
+                      "type": "pound_mills_dec_assets_acquired"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Assets realised during current quarter proceeds",
+                      "type": "pound_mills_dec_assets_realised"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3026"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3027"
+                    }
+                  ]
+                }
+              },
+              {
+                "ID": "5.1",
+                "text": "of which issued by EU source",
+                "type": "matrix",
+                "question": {
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "5.1",
+                      "text": "of which issued by EU source",
+                      "context": "(including transactions in the UK in sterling)"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Assets acquired during current quarter at cost",
+                      "type": "pound_mills_dec_assets_acquired"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Assets realised during current quarter proceeds",
+                      "type": "pound_mills_dec_assets_realised"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "validation": "<=3026",
+                      "tracking_code": "3028"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "validation": "<=3027",
+                      "tracking_code": "3029"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "ID": "6",
+            "text": "UK Corporate Securities (excluding investment trusts)",
+            "note_ID": "6. UK corporate securities.",
+            "segment": [
+              {
+                "ID": "6.1",
+                "text": "Other than shares",
+                "note_ID": "6.1 Non-equity securities.",
+                "segment": [
+                  {
+                    "ID": "6.1.1",
+                    "text": "UK corporate sterling bonds",
+                    "type": "matrix",
+                    "question": {
+                      "row_count": "3",
+                      "col_count": "2",
+                      "rows": [
+                        {
+                          "row_index": "1",
+                          "ID": "6.1.1.1",
+                          "text": "issued by banks"
+                        },
+                        {
+                          "row_index": "2",
+                          "ID": "6.1.1.2",
+                          "text": "issued by building societies"
+                        },
+                        {
+                          "row_index": "3",
+                          "ID": "6.1.1.3",
+                          "text": "issued by other UK corporates"
+                        }
+                      ],
+                      "cols": [
+                        {
+                          "col_index": "1",
+                          "text": "Assets acquired during current quarter at cost",
+                          "type": "pound_mills_dec_assets_acquired"
+                        },
+                        {
+                          "col_index": "2",
+                          "text": "Assets realised during current quarter proceeds",
+                          "type": "pound_mills_dec_assets_realised"
+                        }
+                      ],
+                      "cells": [
+                        {
+                          "row_index": "1",
+                          "col_index": "1",
+                          "tracking_code": "3030"
+                        },
+                        {
+                          "row_index": "1",
+                          "col_index": "2",
+                          "tracking_code": "3031"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "1",
+                          "tracking_code": "3032"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "2",
+                          "tracking_code": "3033"
+                        },
+                        {
+                          "row_index": "3",
+                          "col_index": "1",
+                          "tracking_code": "3034"
+                        },
+                        {
+                          "row_index": "3",
+                          "col_index": "2",
+                          "tracking_code": "3035"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "ID": "6.1.2",
+                    "text": "UK corporate foreign currency bonds",
+                    "type": "matrix",
+                    "question": {
+                      "row_count": "3",
+                      "col_count": "2",
+                      "rows": [
+                        {
+                          "row_index": "1",
+                          "ID": "6.1.2.1",
+                          "text": "issued by banks"
+                        },
+                        {
+                          "row_index": "2",
+                          "ID": "6.1.2.2",
+                          "text": "issued by building societies"
+                        },
+                        {
+                          "row_index": "3",
+                          "ID": "6.1.2.3",
+                          "text": "issued by other UK corporates"
+                        }
+                      ],
+                      "cols": [
+                        {
+                          "col_index": "1",
+                          "text": "Assets acquired during current quarter at cost",
+                          "type": "pound_mills_dec_assets_acquired"
+                        },
+                        {
+                          "col_index": "2",
+                          "text": "Assets realised during current quarter proceeds",
+                          "type": "pound_mills_dec_assets_realised"
+                        }
+                      ],
+                      "cells": [
+                        {
+                          "row_index": "1",
+                          "col_index": "1",
+                          "tracking_code": "3036"
+                        },
+                        {
+                          "row_index": "1",
+                          "col_index": "2",
+                          "tracking_code": "3037"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "1",
+                          "tracking_code": "3038"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "2",
+                          "tracking_code": "3039"
+                        },
+                        {
+                          "row_index": "3",
+                          "col_index": "1",
+                          "tracking_code": "3040"
+                        },
+                        {
+                          "row_index": "3",
+                          "col_index": "2",
+                          "tracking_code": "3041"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "ID": "6.2",
+                "text": "Ordinary shares",
+                "note_ID": "6.2 Ordinary shares, 8.2 UK unauthorised unit trust units, 8.5 overseas mutual fund.",
+                "type": "matrix",
+                "question": {
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "6.2.1",
+                      "text": "quoted"
+                    },
+                    {
+                      "row_index": "2",
+                      "ID": "6.2.2",
+                      "text": "unquoted"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Assets acquired during current quarter at cost",
+                      "type": "pound_mills_dec_assets_acquired"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Assets realised during current quarter proceeds",
+                      "type": "pound_mills_dec_assets_realised"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3042"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3043"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3044"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3045"
+                    }
+                  ]
+                }
+              },
+              {
+                "ID": "6.3",
+                "text": "Preference shares",
+                "type": "matrix",
+                "question": {
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "6.3.1",
+                      "text": "quoted"
+                    },
+                    {
+                      "row_index": "2",
+                      "ID": "6.3.2",
+                      "text": "unquoted"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Assets acquired during current quarter at cost",
+                      "type": "pound_mills_dec_assets_acquired"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Assets realised during current quarter proceeds",
+                      "type": "pound_mills_dec_assets_realised"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3046"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3047"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3048"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3049"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "ID": "7",
+            "text": "Overseas Corporate securities",
+            "type": "matrix",
+            "question": {
+              "row_count": "6",
+              "col_count": "2",
+              "rows": [
+                {
+                  "row_index": "1",
+                  "ID": "7.1",
+                  "text": "Overseas bonds"
+                },
+                {
+                  "row_index": "2",
+                  "ID": "7.1.1",
+                  "text": "of which issued by EU source",
+                  "context": "Overseas bonds"
+                },
+                {
+                  "row_index": "3",
+                  "ID": "7.2",
+                  "text": "Overseas shares"
+                },
+                {
+                  "row_index": "4",
+                  "ID": "7.2.1",
+                  "text": "of which issued by EU source",
+                  "context": "Overseas shares"
+                },
+                {
+                  "row_index": "5",
+                  "ID": "7.3",
+                  "text": "Overseas preference shares"
+                },
+                {
+                  "row_index": "6",
+                  "ID": "7.3.1",
+                  "text": "of which issued by EU source",
+                  "context": "Overseas preference shares"
+                }
+              ],
+              "cols": [
+                {
+                  "col_index": "1",
+                  "text": "Assets acquired during current quarter at cost",
+                  "type": "pound_mills_dec_assets_acquired"
+                },
+                {
+                  "col_index": "2",
+                  "text": "Assets realised during current quarter proceeds",
+                  "type": "pound_mills_dec_assets_realised"
+                }
+              ],
+              "cells": [
+                {
+                  "row_index": "1",
+                  "col_index": "1",
+                  "tracking_code": "3050"
+                },
+                {
+                  "row_index": "1",
+                  "col_index": "2",
+                  "tracking_code": "3051"
+                },
+                {
+                  "row_index": "2",
+                  "col_index": "1",
+                  "validation": "<=3050",
+                  "tracking_code": "3052"
+                },
+                {
+                  "row_index": "2",
+                  "col_index": "2",
+                  "validation": "<=3051",
+                  "tracking_code": "3053"
+                },
+                {
+                  "row_index": "3",
+                  "col_index": "1",
+                  "tracking_code": "3054"
+                },
+                {
+                  "row_index": "3",
+                  "col_index": "2",
+                  "tracking_code": "3055"
+                },
+                {
+                  "row_index": "4",
+                  "col_index": "1",
+                  "validation": "<=3054",
+                  "tracking_code": "3056"
+                },
+                {
+                  "row_index": "4",
+                  "col_index": "2",
+                  "validation": "<=3055",
+                  "tracking_code": "3057"
+                },
+                {
+                  "row_index": "5",
+                  "col_index": "1",
+                  "tracking_code": "3058"
+                },
+                {
+                  "row_index": "5",
+                  "col_index": "2",
+                  "tracking_code": "3059"
+                },
+                {
+                  "row_index": "6",
+                  "col_index": "1",
+                  "validation": "<=3058",
+                  "tracking_code": "3060"
+                },
+                {
+                  "row_index": "6",
+                  "col_index": "2",
+                  "validation": "<=3059",
+                  "tracking_code": "3061"
+                }
+              ]
+            }
+          },
+          {
+            "ID": "8",
+            "text": "Mutual fund",
+            "type": "matrix",
+            "question": {
+              "row_count": "6",
+              "col_count": "2",
+              "rows": [
+                {
+                  "row_index": "1",
+                  "ID": "8.1",
+                  "text": "UK authorised unit trust units"
+                },
+                {
+                  "row_index": "2",
+                  "ID": "8.2",
+                  "text": "UK unauthorised unit trust units",
+                  "note_ID": "6.2 Ordinary shares, 8.2 UK unauthorised unit trust units, 8.5 overseas mutual fund."
+                },
+                {
+                  "row_index": "3",
+                  "ID": "8.3",
+                  "text": "UK investment trust shares"
+                },
+                {
+                  "row_index": "4",
+                  "ID": "8.4",
+                  "text": "UK open ended investment companies"
+                },
+                {
+                  "row_index": "5",
+                  "ID": "8.5",
+                  "text": "Overseas mutual fund",
+                  "note_ID": "6.2 Ordinary shares, 8.2 UK unauthorised unit trust units, 8.5 overseas mutual fund."
+                },
+                {
+                  "row_index": "6",
+                  "ID": "8.5.1",
+                  "text": "of which issued by EU source",
+                  "context": "Overseas mutual fund"
+                }
+              ],
+              "cols": [
+                {
+                  "col_index": "1",
+                  "text": "Assets acquired during current quarter at cost",
+                  "type": "pound_mills_dec_assets_acquired"
+                },
+                {
+                  "col_index": "2",
+                  "text": "Assets realised during current quarter proceeds",
+                  "type": "pound_mills_dec_assets_realised"
+                }
+              ],
+              "cells": [
+                {
+                  "row_index": "1",
+                  "col_index": "1",
+                  "tracking_code": "3062"
+                },
+                {
+                  "row_index": "1",
+                  "col_index": "2",
+                  "tracking_code": "3063"
+                },
+                {
+                  "row_index": "2",
+                  "col_index": "1",
+                  "tracking_code": "3064"
+                },
+                {
+                  "row_index": "2",
+                  "col_index": "2",
+                  "tracking_code": "3065"
+                },
+                {
+                  "row_index": "3",
+                  "col_index": "1",
+                  "tracking_code": "3066"
+                },
+                {
+                  "row_index": "3",
+                  "col_index": "2",
+                  "tracking_code": "3067"
+                },
+                {
+                  "row_index": "4",
+                  "col_index": "1",
+                  "tracking_code": "3068"
+                },
+                {
+                  "row_index": "4",
+                  "col_index": "2",
+                  "tracking_code": "3069"
+                },
+                {
+                  "row_index": "5",
+                  "col_index": "1",
+                  "tracking_code": "3070"
+                },
+                {
+                  "row_index": "5",
+                  "col_index": "2",
+                  "tracking_code": "3071"
+                },
+                {
+                  "row_index": "6",
+                  "col_index": "1",
+                  "validation": "<=3070",
+                  "tracking_code": "3072"
+                },
+                {
+                  "row_index": "6",
+                  "col_index": "2",
+                  "validation": "<=3071",
+                  "tracking_code": "3073"
+                }
+              ]
+            }
+          },
+          {
+            "ID": "9",
+            "text": "Fixed Assets",
+            "note_ID": "9. Fixed assets",
+            "type": "matrix",
+            "question": {
+              "row_count": "5",
+              "col_count": "2",
+              "rows": [
+                {
+                  "row_index": "1",
+                  "ID": "9.1",
+                  "text": "Existing UK buildings",
+                  "note_ID": [
+                    "9.1 Acquisitions of Existing UK buildings - 9.2 Acquisitions of UK Land",
+                    "9.1 Realisations of Existing UK buildings - 9.2 Realisations of UK Land"
+                  ]
+                },
+                {
+                  "row_index": "2",
+                  "ID": "9.2",
+                  "text": "UK land",
+                  "note_ID": [
+                    "9.1 Acquisitions of Existing UK buildings - 9.2 Acquisitions of UK Land",
+                    "9.1 Realisations of Existing UK buildings - 9.2 Realisations of UK Land"
+                  ]
+                },
+                {
+                  "row_index": "3",
+                  "ID": "9.3",
+                  "text": "New UK construction work",
+                  "note_ID": "9.3 New construction work"
+                },
+                {
+                  "row_index": "4",
+                  "ID": "9.4",
+                  "text": "Other UK capital expenditure (e.g. office machinery, furniture and fittings, computer equipment)",
+                  "note_ID": "9.4 Other UK Capital Expenditure"
+                },
+                {
+                  "row_index": "5",
+                  "ID": "9.5",
+                  "text": "Overseas (e.g. land, buildings, office machinery, furniture and fittings, computer equipment)"
+                }
+              ],
+              "cols": [
+                {
+                  "col_index": "1",
+                  "text": "Assets acquired during current quarter at cost",
+                  "type": "pound_mills_dec_assets_acquired"
+                },
+                {
+                  "col_index": "2",
+                  "context": "Assets realised during current quarter proceeds",
+                  "type": "pound_mills_dec_assets_realised"
+                }
+              ],
+              "cells": [
+                {
+                  "row_index": "1",
+                  "col_index": "1",
+                  "tracking_code": "3088"
+                },
+                {
+                  "row_index": "1",
+                  "col_index": "2",
+                  "tracking_code": "3089"
+                },
+                {
+                  "row_index": "2",
+                  "col_index": "1",
+                  "tracking_code": "3090"
+                },
+                {
+                  "row_index": "2",
+                  "col_index": "2",
+                  "tracking_code": "3091"
+                },
+                {
+                  "row_index": "3",
+                  "col_index": "1",
+                  "tracking_code": "3092"
+                },
+                {
+                  "row_index": "3",
+                  "col_index": "2",
+                  "NULL": "TRUE"
+                },
+                {
+                  "row_index": "4",
+                  "col_index": "1",
+                  "tracking_code": "3124"
+                },
+                {
+                  "row_index": "4",
+                  "col_index": "2",
+                  "tracking_code": "3125"
+                },
+                {
+                  "row_index": "5",
+                  "col_index": "1",
+                  "tracking_code": "3102"
+                },
+                {
+                  "row_index": "5",
+                  "col_index": "2",
+                  "tracking_code": "3103"
+                }
+              ]
+            }
+          },
+          {
+            "ID": "10",
+            "text": "Other investments",
+            "note_ID": "10. Other investments.",
+            "type": "matrix",
+            "question": {
+              "row_count": "3",
+              "col_count": "2",
+              "rows": [
+                {
+                  "row_index": "1",
+                  "ID": "10.1",
+                  "text": "UK (please specify)"
+                },
+                {
+                  "row_index": "2",
+                  "ID": "10.2",
+                  "text": "Overseas (please specify)"
+                },
+                {
+                  "row_index": "3",
+                  "ID": "10.2.1",
+                  "text": "of which issued by EU source",
+                  "context": "Overseas (please specify)"
+                }
+              ],
+              "cols": [
+                {
+                  "col_index": "1",
+                  "text": "Assets acquired during current quarter at cost",
+                  "type": "pound_mills_dec_assets_acquired"
+                },
+                {
+                  "col_index": "2",
+                  "text": "Assets realised during current quarter proceeds",
+                  "type": "pound_mills_dec_assets_realised"
+                }
+              ],
+              "cells": [
+                {
+                  "row_index": "1",
+                  "col_index": "1",
+                  "tracking_code": "3110"
+                },
+                {
+                  "row_index": "1",
+                  "col_index": "2",
+                  "tracking_code": "3111"
+                },
+                {
+                  "row_index": "2",
+                  "col_index": "1",
+                  "tracking_code": "3112"
+                },
+                {
+                  "row_index": "2",
+                  "col_index": "2",
+                  "tracking_code": "3113"
+                },
+                {
+                  "row_index": "3",
+                  "col_index": "1",
+                  "validation": "<=3112",
+                  "tracking_code": "3114"
+                },
+                {
+                  "row_index": "3",
+                  "col_index": "2",
+                  "validation": "<=3113",
+                  "tracking_code": "3115"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "ID": "Liabilities",
+        "segment": [
+          {
+            "ID": "11",
+            "text": "Borrowing",
+            "note_ID": "11. Borrowing.",
+            "type": "pound_mills_dec_balances",
+            "segment": [
+              {
+                "ID": "11.1",
+                "text": "From UK banks",
+                "question": [
+                  {
+                    "ID": "11.1.1",
+                    "text": "sterling",
+                    "tracking_code": "2000"
+                  },
+                  {
+                    "ID": "11.1.2",
+                    "text": "foreign currency",
+                    "tracking_code": "2001"
+                  }
+                ]
+              },
+              {
+                "ID": "11.2",
+                "text": "From building societies",
+                "question": [
+                  {
+                    "ID": "11.2.1",
+                    "text": "sterling",
+                    "tracking_code": "2002"
+                  },
+                  {
+                    "ID": "11.2.2",
+                    "text": "foreign currency",
+                    "tracking_code": "2003"
+                  }
+                ]
+              },
+              {
+                "ID": "11.3",
+                "text": "Other UK borrowing",
+                "question": [
+                  {
+                    "ID": "11.3.1",
+                    "text": "issue of UK securities",
+                    "tracking_code": "2004"
+                  },
+                  {
+                    "ID": "11.3.2",
+                    "text": "issue of sterling commercial paper",
+                    "tracking_code": "2005"
+                  },
+                  {
+                    "ID": "11.3.3",
+                    "text": "other",
+                    "tracking_code": "2006"
+                  }
+                ]
+              },
+              {
+                "ID": "11.4",
+                "text": "Other UK borrowing",
+                "question": [
+                  {
+                    "ID": "11.4.1",
+                    "text": "from banks",
+                    "tracking_code": "2007"
+                  },
+                  {
+                    "ID": "11.4.2",
+                    "text": "from related companies overseas",
+                    "tracking_code": "2008"
+                  },
+                  {
+                    "ID": "11.4.3",
+                    "text": "other short-term",
+                    "tracking_code": "2009"
+                  },
+                  {
+                    "ID": "11.4.4",
+                    "text": "other medium, and long-term",
+                    "tracking_code": "2010"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "ID": "12",
+            "text": "Sales and redemptions for cash of issued share and loan capital of companies covered by this return, gross of dealing costs",
+            "note_ID": "12. Sales and redemptions for cash of issued share and loan capital of companies covered by this return, gross of dealing costs.",
+            "segment": [
+              {
+                "ID": "12.1",
+                "text": "Listed",
+                "type": "matrix",
+                "question": {
+                  "row_count": "3",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "12.1.1",
+                      "text": "ordinary, 'A', 'B' and deferred stocks"
+                    },
+                    {
+                      "row_index": "2",
+                      "ID": "12.1.2",
+                      "text": "preference shares"
+                    },
+                    {
+                      "row_index": "3",
+                      "ID": "12.1.3",
+                      "text": "bonds, debentures and loan stocks"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Receipts",
+                      "type": "pound_mills_dec_receipts"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Repayments",
+                      "type": "pound_mills_dec_repayments"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3126"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3127"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3128"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3129"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3130"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3131"
+                    }
+                  ]
+                }
+              },
+              {
+                "ID": "12.2",
+                "text": "Unlisted",
+                "type": "matrix",
+                "question": {
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "12.2.1",
+                      "text": "preference shares"
+                    },
+                    {
+                      "row_index": "2",
+                      "ID": "12.2.2",
+                      "text": "bonds, debentures and loan stocks"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "text": "Receipts",
+                      "type": "pound_mills_dec_receipts"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Repayments",
+                      "type": "pound_mills_dec_repayments"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3132"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3133"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3134"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3135"
+                    }
+                  ]
+                }
+              },
+              {
+                "ID": "12.3",
+                "text": "income received/distributed",
+                "type": "matrix",
+                "question": {
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "row_index": "1",
+                      "ID": "12.3",
+                      "text": "income received/distributed"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "col_index": "1",
+                      "context": "Receipts",
+                      "type": "pound_mills_dec_receipts"
+                    },
+                    {
+                      "col_index": "2",
+                      "context": "Repayments",
+                      "type": "pound_mills_dec_repayments"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3136"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3137"
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "ID": "13",
+            "text": "Reserves, taxation etc",
+            "type": "pound_mills_dec_balances",
+            "tracking_code": "2035"
+          }
+        ]
+      },
+      {
+        "ID": "Comments",
+        "question": [
+          {
+            "context": [
+              "Please use the space below to comment on significant movements in data between the current and previous quarterly returns, or if you have merged with, or been acquired by another company.",
+              "Please include details of any significant impacts upon your data resulting from changes in the accounting approaches you have taken. "
+            ],
+            "type": "open_text",
+            "tracking_code": "C_2"
+          },
+          {
+            "question": {
+              "type": "contact_1"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "notes": [
+      {
+        "ID": "Please refer to these notes before completing this return",
+        "segment": [
+          {
+            "ID": "Return of questionnaire",
+            "text": "Please use this questionnaire to provide details for all the investment trusts within the fund management group named on the front of the questionnaire."
+          },
+          {
+            "ID": "Valuation",
+            "text": "Expenditure on plant, machinery (including oil and gas exploration/production equipment) and all other capital equipment (e.g. office machinery, computers, TV receivers, furniture, mechanical handling equipment and mobile powered equipment)."
+          },
+          {
+            "ID": "Estimates",
+            "text": "These are produced assets that are not used primarily for production or consumption, they are expected to appreciate or at least not to decline in real value, that do not deteriorate over time under normal conditions and that are acquired and held primarily as stores of values."
+          },
+          {
+            "ID": "Derivatives",
+            "text": "These are fixed assets that consist of mineral exploration, computer software and other fixed assets."
+          },
+          {
+            "ID": "Definition_Of_UK",
+            "text": "These are fixed assets that consist of mineral exploration, computer software and other fixed assets."
+          }
+        ]
+      },
+      {
+        "ID": "Short-term assets",
+        "text": "Short-term assets are defined as those maturing within one year of their originating date, including loans repayable at lender's option within one year of the date of issue. Include floating rate notes maturing within one year of issue. Include any accrued interest normally included in the market values of short-term assets."
+      },
+      {
+        "ID": "1.1 - 1.5 Cash and deposits in hand and balances held with banks.",
+        "text": "Holdings of cash include UK coins and note issues of the Bank of England and of Scottish and Northern Ireland banks. Balances held with banks include current and deposit accounts including any term deposit, even if for 12 months or more. Include all foreign currency balances held in the UK. Show overdrafts in question 11."
+      },
+      {
+        "ID": "2.4. UK local authority debt and temporary money with LAs.",
+        "text": "Include local authority bills, and unsecured money lent to local authorities, with maturity of less than 12 months. Local authority securities and bonds should be entered in question 4.3 even if they mature in 12 months or less."
+      },
+      {
+        "ID": "2.7 Money market instruments issued by overseas residents.",
+        "text": "Include certificates of deposit issued by overseas banks and commercial paper issued by overseas companies."
+      },
+      {
+        "ID": "3.1 Net transactions in derivatives.",
+        "text": "Derivative products include interest rate swaps, forward rate agreements, futures, options and other derived contracts. Transactions should be recorded on a cash basis. Where cash is received, a negative transaction should be recorded. Where payment is made a positive transaction should be recorded. Interest rate swaps: Interest rate swaps involve an exchange of interest payments, or receipt, on a notional amount of principal in one currency over a period of time. For example, payments based on a floating rate of interest are swapped for fixed-rate payment over a period of time. Forward rate agreements: A forward contract in which two counterparties agree on a specific interest rate to be paid, at a specified settlement date, on a notional amount of principal of a specified maturity in one currency that is never exchanged."
+      },
+      {
+        "ID": "3.4 Amounts receivable from stockbrokers and securities dealers, less amounts payable.",
+        "text": "Net balances due from stockbrokers including amounts due on securities sold for future settlement. Net balances owed to stockbrokers should be included as a negative item. Include amounts receivable, less amounts payable, from securities dealers."
+      },
+      {
+        "ID": "Longer term investments.",
+        "text": "Deal with all investment items by reference to the date of contract rather than the payment or receipt of funds. In cases where payment has not been made or received, a contra item must be entered in question 3.4 representing balances due from or to stockbrokers. However, if you have acquired securities on which further instalments are payable (or \"rights\" to subscribe to a forthcoming issue), enter the actual payment made during the quarter (or the cost of the \"rights\"). Exclude any amounts due in respect of future instalments (or future subscriptions to the new issue) as these should be recorded in future returns. Classify securities with optional redemption dates by their final redemption date. Exclude UK Treasury bills, which should be treated as short-term investment and entered in question 2.3."
+      },
+      {
+        "ID": "4.3 UK local authority securities and negotiable bonds.",
+        "text": "Exclude local authority bills, which should be included in question 2.4. Shares of privatised utilities should be included in question 6."
+      },
+      {
+        "ID": "5. Overseas government, provincial and municipal securities.",
+        "text": "Include those listed in the Stock Exchange Official List (or Yearbook) under Commonwealth Government, Corporation and Provincial Stocks and Securities; Foreign Government and Corporation Stocks and Bonds. Include investments in the UK Marine Trust and other similar trust funds set up in support of head office business under the appropriate headings. The Republic of Ireland is regarded as an overseas country."
+      },
+      {
+        "ID": "6. UK corporate securities.",
+        "text": "Exclude securities in mutual funds, such as unit trusts, investment trusts and OEICs - these should be included in section 8. Include securities traded on the Alternative Investment Market in quoted securities. The value of transactions in Eurotunnel units and warrants should be divided equally between questions 6.2 and 7.2. Include permanent interest-bearing shares issued by Building Societies in question 6.2. If the investment trust has taken up an option to receive scrip dividends in the last quarter, please include in question 6.2."
+      },
+      {
+        "ID": "6.1 Non-equity securities.",
+        "text": "Include convertible debentures and loan stocks where rights of conversion into equity are still outstanding. Exclude floating rate notes which mature within one year of issue; include these as short-term assets in questions 2 or 3."
+      },
+      {
+        "ID": "6.2 Ordinary shares, 8.2 UK unauthorised unit trust units, 8.5 overseas mutual fund.",
+        "text": "Shareholdings in unit trust management companies should be shown in question 6.2. UK based unauthorised unit trusts should be included in question 8.2. Mutual funds managed by overseas companies should be included in question 8.5."
+      },
+      {
+        "ID": "9. Fixed assets",
+        "text": "General note",
+        "Inclusions": [
+          "The total capital value of any assets that you have bought on hire purchase or acquired (as lessee) under a finance leasing arrangement in the period covered by the questionnaire, but not interest and instalment payments.",
+          "Expenditure on assets acquired for hiring, renting and other leasing purposes (but not assets acquired in order to lease to others under finance leasing arrangements)."
+        ],
+        "Exclusions": [
+          "The capital value of any assets acquired by your business but leased out to others under finance leasing arrangements."
+        ]
+      },
+      {
+        "ID": "9.1 Acquisitions of Existing UK buildings - 9.2 Acquisitions of UK Land",
+        "text": "Include all expenditure on the acquisitions of land and existing buildings. Land purchased in connection with new construction work should be recorded here and should be estimated where precise figures are not known. Amounts shown should include the capital cost of freeholds and leaseholds purchased and any leaseholds premiums paid. Where land is purchased with existing buildings and the value of the two components is not separable; the total is recorded under land if it is estimated that the value of the land exceeds the value of the existing building. If the existing buildings are estimated to be of greater value than the land, the total is recorded under existing buildings.",
+        "Inclusions": [
+          "The value of mineral rights, forests and inland waters.",
+          "Associated architects' and surveyors' fees and legal charges, stamp duties, agents' commissions, etc"
+        ]
+      },
+      {
+        "ID": "9.1 Realisations of Existing UK buildings - 9.2 Realisations of UK Land",
+        "text": "Enter the net amount received after deduction of all transfer costs."
+      },
+      {
+        "ID": "9.3 New construction work",
+        "text": "Include expenditure on new construction work contracted by you, whether directly with the constructors or arranged by property developers. This covers the construction of new buildings and extensions and improvements to existing buildings (including fixtures, e.g. lifts, heating and ventilation systems). The cost of site preparation (including the demolition of previous buildings on a site) and any other civil engineering work, should be included, but the cost of land should be recorded against acquisitions of land.",
+        "Inclusions": [
+          "Permanent installations such as water supply, central heating, air conditioning, lighting etc.",
+          "Constructions expenditure on structures such as oil wells (drilling), operational mines, pipelines, power transmission lines, gas pipes, railway lines, port installations, roads, bridges, viaducts, drains, cable networks, etc.",
+          "Other site improvements such as the clearance of forests, levelling, draining of marshes etc.",
+          "Associated architects' and surveyors' fees and any legal charges, stamp duties, agents' commissions, etc."
+        ],
+        "Exclusions": [
+          "Current maintenance costs",
+          "Spending on land purchases in connection with new construction work",
+          "Expenditure on dwellings"
+        ]
+      },
+      {
+        "ID": "9.4 Other UK Capital Expenditure",
+        "text": "None",
+        "Inclusions": [
+          "Expenditure on plant, machinery (including oil and gas exploration/production equipment) and all other capital equipment (e.g. office machinery, computers, TV receivers, furniture, mechanical handling equipment and mobile powered equipment)."
+        ],
+        "Valuables": {
+          "text": "These are produced assets that are not used primarily for production or consumption, they are expected to appreciate or at least not to decline in real value, that do not deteriorate over time under normal conditions and that are acquired and held primarily as stores of values."
+        },
+        "Intangibles": {
+          "text": "These are fixed assets that consist of mineral exploration, computer software and other fixed assets.",
+          "Inclusions": [
+            "The value of expenditures on mineral exploration.",
+            "Computer software to be used for more than one year. This includes the purchase or development of large data bases and licence payments for the use of software. Software produced for own use should be valued at production cost and included only if its useful life is at least one year."
+          ]
+        }
+      },
+      {
+        "ID": "10. Other investments",
+        "text": "Include only financial assets similar to those specified in other terms of the return, but which do not fit under those headings. Please give the amount and brief details in respect of each item. Include items such as certificates of tax deposit, income tax refunds, sundry debtors, interest accrued and outstanding interest and dividends and rents. Include loans covered by ECGD specific bank guarantees or ECGD buyer credit guarantees."
+      },
+      {
+        "ID": "11. Borrowing",
+        "text": "Include foreign currency liabilities on back-to-back loans and borrowing from related concerns. Record issues of floating rate notes as UK borrowing in question 11.3."
+      },
+      {
+        "ID": "12. Sales and redemptions for cash of issued share and loan capital of companies covered by this return, gross of dealing costs",
+        "text": "Include amounts received or repaid in respect of medium and long-term loans and securities (i.e. all those with an original maturity of one year or more even if there is provision for earlier repayment). Do not include issues of capital in exchange for securities during takeovers, conversions of debentures into shares or bonus issues."
+      }
+    ]
+}

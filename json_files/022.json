@@ -1,0 +1,110 @@
+{
+  "survey_scrape_info":{
+    "file_name": "ex_sel022-ft0004.pdf",
+    "folder_name": "022 - Questionnaire Examples",
+    "download_date": "22/03/2017",
+    "scrape_date": "17/05/2017"
+  },
+  "segment": [
+
+    {
+      "segment_type": "survey",
+      "text": "Quarterly Operating Profits Survey",
+      "survey_number": "022",
+      "form_type": "0004",
+      "reporting_period": {
+        "start": "01/10/2014",
+        "end": "31/12/2016"
+      }
+    },
+    {
+      "segment": {
+        "ID": "1",
+        "text":"If you are unable to report figures for the above period, which alternative quarter areyou reporting for?",
+        "context":"Successive questionnaires should have no gaps or overlaps.",
+        "type":"dmy_date",
+        "segment": [
+          {
+            "question": [
+              {
+                "ID": "from",
+                "text": "from",
+                "tracking_code":"11"},
+              {
+                "ID": "to",
+                "tracking_code":"12"}
+            ]
+              }
+            ]
+          },
+      "segment ": {
+        "ID":"Section B",
+        "text": "Section B - Operating Profit and Depreciation",
+        "context":"Please report non-cumulative (quarterly) figures before exceptional items. Report figures in accordance with UK Generally Accepted Accounting Practice (GAAP) or International Accounting Standards (IAS).",
+        "segment": [
+          {
+            "question": [
+              {
+                "ID": "2",
+                "text": "what was the value of your operating profit before exceptional items?",
+                "context":"Report operating profit or loss figures before tax.",
+                "include":"rental income and royalty income.",
+                "type":"pound_negthousands",
+                "tracking_code":"150"},
+              {
+                "ID": "3",
+                "text": "how much depreciation, amortisation, impairment, and losses on disposals (and/or profits) did you charge in arriving at your answer to question 2?",
+                "type":"pound_thousands",
+                "tracking_code":"250"}
+            ]
+          }
+        ]
+      },
+      "segment": {
+        "ID":"Section C",
+        "text": "Section C - Exceptional Items",
+        "segment": [
+          {
+            "question": [
+              {
+                "ID": "4",
+                "text": "please provide details of all exceptional items:",
+                "context":[
+                  "An exceptional item is an unusually large and uncommon transaction charge that must be disclosed on the balance sheet in accordance with GAAP.",
+                  "Report income as positive and expenditure as negative.",
+                  "Please continue on a separate sheet if necessary."
+                ],
+                "exclude":"any items already included in Section B.",
+                "type":"openpound_negthousands",
+                "tracking_code":"40"},
+              {
+                "ID": "5",
+                "text": [
+                  "Please use the box below to:",
+                  "Describe any changes in your figures between this and previous quarters that you think are significant."
+                ],
+                "context":[
+                  "For example, explain movements from profit to loss or vice versa and amend figures from the previous quarter with actual figures if estimates were used.",
+                  "Please include details of any significant impacts upon your data resulting from changes in the accounting approaches you have taken."
+                ],
+                "include":"details of any significant impacts upon your data resulting from changes in the accounting approaches you have taken.",
+                "type":"data_changes_1",
+                "tracking_code":"146"},
+              {
+                "ID": "6",
+                "text": "Please write the details of the person we should contact if we have any queries regarding the figures returned on this questionnaire.",
+                "type":"contact_2",
+                "tracking_code":"c_1"},
+              {
+                "text": "Signature",
+                "type":"signature_date2",
+                "tracking_code":"c_2"}
+            ]
+          }
+        ]
+      }
+      }
+    ]
+}
+
+

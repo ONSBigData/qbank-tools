@@ -1,0 +1,1784 @@
+{
+  "survey_scrape_info": {
+    "file_name": "ex_sel101-ft0011.pdf",
+    "folder_name": "101 - QUESTIONNAIRE EXAMPLE (2014)",
+    "download_date": "22/03/2017",
+    "scrape_date": "18/05/2017"
+  },
+  "segment": [
+    {
+      "segment_type": "survey",
+      "text": "Quarterly Survey of Insurance Companies: Long-Term Business Transactions and Balances",
+      "survey_number": "101",
+      "form_type": "0011",
+      "reporting_period": {
+        "start": "01/10/2015",
+        "end": "31/12/2015"
+      }
+    },
+    {
+      "segment": [
+        {
+          "ID": "Section A",
+          "text": [
+            "Section A - Reporting Period",
+            "What are the dates of the 3 month period that you will be reporting for:"
+          ],
+          "type": "dmy_date",
+          "segment": [
+            {
+              "question": [
+                {
+                  "ID": "from",
+                  "text": "from",
+                  "tracking_code": "C_1"
+                },
+                {
+                  "ID": "to",
+                  "tracking_code": "C_2"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ID": "Section B",
+          "text": "Section B - Short-Term Assets",
+          "context": "Short-term assets are defined as those maturing within one year of their originating date, including loans repayable at lender's option within one year of the date of issue.",
+          "include": [
+            "Money at call and short notice and other short-term loans including longer-term mortgages (other than local authority mortgages) that are repayable by invoking a break clause within the first year.",
+            "Any accrued interest normally included in the market values of short-term assets."
+          ],
+          "segment": [
+            {
+              "ID": "2",
+              "text": "What were your holdings of the following liquid assets:",
+              "type": "pound_mills_dec_balances",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "Cash?",
+                    "include": "notes and coins of all denominations held on the premises",
+                    "tracking_code": "1000"
+                  }
+                },
+                {
+                  "segment": {
+                    "ID": "b",
+                    "text": "Balances with banks in the UK:",
+                    "context": [
+                      "A UK bank is a bank that trades in the UK",
+                      "Do not deduct overdrafts and other borrowing."
+                    ],
+                    "include": [
+                      "subsidiaries and branches of foreign owned banks.",
+                      "current and deposit accounts including any term deposit, even if for 12 months or more.",
+                      "all foreign currency balances held in the UK"
+                    ],
+                    "question": [
+                      {
+                        "text": "Sterling deposits?",
+                        "tracking_code": "1001"
+                      },
+                      {
+                        "text": "Foreign currency deposits?",
+                        "tracking_code": "1002"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "c",
+                    "text": "Balances with overseas banks?",
+                    "context": [
+                      "Overseas banks are those located outside the UK.",
+                      "Do not deduct overdrafts and other borrowing."
+                    ],
+                    "tracking_code": "1005"
+                  }
+                },
+                {
+                  "segment": {
+                    "ID": "d",
+                    "text": "Building society deposits:",
+                    "context": "Do not deduct borrowing.",
+                    "question": [
+                      {
+                        "text": "Sterling deposits?",
+                        "tracking_code": "1003"
+                      },
+                      {
+                        "text": "Foreign currency deposits?",
+                        "tracking_code": "1004"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "segment": {
+                    "ID": "e",
+                    "text": "Any other liquid deposits?",
+                    "context": "For example, money market funds, liquidity funds, cash liquidity funds.Money market funds are mutual funds that invest in short term debt and debt related investments. Liquidity funds are open ended investment companies which aim to preserve capital by investing in a diversified portfolio of short term debt and debt related investments. These combine the benefits of same day liquidity with the potential for competitive returns",
+                    "question": [
+                      {
+                        "text": "Any other liquid deposits?",
+                        "tracking_code": "1006"
+                      },
+                      {
+                        "text": "Of (e), what was the value of the overseas component?",
+                        "validation": "<=1006",
+                        "tracking_code": "1330"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "ID": "3",
+              "text": "What were your holdings of the following types of money market instruments:",
+              "type": "pound_mills_dec_balances",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "Sterling certificates of deposit issued by banks and building societies in the UK?",
+                    "tracking_code": "1300"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "b",
+                    "text": "Foreign currency certificates of deposit issued by banks and building societies in the UK?",
+                    "tracking_code": "1301"
+                  }
+                },
+                {
+                  "segment": {
+                    "ID": "c",
+                    "text": "Money market instruments issued by HM Treasury:",
+                    "include": "UK treasury bills.",
+                    "exclude": "longer-term UK Government Securities.",
+                    "question": [
+                      {
+                        "text": "Sterling?",
+                        "tracking_code": "1010"
+                      },
+                      {
+                        "text": "Other currencies?",
+                        "tracking_code": "1011"
+                      }
+                    ]
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "d",
+                    "text": "UK local authority (LA) debt and temporary money with LAs?",
+                    "include": "local authority bills and unsecured money lent to local",
+                    "exclude": "public corporations such as ex-local authority bus companies.",
+                    "tracking_code": "1012"
+                  }
+                }
+              ]
+            },
+            {
+              "ID": "4",
+              "text": "What were your holdings of the following types of commercial paper or bills issued by UK companies:",
+              "type": "pound_mills_dec_balances",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "Sterling commercial paper issued by banks and building societies?",
+                    "tracking_code": "1302"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "b",
+                    "text": "Foreign currency commercial paper issued by banks and building societies?",
+                    "tracking_code": "1303"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "c",
+                    "text": "Sterling commercial paper issued by other financial institutions?",
+                    "tracking_code": "1017"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "d",
+                    "text": "Other issues of UK commercial paper?",
+                    "tracking_code": "1018"
+                  }
+                }
+              ]
+            },
+            {
+              "ID": "5",
+              "text": "What were your holdings of:",
+              "type": "pound_mills_dec_balances",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "Sterling commercial paper issued by banks and building societies?",
+                    "tracking_code": "1302"
+                  }
+                },
+                {
+                  "segment": {
+                    "ID": "b",
+                    "text": "Money market instruments issued by HM Treasury:",
+                    "question": [
+                      {
+                        "text": "Money market instruments issued by non-resident businesses?",
+                        "tracking_code": "1019"
+                      },
+                      {
+                        "text": "Of (b), what was the value of the European Union (EU) component?",
+                        "context": "For a full list of overseas European Union member state countries please see Annex A at the back of this questionnaire",
+                        "validation": "<=1020",
+                        "tracking_code": "1021"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "ID": "6",
+              "text": "What were your holdings of any of the following other types of short-term assets:",
+              "type": "pound_mills_dec_balances",
+              "exclude": "derivative contracts",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "UK short-term assets?",
+                    "tracking_code": "1025"
+                  }
+                },
+                {
+                  "segment": {
+                    "ID": "b",
+                    "question": [
+                      {
+                        "text": "Overseas short-term assets?",
+                        "tracking_code": "1026"
+                      },
+                      {
+                        "text": "Of (b), what was the value of the European Union (EU) component?",
+                        "context": "For a full list of overseas European Union member state countries please see Annex A at the back of this questionnaire",
+                        "validation": "<=1020",
+                        "tracking_code": "1021"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "question": {
+                "ID": "7",
+                "text": "What was your net balance due to/from stockbrokers and/or securities dealers?",
+                "type": "pound_mills_dec_balances",
+                "context": [
+                  "Report net balances due, including amounts due on securities bought and sold for future settlement.",
+                  "Net balances owed should be included as a negative amount"
+                ],
+                "tracking_code": "1089"
+              }
+            }
+          ]
+        },
+        {
+          "ID": "Section C",
+          "text": "Section C - Transactions",
+          "context": "Deal with all investment items by reference to the date of contract rather than the payment or receipt of funds. For transactions in foreign currency, the ruling rate at the time of transactions should be used. Include in the cost of assets acquired dealing costs such as brokers' commissions and stamp duty. Show proceeds of assets realised net of such dealing costs. If you have acquired securities on which further instalments are payable (or 'rights' to subscribe to a forthcoming issue), enter the actual payment made during the quarter (or the cost of the 'rights'). Exclude any amounts due in respect of future instalments (or future subscriptions to the new issue) as these will appear in future returns. Investments in external pooled funds should be reported within mutual funds. Investments into internal pooled funds, i.e. those managed by your company and allowing investments to be made only by members of your corporate group, should be reported as the underlying investments.",
+          "include": "the cost of assets acquired dealing costs such as brokers' commissions and stamp duty. Show proceeds of assets realised net of such dealing costs",
+          "exclude": "any amounts due in respect of future instalments (or future subscriptions to the new issue) as these will appear in future returns.",
+          "segment": [
+            {
+              "ID": "8",
+              "text": "What were your net transactions in derivative contracts:",
+              "context": "Financial derivatives are defined as instruments that are linked to the price performance of any underlying instrument and which involve the trading of financial risk. For derivatives traded on a margined basis you should include cash payments/ receipts in respect of variation margins but exclude initial deposit margins and the return of these. Include only the actual cash-flows that have occurred between your company and its derivative counterparties. Do not report the values of any securities/ commodities underlying the derivatives. Transactions should be recorded on a cash basis. Where cash is received, a negative transaction should be recorded. Where a payment is made a positive transaction should be recorded.",
+              "type": "pound_mills_paid_less_rec",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "With UK counterparties?",
+                    "tracking_code": "3310"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "b",
+                    "text": "With overseas counterparties?.",
+                    "tracking_code": "3311"
+                  }
+                }
+              ]
+            },
+            {
+              "ID": "9",
+              "text": "What were your holdings of the following types of money market instruments:",
+              "exclude": "treasury bills",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "4",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Denominated in sterling: 0 up to 15 years maturity?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "Denominated in sterling: Over 15 years and undated maturity?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "c",
+                      "text": "Index linked securities denominated in sterling?",
+                      "row_index": "3"
+                    },
+                    {
+                      "ID": "d",
+                      "text": "Denominated in foreign currency?",
+                      "include": "foreign currency index linked securities",
+                      "row_index": "4"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3238"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3239"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3240"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3241"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3014"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3015"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "tracking_code": "3016"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "3017"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "10",
+              "text": "What were your acquisitions and disposals of UK public sector investments for the following",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "4",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Local authority securities and negotiable bonds?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "Local authority loans and mortgages?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "c",
+                      "text": "Public corporation loans and mortgages?",
+                      "row_index": "3"
+                    },
+                    {
+                      "ID": "d",
+                      "text": "Other UK public sector investments?",
+                      "row_index": "4"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3018"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3019"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3020"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3021"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3022"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3023"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "tracking_code": "3024"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "3025"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "11",
+              "text": "What were your acquisitions and disposals of:",
+              "include": "all transactions regardless of currency or location.",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Overseas government provincial and municipal securities?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "of a",
+                      "text": "Of (a), what was the value of the EU component?",
+                      "context": "Overseas government provincial and municipal securities?.",
+                      "row_index": "2"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3026"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3027"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "validation": "<=3026",
+                      "tracking_code": "3028"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "validation": "<=3027",
+                      "tracking_code": "3029"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "12",
+              "text": "What were your acquisitions and disposals of UK corporate sterling bonds issued by:",
+              "context": "A UK corporate bond is a certificate of debt that is issued by a corporation in order to raise money. It makes a promise to pay a specified sum of money, either at a fixed time in the future or during a future time period, and carries interest, either at a fixed or variable rate.",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Banks and building societies?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "Other UK corporates?",
+                      "row_index": "2"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3216"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3217"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3034"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3035"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "13",
+              "text": "What were your acquisitions and disposals of UK corporate foreign currency bonds issued by:",
+              "context": "A UK corporate bond is a certificate of debt that is issued by a corporation in order to raise money. It makes a promise to pay a specified sum of money, either at a fixed time in the future or during a future time period, and carries interest, either at a fixed or variable rate",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Banks and building societies?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "Other UK corporates?",
+                      "row_index": "2"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3218"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3219"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3040"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3041"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "segment": {
+                "ID": "14",
+                "text": "What were your acquisitions and disposals of the following types of UK share:",
+                "include": [
+                  "Shares in unit trust management companies.",
+                  "Permanent interest-bearing shares issued by building societies.",
+                  "Securities traded on the Alternative Investment Market (AIM)."
+                ],
+                "type": "matrix",
+                "segment": [
+                  {
+                    "ID": "a",
+                    "text": "Ordinary share",
+                    "question": {
+                      "row_count": "2",
+                      "col_count": "2",
+                      "rows": [
+                        {
+                          "ID": "Quoted?",
+                          "text": "Quoted?",
+                          "row_index": "1"
+                        },
+                        {
+                          "ID": "Unquoted?",
+                          "text": "Unquoted?",
+                          "row_index": "2"
+                        }
+                      ],
+                      "cols": [
+                        {
+                          "text": "Acquisitions of assets at cost",
+                          "col_index": "1",
+                          "context": "Millions of £",
+                          "type": "pound_hunthousands"
+                        },
+                        {
+                          "text": "Disposals of assets",
+                          "col_index": "2",
+                          "context": "Millions of £",
+                          "type": "pound_hunthousands"
+                        }
+                      ],
+                      "cells": [
+                        {
+                          "row_index": "1",
+                          "col_index": "1",
+                          "tracking_code": "3042"
+                        },
+                        {
+                          "row_index": "1",
+                          "col_index": "2",
+                          "tracking_code": "3043"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "1",
+                          "tracking_code": "3044"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "2",
+                          "tracking_code": "3045"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "ID": "b",
+                    "text": "Preference share:",
+                    "question": {
+                      "row_count": "2",
+                      "col_count": "2",
+                      "rows": [
+                        {
+                          "ID": "Quoted?",
+                          "text": "Quoted?",
+                          "row_index": "1"
+                        },
+                        {
+                          "ID": "Unquoted?",
+                          "text": "Unquoted?",
+                          "row_index": "2"
+                        }
+                      ],
+                      "cols": [
+                        {
+                          "text": "Acquisitions of assets at cost",
+                          "col_index": "1",
+                          "context": "Millions of £",
+                          "type": "pound_hunthousands"
+                        },
+                        {
+                          "text": "Disposals of assets",
+                          "col_index": "2",
+                          "context": "Millions of £",
+                          "type": "pound_hunthousands"
+                        }
+                      ],
+                      "cells": [
+                        {
+                          "row_index": "1",
+                          "col_index": "1",
+                          "tracking_code": "3046"
+                        },
+                        {
+                          "row_index": "1",
+                          "col_index": "2",
+                          "tracking_code": "3047"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "1",
+                          "tracking_code": "3048"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "2",
+                          "tracking_code": "3049"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "ID": "15",
+              "text": "What were your acquisitions and disposals of UK corporate foreign currency bonds issued by:",
+              "context": "A UK corporate bond is a certificate of debt that is issued by a corporation in order to raise money. It makes a promise to pay a specified sum of money, either at a fixed time in the future or during a future time period, and carries interest, either at a fixed or variable rate",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "6",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Overseas bonds?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "of a",
+                      "text": "Of (a), what was the value of the EU component?",
+                      "context": "Overseas bonds?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "Overseas ordinary shares?",
+                      "row_index": "3"
+                    },
+                    {
+                      "ID": "of b",
+                      "text": "Of (b), what was the value of the EU component?",
+                      "context": "Overseas ordinary shares?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "c",
+                      "text": "Overseas preference shares?",
+                      "row_index": "3"
+                    },
+                    {
+                      "ID": "of c",
+                      "text": "Of (c), what was the value of the EU component?",
+                      "context": "Overseas ordinary shares?",
+                      "row_index": "4"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3050"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3051"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3052"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3053"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3054"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3055"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "tracking_code": "3056"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "3057"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "1",
+                      "tracking_code": "3058"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "2",
+                      "tracking_code": "3059"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "1",
+                      "tracking_code": "3060"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "2",
+                      "tracking_code": "3061"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "16",
+              "text": "What were your acquisitions and disposals of mutual fund investments for the following:",
+              "include": "securities of investment trusts",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "7",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "UK authorised unit trust units?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "UK unauthorised unit trust units?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "c",
+                      "text": "UK investment trust securities?",
+                      "row_index": "3"
+                    },
+                    {
+                      "ID": "d",
+                      "text": "UK open-ended investment companies?",
+                      "row_index": "4"
+                    },
+                    {
+                      "ID": "e",
+                      "text": "Other UK mutual funds?",
+                      "include": "UK hedge funds",
+                      "row_index": "5"
+                    },
+                    {
+                      "ID": "f",
+                      "text": "Overseas mutual funds?",
+                      "include": "UK overseas hedge funds",
+                      "row_index": "6"
+                    },
+                    {
+                      "ID": "of f",
+                      "text": "Of (f), what was the value of the EU component?",
+                      "context": "Overseas mutual funds? Include overseas hedge funds",
+                      "row_index": "7"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3062"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3063"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3064"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3065"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3066"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3067"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "tracking_code": "3068"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "3069"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "1",
+                      "tracking_code": "3220"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "2",
+                      "tracking_code": "3221"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "1",
+                      "tracking_code": "3070"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "2",
+                      "tracking_code": "3071"
+                    },
+                    {
+                      "row_index": "7",
+                      "col_index": "1",
+                      "tracking_code": "3072"
+                    },
+                    {
+                      "row_index": "7",
+                      "col_index": "2",
+                      "tracking_code": "3073"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "17",
+              "text": "What were your transactions in the following UK loans:",
+              "include": "sterling asset backed loans",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "7",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Loans to individuals secured on dwellings?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "Other loans including policy loans and loans to individuals?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "c",
+                      "text": "Loans to businesses?",
+                      "exclude": [
+                        "Loans to those of your UK subsidiaries whose transactions and balances have not been included in this questionnaire.",
+                        "Loans to your UK associate companies"
+                      ],
+                      "row_index": "3"
+                    },
+                    {
+                      "ID": "d",
+                      "text": "Loans to others?",
+                      "exclude": "Exclude all bank term deposits and building society investments",
+                      "row_index": "4"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Assets acquired (i.e. loans made) during the quarter (at cost)",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets (i.e. loans settled) during the quarter (at settlement amount)s",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3074"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3075"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3076"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3077"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3078"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3079"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "tracking_code": "3082"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "3083"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "18",
+              "text": "What were your acquisitions and disposals of the following investments and fixed assets:",
+              "include": [
+                "The total capital value of any assets that you have bought on hire purchase or acquired (as lessee) under a finance leasing arrangement in the period covered by this questionnaire, but not interest and instalment payments.",
+                "Assets acquired for hiring, renting and operating leasing purposes.",
+                "Include associated architects' and surveyors' fees and legal charges, stamp duties and agents' commissions.",
+                "Enter against assets realised the net amount receivable after deduction of all transfer costs.",
+                "Where the purchase of land and buildings is not separable, record under the component estimated to be of the greater value."
+              ],
+              "exclude": "the capital value of any assets acquired by your business but leased out to others under finance leasing arrangements.",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "7",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Existing UK buildings and property?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "UK land?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "c",
+                      "text": "UK new construction work?",
+                      "exclude": [
+                        "Loans to those of your UK subsidiaries whose transactions and balances have not been included in this questionnaire.",
+                        "Loans to your UK associate companies"
+                      ],
+                      "row_index": "3"
+                    },
+                    {
+                      "ID": "d",
+                      "text": "UK vehicles?",
+                      "row_index": "4"
+                    },
+                    {
+                      "ID": "e",
+                      "text": "UK machinery and equipment?",
+                      "row_index": "5"
+                    },
+                    {
+                      "ID": "f",
+                      "text": "UK valuables?",
+                      "row_index": "6"
+                    },
+                    {
+                      "ID": "g",
+                      "text": "UK intangibles?",
+                      "row_index": "7"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3088"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3089"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3090"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3091"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3222"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "NULL"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "tracking_code": "3224"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "3225"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "1",
+                      "tracking_code": "3226"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "2",
+                      "tracking_code": "3227"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "1",
+                      "tracking_code": "3228"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "2",
+                      "tracking_code": "3229"
+                    },
+                    {
+                      "row_index": "7",
+                      "col_index": "1",
+                      "tracking_code": "3230"
+                    },
+                    {
+                      "row_index": "7",
+                      "col_index": "2",
+                      "tracking_code": "3231"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "19",
+              "text": "For the categories noted in question 18, what were your acquisitions and disposals of overseas investments and fixed assets?",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "For the categories noted in question 18, what were your acquisitions and disposals of overseas investments and fixed assets?",
+                      "row_index": "1"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3102"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3103"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "20",
+              "text": "What were your acquisitions and disposals of direct investment assets for the following:",
+              "context": [
+                "Direct investment is a long-term relationship between two entities. It is held to exist where the parent owns 10% or more of the ordinary shares or voting power of an incorporated enterprise or the equivalent of an unincorporated enterprise. It involves both the initial transaction between the two entities and all subsequent capital transactions between them and among affiliated enterprises, both incorporated and unincorporated.",
+                "Report the value of acquisitions and disposals in companies that are attributable to you, and for your overseas branches and agencies, give the value of loans make and repayments received on branch/head office account."
+              ],
+              "include": [
+                "The value of loans from and repayments to the UK reporting company but do not deduct borrowing by the UK reporting company from these concerns.",
+                "Inter-company loans made and repayments received."
+              ],
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "3",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Non-insurance subsidiary and associate companies in the UK?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "UK insurance subsidiary, associate and holding companies, where consolidated figures are not included in this questionnaire?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "c",
+                      "text": "Overseas subsidiaries, associates, branches and agencies?",
+                      "exclude": [
+                        "Loans to those of your UK subsidiaries whose transactions and balances have not been included in this questionnaire.",
+                        "Loans to your UK associate companies"
+                      ],
+                      "row_index": "3"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Assets acquired (i.e. loans made) during the quarter (at cost)",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets (i.e. loans settled) during the quarter (at settlement amount)",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3104"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3105"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3106"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3107"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3108"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3109"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "21",
+              "text": "What were your transactions in overseas loans for the following:",
+              "include": "loans to overseas parent companies' head office, fellow subsidiaries and associates not included elsewhere in this questionnaire.",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Parent companies?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "Other overseas loans?",
+                      "row_index": "2"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Assets acquired (i.e. loans made) during the quarter (at cost)",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets (i.e. loans settled) during the quarter (at settlement amount)",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3084"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3085"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3086"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3087"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "ID": "22",
+              "text": "What were your acquisitions and disposals of the other assets not covered elsewhere in this questionnaire, for the following:",
+              "include": [
+                "Items such as certificates of tax deposit, insurance policies and annuities.",
+                "Loans covered by Export Credit Guarantee Department (ECGD) specific bank guarantees or ECGD buyer credit guarantees."
+              ],
+              "exclude": "pre-payments and debtors.",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "3",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "UK assets?",
+                      "row_index": "1"
+                    },
+                    {
+                      "ID": "b",
+                      "text": "Overseas assets?",
+                      "row_index": "2"
+                    },
+                    {
+                      "ID": "of b",
+                      "text": "Of (b), what was the value of the EU component?",
+                      "context": "Overseas assets?",
+                      "row_index": "3"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Acquisitions of assets at cost",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Disposals of assets",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3110"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3111"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "3112"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "3113"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "3114"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "3115"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ID": "Section D",
+          "text": "Section D - Liabilities",
+          "segment": [
+            {
+              "segment": {
+                "ID": "23",
+                "text": "What were your outstanding balances of borrowing from:",
+                "include": [
+                  "Foreign currency liabilities on back-to-back loans.",
+                  "Overdrafts."
+                ],
+                "segment": {
+                  "ID": "a",
+                  "text": "UK banks:",
+                  "question": {
+                    "text": "Sterling?",
+                    "tracking_code": "2000"
+                  },
+                  "question": {
+                    "text": "Foreign currency?",
+                    "tracking_code": "2001"
+                  }
+                },
+                "segment": {
+                  "ID": "b",
+                  "text": "Building societies:",
+                  "question": [
+                    {
+                      "text": "Sterling?",
+                      "tracking_code": "2002"
+                    },
+                    {
+                      "text": "Foreign currency?",
+                      "tracking_code": "2003"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "ID": "24",
+              "text": "What were your outstanding balances of other UK borrowing arising from:",
+              "type": "pound_mills_dec_balances",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "Issue of UK securities (other than ordinary shares)?",
+                    "include": "issues of floating rate notes and preference shares",
+                    "tracking_code": "2004"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "b",
+                    "text": "Issue of sterling commercial paper?",
+                    "tracking_code": "2005"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "c",
+                    "text": "Other?",
+                    "include": "borrowing from parent, subsidiary and associate companies, and other related concerns not included elsewhere in this questionnaire",
+                    "tracking_code": "2006"
+                  }
+                }
+              ]
+            },
+            {
+              "ID": "25",
+              "text": "What were your outstanding balances of other UK borrowing arising from:",
+              "type": "pound_mills_dec_balances",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "Banks?",
+                    "tracking_code": "2007"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "b",
+                    "text": "Related companies overseas?",
+                    "include": "borrowing from parent, subsidiary and associate companies, and other related concerns not included elsewhere in this questionnaire",
+                    "tracking_code": "2008"
+                  }
+                }
+              ]
+            },
+            {
+              "ID": "26",
+              "text": "What were your outstanding balances of other overseas borrowing for:",
+              "type": "pound_mills_dec_balances",
+              "segment": [
+                {
+                  "question": {
+                    "ID": "a",
+                    "text": "One year or less??",
+                    "tracking_code": "2009"
+                  }
+                },
+                {
+                  "question": {
+                    "ID": "b",
+                    "text": "More than a year?",
+                    "include": "borrowing from parent, subsidiary and associate companies, and other related concerns not included elsewhere in this questionnaire",
+                    "tracking_code": "2010"
+                  }
+                }
+              ]
+            },
+            {
+              "ID": "19",
+              "text": "What were your issues and redemptions for cash of share capital of companies included in this questionnaire?",
+              "type": "matrix",
+              "question": [
+                {
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows": [
+                    {
+                      "ID": "a",
+                      "text": "Gross of dealing costs",
+                      "row_index": "1"
+                    }
+                  ],
+                  "cols": [
+                    {
+                      "text": "Issues",
+                      "col_index": "1",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    },
+                    {
+                      "text": "Redemptions",
+                      "col_index": "2",
+                      "context": "Millions of £",
+                      "type": "pound_hunthousands"
+                    }
+                  ],
+                  "cells": [
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "3116"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "3117"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "ID": "Section E",
+          "text": "Section E - Comments and Contact Details",
+          "segment": [
+            {
+              "ID": "28",
+              "text": "Please use the box below to:",
+              "context": [
+                "Describe any significant movements in data between this and previous returns.",
+                "Tell us if you have merged with, or been acquired by, another company.",
+                "Please include details of any significant impacts upon your data resulting from changes in the accounting approaches you have taken."
+              ],
+              "type": "data_changes_1",
+              "tracking_code": "C_3"
+            },
+            {
+              "ID": "29",
+              "text": "Please provide details of the person we should contact if we have any queries regarding the information returned on this questionnaire:",
+              "type": "contact_1",
+              "tracking_code": "C_4"
+            },
+            {
+              "ID": "29",
+              "text": "Please provide details of the person we should contact if we have any queries regarding the information returned on this questionnaire:",
+              "type": "contact_1",
+              "tracking_code": "C_4"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

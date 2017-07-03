@@ -1,0 +1,425 @@
+{
+  "survey_scrape_info":{
+    "file_name": "ex_sel024-ft0002.pdf",
+    "folder_name": "024 - Questionnaire Example",
+    "download_date": "22/03/2017",
+    "scrape_date": "17/05/2017"
+  },
+  "segment": [
+
+    {
+      "segment_type": "survey",
+      "text": "Quarterly Fuels Survey",
+      "context": [
+        "Please complete this questionnaire for the business named on the front page",
+        "Please provide both quantities and cost rounded to the nearest whole number",
+        "Leave the response box blank if the question is not applicable"
+        ],
+      "survey_number": "024",
+      "form_type": "0002",
+      "reporting_period": {
+        "start": "01/10/2016",
+        "end": "31/12/2016"
+      }
+    },
+    {
+      "segment": {
+        "ID": "Section A",
+        "text": [
+          "Section A - Oil",
+          "Please answer all questions for the reporting period"
+        ],
+        "include": [
+          "duty paid",
+          "all costs incurred transporting fuel to your premises",
+          "gas oil",
+          "diesel oil"
+        ],
+        "exclude": [
+          "lubricants",
+          "drawing or quelching oils",
+          "fuels used as raw materials",
+          "fuels for use in fork lift trucks",
+          "fuels for use in road vehicles"
+        ],
+        "segment": [
+          {
+            "question": [
+              {
+                "ID": "1",
+                "text": "What was the purchase cost (excl. VAT & Levy) of heavy fuel oil?",
+                "type": "pound_whole",
+                "tracking_code": "c_1"
+              },
+              {
+                "ID": "2a",
+                "text": "What was the quantity of heavy fuel oil purchased?",
+                "type": "whole_quant",
+                "tracking_code": "c_2"
+              },
+              {
+                "ID": "2b",
+                "text": "Was the heavy fuel oil purchased in tonnes or litres??",
+                "type": "single_select",
+                "options": [
+                  "tonnes",
+                  "litres"
+                ],
+                "tracking_code": "c_2"
+              },
+              {
+                "ID": "3",
+                "text": "What was the purchase cost (excl. VAT & Levy) of light fuel oil?",
+                "type": "pound_whole",
+                "tracking_code": "c_3"
+              },
+              {
+                "ID": "4a",
+                "text": "What was the quantity of light fuel oil purchased?",
+                "type": "whole_quant",
+                "tracking_code": "c_4"
+              },
+              {
+                "ID": "4b",
+                "text": "Was the light fuel oil purchased in tonnes or litres?",
+                "type": "single_select",
+                "tracking_code": "c_5"
+              }
+            ]
+          }
+        ]
+      },
+      "segment": {
+        "ID": "Section B",
+        "text": [
+          "Section B - Coal",
+          "Please answer all questions for the reporting period"
+        ],
+        "include": "purchases of all types of coal",
+        "exclude": [
+          "slurry purchases",
+          "coke"
+        ],
+        "segment": [
+          {
+            "question": [
+              {
+                "ID": "5",
+                "text": "What was the purchase cost (excl. VAT & Levy) of coal?",
+                "type": "pound_whole",
+                "tracking_code": "c_7"
+              },
+              {
+                "ID": "6",
+                "text": "What was the quantity of coal purchased in tonnes?",
+                "type": "whole_tonnes",
+                "tracking_code": "c_8"
+              },
+              {
+                "ID": "7",
+                "text": "Do you know the percentage rate of Climate Change Levy paid?",
+                "type": "boolean",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "c_11"
+                  }
+                ],
+                "tracking_code": "c_9"
+              },
+              {
+                "ID": "8",
+                "text": "How much was the Climate Change Levy?",
+                "type": "pound_whole",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "c_12"
+                  }
+                ],
+                "tracking_code": "c_10"
+              },
+              {
+                "ID": "9",
+                "text": "What percentage rate of Climate Change Levy was paid?",
+                "type": "percentage",
+                "tracking_code": "c_11"
+              },
+              {
+                "ID": "10",
+                "text": "What was the total cost (excl. VAT) of coal?",
+                "context": "Climate Change Levy & purchase cost",
+                "type": "pound_whole",
+                "tracking_code": "c_12"
+              },
+              {
+                "ID": "11",
+                "text": "What was the net Calorific value of coal purchased?",
+                "type": "whole_kj/kg",
+                "tracking_code": "c_13"
+              }
+            ]
+          }
+        ]
+      },
+      "segment": {
+        "ID": "Section C",
+        "text": [
+          "Section C - gas",
+          "Please answer all questions for the reporting period"
+        ],
+        "include": [
+          "maximum demand charges",
+          "standing charges",
+          "meter charges"
+          ],
+        "segment": [
+          {
+            "ID":"Firm Contract",
+            "text":"Firm Contract",
+            "question": [
+              {
+                "ID": "12",
+                "text": "What was the purchase cost (excl. VAT & Levy) of gas?",
+                "type": "pound_whole",
+                "tracking_code": "c_14"
+              },
+              {
+                "ID": "13",
+                "text": "What was the quantity of gas purchased in kWh?",
+                "type": "whole_kWh",
+                "tracking_code": "c_15"
+              },
+              {
+                "ID": "14",
+                "text": "Do you know the percentage rate of Climate Change Levy paid?",
+                "type": "boolean",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "c_18"
+                  }
+                ],
+                "tracking_code": "c_16"
+              },
+              {
+                "ID": "15",
+                "text": "How much was the Climate Change Levy?",
+                "type": "pound_whole",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "c_19"
+                  }
+                ],
+                "tracking_code": "c_17"
+              },
+              {
+                "ID": "16",
+                "text": "What percentage rate of Climate Change Levy was paid?",
+                "type": "percentage",
+                "tracking_code": "c_18"
+              },
+              {
+                "ID": "17",
+                "text": "What was the total cost (excl. VAT) of gas?",
+                "context": "Climate Change Levy & purchase cost",
+                "type": "pound_whole",
+                "tracking_code": "c_19"
+              },
+              {
+                "ID": "18",
+                "text": "What was the name of your gas supplier?",
+                "type": "open_text",
+                "tracking_code": "c_20"
+              },
+              {
+                "ID": "19",
+                "text": "What was the main use for the gas?",
+                "type": "single_select",
+                "options":[
+                  "Heat",
+                  "Raw materials",
+                  "Electricity generation"
+                  ],
+                "tracking_code": "c_21"
+              }
+
+            ]
+          },
+          {
+            "ID":"Interruptible Contract",
+            "text":"Interruptible Contract",
+            "question": [
+              {
+                "ID": "20",
+                "text": "What was the purchase cost (excl. VAT & Levy) of gas?",
+                "type": "pound_whole",
+                "tracking_code": "c22"
+              },
+              {
+                "ID": "21",
+                "text": "What was the quantity of gas purchased in kWh?",
+                "type": "whole_kWh",
+                "tracking_code": "c_23"
+              },
+              {
+                "ID": "22",
+                "text": "Do you know the percentage rate of Climate Change Levy paid?",
+                "type": "boolean",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "c_26"
+                  }
+                ],
+                "tracking_code": "c_24"
+              },
+              {
+                "ID": "23",
+                "text": "How much was the Climate Change Levy?",
+                "type": "pound_whole",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "c_27"
+                  }
+                ],
+                "tracking_code": "c_25"
+              },
+              {
+                "ID": "24",
+                "text": "What percentage rate of Climate Change Levy was paid?",
+                "type": "percentage",
+                "tracking_code": "c_26"
+              },
+              {
+                "ID": "25",
+                "text": "What was the total cost (excl. VAT) of coal?",
+                "context": "Climate Change Levy & purchase cost",
+                "type": "pound_whole",
+                "tracking_code": "c_27"
+              },
+              {
+                "ID": "26",
+                "text": "What was the name of your gas supplier?",
+                "type": "open_text",
+                "tracking_code": "c_28"
+              },
+              {
+                "ID": "27",
+                "text": "What was the main use for the gas?",
+                "type": "single_select",
+                "options":[
+                  "Heat",
+                  "Raw materials",
+                  "Electricity generation"
+                ],
+                "tracking_code": "c_29"
+              }
+
+            ]
+          }
+        ]
+      },
+      "segment": {
+        "ID": "Section D",
+        "text": [
+          "Section D - Electricity",
+          "Please answer all questions for the reporting period"
+        ],
+        "include": [
+          "only electricity supplied from external sources",
+          "maximum demand charges",
+          "standing charges",
+          "meter charges"
+        ],
+        "exclude": [
+          "costs for any self-generated electricity",
+          "receipts from sales of self-generated electricity"
+        ],
+        "segment": [
+          {
+            "question": [
+              {
+                "ID": "28",
+                "text": "What was the purchase cost (excl. VAT & Levy) of electricity?",
+                "type": "pound_whole",
+                "tracking_code": "c_30"
+              },
+              {
+                "ID": "29",
+                "text": "What was the quantity of electricity purchased in kWh?",
+                "type": "whole_tonnes",
+                "tracking_code": "c_31"
+              },
+              {
+                "ID": "30",
+                "text": "Do you know the percentage rate of Climate Change Levy paid?",
+                "type": "boolean",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "c_34"
+                  }
+                ],
+                "tracking_code": "c_32"
+              },
+              {
+                "ID": "31",
+                "text": "How much was the Climate Change Levy?",
+                "type": "pound_whole",
+                "routing": [
+                  {
+                    "value": "Yes",
+                    "destination": "c_35"
+                  }
+                ],
+                "tracking_code": "c_33"
+              },
+              {
+                "ID": "32",
+                "text": "What percentage rate of Climate Change Levy was paid?",
+                "type": "percentage",
+                "tracking_code": "c_34"
+              },
+              {
+                "ID": "33",
+                "text": "What was the total cost (excl. VAT) of electricity?",
+                "context": "Climate Change Levy & purchase cost",
+                "type": "pound_whole",
+                "tracking_code": "c_35"
+              },
+              {
+                "ID": "34",
+                "text": "What was the name of your electricity supplier?",
+                "type": "open_text",
+                "tracking_code": "c_36"
+              },
+              {
+                "ID": "35",
+                "text": "Comments",
+                "context": "Please use this box to explain any large price or quantity changes compared to previous quarters or if there are any other comments that will increase our understanding of your data. Please include details of any credits or rebates received in respect of fuel payments made in a previous period.",
+                "include":"details of any credits or rebates received in respect of fuel payments made in a previous period.",
+                "type": "open_text",
+                "tracking_code": "c_36"
+              },
+              {
+                "ID": "Contact Detail",
+                "type":"contact_2",
+                "tracking_code":"c_37"},
+              {
+                "text": "Signature",
+                "type":"signature",
+                "tracking_code":"c_38"}
+
+            ]
+          }
+        ]
+      }
+    }
+
+
+    ]
+
+}

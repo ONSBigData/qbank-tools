@@ -1,0 +1,113 @@
+{
+  "survey_scrape_info": {
+    "download_date": "24/03/2017",
+    "scrape_date": "19/05/2017",
+    "file_name": "ex_sel009-ft0156.pdf",
+    "folder_name": "009 - QUESTIONNAIRE EXAMPLES"
+  },
+  "segment": {
+    "segment_type": "survey",
+    "text": "Monthly Business Survey",
+    "survey_number": "009",
+    "form_type": "156",
+    "reporting_period": {
+      "start": "01/06/2015",
+      "end": "30/06/2015"
+    },
+    "segment": {
+      "ID": "Questions and Telephone Return Instructions",
+      "segment": [
+        {
+          "text": "Data should relate to all sites in England, Scotland and Wales of the following business:",
+          "ID": "1",
+          "context":"*PIPE* business name"
+        },
+        {
+          "text": "You must return your data using our Telephone Data Entry (TDE) service. Freephone 0800 0858163 Your Respondent Identification Number:",
+          "context": [
+            "You will be asked to enter your data using the telephone keypad in the order listed below. Please retain a copy of your data for future reference.",
+          "*PIPE* Respondent Identification Number"],
+          "ID": "2"
+        },
+        {
+          "text": "For future queries about this call, please quote your reference number",
+          "context":"*PIPE* reference number ",
+          "ID": "5"
+        },
+        {
+          "ID":"4",
+          "text":"On 12 June 2015 what was the number of employees for the business named above?",
+          "context":"An employee is anyone aged 16 years or over that your organisation directly pays from its payroll(s), in return for carrying out a full-time or part-time job or being on a training scheme.",
+          "inclusions":[
+            "all workers paid directly from this business's payroll(s)",
+            "those temporarily absent but still being paid, for example on maternity leave."
+          ],
+          "exclusions":[
+            "agency workers paid directly from the agency payroll",
+            "voluntary workers",
+            "former employees only receiving a pension",
+            "self-employed workers",
+            "working owners who are not paid via PAYE."
+          ],
+          "question":[
+            {
+              "ID":"a",
+              "text":"Male employees working more than 30 hours per week?",
+              "type":"employees",
+              "tracking_code":"c_2"
+            },
+            {
+              "ID":"b",
+              "text":"Male employees working 30 hours or less per week?",
+              "type":"employees",
+              "tracking_code":"c_3"
+            },
+            {
+              "ID":"c",
+              "text":"Female employees working more than 30 hours per week?",
+              "type":"employees",
+              "tracking_code":"c_4"
+            },
+            {
+              "ID":"d",
+              "text":"Female employees working 30 hours or less per week?",
+              "type":"employees",
+              "tracking_code":"c_5"
+            },
+            {
+              "ID":"e",
+              "text":"Total employees?",
+              "type":"employees",
+              "tracking_code":"c_6"
+            }
+          ]
+        }
+      ],
+      "question": [
+        {
+          "ID": "3",
+          "text": "For the period 1 June 2015 to 30 June 2015 what was the value of the business's turnover excluding VAT and excise duties?",
+          "context": "If your figures do not relate to the exact calendar month, please provide us with the dates you are reporting for. Please round your figure to the nearest £ thousand. Even if your turnover is zero, please still complete a return using the TDE system. If an exact figure is not available, please provide a careful estimate.",
+          "type": "pound_thousands",
+          "tracking_code": "c_1",
+          "inclusions": [
+            "commission",
+            "costs incurred and passed on to customers",
+            "sales of goods purchased for resale",
+            "payments for work in progress",
+            "income from sub-contracted activities",
+            "revenue earned from other parts of the business, not named at the top of this page (please supply at fair value)."
+          ],
+          "exclusions": [
+            "VAT",
+            "excise duty",
+            "grants and subsidies",
+            "gains on sales of fixed capital assets",
+            "insurance claims",
+            "interest received"
+          ]
+        }
+      ]
+    }
+  }
+}

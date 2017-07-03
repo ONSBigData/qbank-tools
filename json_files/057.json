@@ -1,0 +1,1849 @@
+{
+  "survey_scrape_info": {
+    "file_name": "ex_sel057-ft0005.pdf",
+    "folder_name": "057 - Questionnaire Examples Q1 2017 onwards",
+    "download_date": "22/03/2017",
+    "scrape_date": "17/05/2017"
+  },
+  "segment": {
+    "segment_type": "survey",
+    "text": "Quarterly Survey of International Trade in Services",
+    "survey_number": "057",
+    "form_type": "0005",
+    "reporting_period": {
+      "start": "01/01/2017",
+      "finish": "31/03/2017"
+    },
+    "context": [
+      "This questionnaire is divided into two sections:",
+      "Section A asks you for details about your business' international trade in services.",
+      "Section B provides you with a comments box and asks for your contact details.",
+      "Report all figures on an annual/quarterly basis.",
+      "Complete this questionnaire on an accruals accounting, rather than a cash accounting, basis."
+    ],
+    "inclusions":[
+      "England",
+      "Scotland",
+      "Wales",
+      "Northern Ireland"
+    ],
+    "exclusions":[
+      "Channel Islands",
+      "Isle of Man"
+    ],
+    "segment":[
+      {
+        "ID": "Section A",
+        "text": "Section A - International Trade in Services",
+        "context": "This section asks you for details about your ITIS, including:",
+        "inclusions": [
+          "the value of exports and imports for each service",
+          "a breakdown by country of these services."
+        ],
+        "question":[
+          {
+            "ID": "1",
+            "text": "During the reporting period did your business conduct any international trade in services?",
+            "context": [
+              "By services we mean intangible commodities. International trade in services is exporting services from or importing services to the UK. This could include international trade to any individual or business entity located outside the UK.",
+              "A full list of services can be found in Question 3."
+            ],
+            "inclusions": [
+              "transactions with branches or subsidiaries of UK businesses that are located outside the UK",
+              "commission (a cut of a fee paid for a service provided)",
+              "for construction services, include international trade in both goods and services."
+            ],
+            "exclusions":[
+              "Value Added Tax (VAT)",
+              "transactions with branches or subsidiaries of foreign businesses that are located within the UK",
+              "interest, dividends, airfares, business travel and subsistence and transportation services"
+            ],
+            "type": "boolean",
+            "routing": [
+              {
+                "value": "Yes",
+                "destination": "0102"
+              },
+              {
+                "value": "No",
+                "destination": "0103"
+              }
+            ],
+            "tracking_code": "0101"
+          },
+          {
+            "ID": "2",
+            "text": "During the reporting period was the total value of international trade in services conducted by your business less than £1,000?",
+            "type": "boolean",
+            "routing": [
+              {
+                "value": "Yes",
+                "destination": "0103"
+              },
+              {
+                "value": "No",
+                "destination": "1001"
+              }
+            ],
+            "tracking_code": "0102"
+          }
+        ],
+        "segment":[
+          {
+            "ID": "3",
+            "text": "During the reporting period, for each international service that your business conducted, write: i) the total export value, ii) the total import value.",
+            "context":[
+              "This questionnaire should be completed according to the services your business trades, and not according to the nature of your business.",
+              "For example, if your business is a recruitment agency and you buy legal services and public relations services from overseas, then you should enter figures relating to these trades in service activities 11 (legal services) and 9 (public relations services). The figures you report in Service Code 10 (recruitment services) should relate to income from, or expenditure on, recruitment services specifically.",
+              "Report all figures to the nearest £1,000."
+            ],
+            "segment":[
+              {
+                "text": "Agricultural and Mining Services",
+                "question":{
+                  "type": "matrix",
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows":[
+                    {
+                      "row_index": "1",
+                      "text": "Agricultural, forestry and fishing services",
+                      "context": "Service Code - 01"
+                    },
+                    {
+                      "row_index": "2",
+                      "text": "Mining and oil and gas extraction services",
+                      "context": "Service Code - 02"
+                    }
+                  ],
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "1001"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "1002"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "1003"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "1004"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Manufacturing, Maintenance and On-site Processing Services",
+                "question":{
+                  "type": "matrix",
+                  "row_count": "3",
+                  "col_count": "2",
+                  "rows":[
+                    {
+                      "row_index": "1",
+                      "text": "Waste treatment and depollution services",
+                      "context": "Service Code - 03"
+                    },
+                    {
+                      "row_index": "2",
+                      "text": "Manufacturing services on goods owned by others",
+                      "context": "Service Code - 04",
+                      "inclusions": [
+                        "For imports: Include the fees charged by foreign businesses for the processing, assembly, labelling and packing of goods overseas that are owned by your business.",
+                        "For exports: Include services such as processing, assembly, labelling and packing of goods that are owned by another foreign business"
+                      ]
+                    },
+                    {
+                      "row_index": "3",
+                      "text": "Maintenance and repair services",
+                      "context": "Service Code - 05",
+                      "inclusions":[
+                        "For imports: Include the fees charged by foreign businesses for maintenance and repair work on goods owned by your business.",
+                        "For exports: Include maintenance and repair work on goods that are owned by foreign residents"
+                      ],
+                      "exclusions":[
+                        "For exports: Exclude the value of parts and material supplied by the repairer, if they are invoiced separately from the charge for the maintenance and repair service"
+                      ]
+
+                    }
+                  ],
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "2001"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "2002"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "2003"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "2004"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "2005"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "2006"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Business and Professional Services",
+                "question":[
+                  {
+                    "type": "matrix",
+                    "row_count": "10",
+                    "col_count": "2",
+                    "rows":[
+                      {
+                        "row_index": "1",
+                        "text": "Accountancy, auditing, bookkeeping and tax consulting services",
+                        "context": "Service Code - 06"
+                      },
+                      {
+                        "row_index": "2",
+                        "text": "Advertising, market research and public opinion polling services",
+                        "context": "Service Code - 07"
+                      },
+                      {
+                        "row_index": "3",
+                        "text": "Business management and management consulting services",
+                        "context": "Service Code - 08",
+                        "inclusions": "advisory, guidance and operational assistance services provided to businesses for business policy and strategy and overall planning, structuring and control of an organisation"
+                      },
+                      {
+                        "row_index": "4",
+                        "text": "Public relations services",
+                        "context": "Service Code - 09"
+                      },
+                      {
+                        "row_index": "5",
+                        "text": "Recruitment services",
+                        "context": "Service Code - 10"
+                      },
+                      {
+                        "row_index": "6",
+                        "text": "Legal services",
+                        "context": "Service Code - 11"
+                      },
+                      {
+                        "row_index": "7",
+                        "text": "Operating leasing services",
+                        "context": "Service Code - 12",
+                        "inclusions": "the leasing (rental) and charters without crew of ships, aircraft and transport equipment and operating lease payments relating to other types of equipment without an operator, including computers and telecommunications equipment.",
+                        "exclusions": "rental of ships and aircraft with crew and licence payments for the right to use intangible assets, such as software, leasing of telecommunications lines for capacity"
+                      },
+                      {
+                        "row_index": "8",
+                        "text": "Procurement services",
+                        "context": "Service Code - 13"
+                      },
+                      {
+                        "row_index": "9",
+                        "text": "Property management services",
+                        "context": "Service Code - 14"
+                      },
+                      {
+                        "row_index": "10",
+                        "text": "Other businesses and professional services",
+                        "context": "Service Code - 15",
+                        "inclusions": "for example, distribution services related to water, steam, gas and petroleum products; security and investigative services; translation and interpretation; photographic services; building cleaning and real estate services"
+                      }
+                    ],
+                    "cols":[
+                      {
+                        "col_index": "1",
+                        "text": "Income from Exports",
+                        "type": "pound_thousands_2"
+                      },
+                      {
+                        "col_index": "2",
+                        "text": "Expenditure on imports",
+                        "type": "pound_thousands_2"
+                      }
+                    ],
+                    "cells":[
+                      {
+                        "row_index": "1",
+                        "col_index": "1",
+                        "tracking_code": "3001"
+                      },
+                      {
+                        "row_index": "1",
+                        "col_index": "2",
+                        "tracking_code": "3002"
+                      },
+                      {
+                        "row_index": "2",
+                        "col_index": "1",
+                        "tracking_code": "3003"
+                      },
+                      {
+                        "row_index": "2",
+                        "col_index": "2",
+                        "tracking_code": "3004"
+                      },
+                      {
+                        "row_index": "3",
+                        "col_index": "1",
+                        "tracking_code": "3005"
+                      },
+                      {
+                        "row_index": "3",
+                        "col_index": "2",
+                        "tracking_code": "3006"
+                      },
+                      {
+                        "row_index": "4",
+                        "col_index": "1",
+                        "tracking_code": "3007"
+                      },
+                      {
+                        "row_index": "4",
+                        "col_index": "2",
+                        "tracking_code": "3008"
+                      },
+                      {
+                        "row_index": "5",
+                        "col_index": "1",
+                        "tracking_code": "3009"
+                      },
+                      {
+                        "row_index": "5",
+                        "col_index": "2",
+                        "tracking_code": "3010"
+                      },
+                      {
+                        "row_index": "6",
+                        "col_index": "1",
+                        "tracking_code": "3011"
+                      },
+                      {
+                        "row_index": "6",
+                        "col_index": "2",
+                        "tracking_code": "3012"
+                      },
+                      {
+                        "row_index": "7",
+                        "col_index": "1",
+                        "tracking_code": "3013"
+                      },
+                      {
+                        "row_index": "7",
+                        "col_index": "2",
+                        "tracking_code": "3014"
+                      },
+                      {
+                        "row_index": "8",
+                        "col_index": "1",
+                        "tracking_code": "3015"
+                      },
+                      {
+                        "row_index": "8",
+                        "col_index": "2",
+                        "tracking_code": "3016"
+                      },
+                      {
+                        "row_index": "9",
+                        "col_index": "1",
+                        "tracking_code": "3017"
+                      },
+                      {
+                        "row_index": "9",
+                        "col_index": "2",
+                        "tracking_code": "3018"
+                      },
+                      {
+                        "row_index": "10",
+                        "col_index": "1",
+                        "tracking_code": "3019"
+                      },
+                      {
+                        "row_index": "10",
+                        "col_index": "2",
+                        "tracking_code": "3020"
+                      }
+                    ]
+                  },
+                  {
+                    "text": "Detailed description:",
+                    "context": [
+                      "Other businesses and professional services",
+                      "Service Code - 15",
+                      "Include: for example, distribution services related to water, steam, gas and petroleum products; security and investigative services; translation and interpretation; photographic services; building cleaning and real estate services"
+                    ],
+                    "type": "open_text",
+                    "tracking_code": "3021"
+                  }
+                ]
+              },
+              {
+                "text": "Research and Development (R&D) Services",
+                "question":{
+                  "type": "matrix",
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows":[
+                    {
+                      "row_index": "1",
+                      "text": "Provision of R&D services",
+                      "context": "Service Code - 16",
+                      "inclusions": "work undertaken on a systematic basis to increase the stock of knowledge, provision of R&D services that are made to order, development of non-customised R&D, commercial research including those relating to electronics, pharmaceuticals, biotechnology and development of operating systems that represent technological advances.",
+                      "exclusions": "technical studies (include in code 8), consultancy work (include in code 8), testing and other process/product development activities (include in code 17) and sale of intellectual property rights arising from R&D (include in code 20a)"
+
+                    },
+                    {
+                      "row_index": "2",
+                      "text": "Provision of product development and testing activities",
+                      "context": "Service Code - 17",
+                      "inclusions": "testing and other product and process development activities that may give rise to patents. Also include here any other service trade related to R&D not included in 16 above.",
+                      "exclusions": "sale of intellectual property rights arising from R&D (include in code 20a)"
+                    }
+                  ],
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "4001"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "4002"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "4003"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "4004"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Intellectual Property",
+                "context": "previously titled Royalties and Licences",
+                "segment":[
+                  {
+                    "text": "Trade marks, franchises, brands or design rights",
+                    "context":[
+                      "A trade mark is a sign that distinguishes your services from those of your competitors (you may refer to your trade mark as your ‘brand’). It can be, for example, words, logos or a combination of both. A design right protects the overall visual appearance of a product or part of a product.",
+                      "Service Code - 18"
+                    ],
+                    "question":{
+                      "type": "matrix",
+                      "row_count": "2",
+                      "col_count": "2",
+                      "rows":[
+                        {
+                          "row_index": "1",
+                          "text": "Outright sales and purchases of the above, resulting in transfer of ownership .",
+                          "context": "a"
+                        },
+                        {
+                          "row_index": "2",
+                          "text": "Charges or payments for the use of the above, but without transfer of ownership (such as franchises and licences to reproduce and/or distribute)",
+                          "context": "b"
+                        }
+                      ],
+                      "cols":[
+                        {
+                          "col_index": "1",
+                          "text": "Income from Exports",
+                          "type": "pound_thousands_2"
+                        },
+                        {
+                          "col_index": "2",
+                          "text": "Expenditure on imports",
+                          "type": "pound_thousands_2"
+                        }
+                      ],
+                      "cells":[
+                        {
+                          "row_index": "1",
+                          "col_index": "1",
+                          "tracking_code": "5001"
+                        },
+                        {
+                          "row_index": "1",
+                          "col_index": "2",
+                          "tracking_code": "5002"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "1",
+                          "tracking_code": "5003"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "2",
+                          "tracking_code": "5004"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "text": "Copyrighted literary works, sound recordings, films, television programmes and databases",
+                    "context":[
+                      "Copyright can protect literary works, including novels, instruction manuals, song lyrics and newspaper articles. Dramatic, musical and artistic works might also be copyrighted. Copyrights may apply to technical drawings, architecture, diagrams, maps or logos. Please also include any computer programmes or databases that are copyrighted.",
+                      "Service Code - 19"
+                    ],
+                    "question":{
+                      "type": "matrix",
+                      "row_count": "2",
+                      "col_count": "2",
+                      "rows":[
+                        {
+                          "row_index": "1",
+                          "text": "Outright sales and purchases of the above, resulting in transfer of ownership .",
+                          "context": "a"
+                        },
+                        {
+                          "row_index": "2",
+                          "text": "Charges or payments for the use of the above, but without transfer of ownership (also include here charges for licences to reproduce or distribute software)",
+                          "context": "b"
+                        }
+                      ],
+                      "cols":[
+                        {
+                          "col_index": "1",
+                          "text": "Income from Exports",
+                          "type": "pound_thousands_2"
+                        },
+                        {
+                          "col_index": "2",
+                          "text": "Expenditure on imports",
+                          "type": "pound_thousands_2"
+                        }
+                      ],
+                      "cells":[
+                        {
+                          "row_index": "1",
+                          "col_index": "1",
+                          "tracking_code": "5005"
+                        },
+                        {
+                          "row_index": "1",
+                          "col_index": "2",
+                          "tracking_code": "5006"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "1",
+                          "tracking_code": "5007"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "2",
+                          "tracking_code": "5008"
+                        }
+                      ]
+                    }
+                  },
+                  {
+                    "text": "Patents and other intellectual property that are the end result of research and development",
+                    "context":[
+                      "Patents protect the features and the processes that make things work. Include outcomes of research and development that have a value but may not necessarily be patented.",
+                      "Service Code - 20"
+                    ],
+                    "question":
+                    {
+                      "type": "matrix",
+                      "row_count": "2",
+                      "col_count": "2",
+                      "rows":[
+                        {
+                          "row_index": "1",
+                          "text": "Outright sales and purchases of the above, resulting in transfer of ownership .",
+                          "context": "a"
+                        },
+                        {
+                          "row_index": "2",
+                          "text": "Charges or payments for the use of the above, but without transfer of ownership",
+                          "context": "b"
+                        }
+                      ],
+                      "cols":[
+                        {
+                          "col_index": "1",
+                          "text": "Income from Exports",
+                          "type": "pound_thousands_2"
+                        },
+                        {
+                          "col_index": "2",
+                          "text": "Expenditure on imports",
+                          "type": "pound_thousands_2"
+                        }
+                      ],
+                      "cells":[
+                        {
+                          "row_index": "1",
+                          "col_index": "1",
+                          "tracking_code": "5009"
+                        },
+                        {
+                          "row_index": "1",
+                          "col_index": "2",
+                          "tracking_code": "5010"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "1",
+                          "tracking_code": "5011"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "2",
+                          "tracking_code": "5012"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "text": "Telecommunications, Computer and Information Services",
+                "question":{
+                  "type": "matrix",
+                  "row_count": "6",
+                  "col_count": "2",
+                  "rows":[
+                    {
+                      "row_index": "1",
+                      "text": "Postal and courier services",
+                      "context": "Service Code - 21"
+                    },
+                    {
+                      "row_index": "2",
+                      "text": "Telecommunication services",
+                      "context": "Service Code - 22",
+                      "inclusions": "the transmission of sound, images or other information by telephone, telex, facsimile or telegram, satellite, e-mail, radio and television broadcasting, business network services, teleconferencing and support facilities, mobile telecommunication services, internet backbone services, internet access and online access services.",
+                      "exclusions": "the value of any information transmitted, installation services for telecommunication equipment and database services"
+                    },
+                    {
+                      "row_index": "3",
+                      "text": "Computer services",
+                      "context": "Service Code - 23",
+                      "inclusions": "computer courses designed for a specific user",
+                      "exclusions": "charges for licences to either reproduce or distribute software (include in code 19b), leasing of computers without an operator (include in code 12)"
+                    },
+                    {
+                      "row_index": "4",
+                      "text": "Publishing services",
+                      "context": "Service Code - 24"
+                    },
+                    {
+                      "row_index": "5",
+                      "text": "News agency services",
+                      "context": "Service Code - 25",
+                      "inclusions": "provision of news, photographs and feature articles to the media"
+                    },
+                    {
+                      "row_index": "6",
+                      "text": "Information services",
+                      "context": "Service Code - 26",
+                      "inclusions": "data base services, web search portals and subscription to newspapers and periodicals"
+                    }
+                  ],
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "6001"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "6002"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "6003"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "6004"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "6005"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "6006"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "tracking_code": "6007"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "6008"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "1",
+                      "tracking_code": "6009"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "2",
+                      "tracking_code": "6010"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "1",
+                      "tracking_code": "6011"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "2",
+                      "tracking_code": "6012"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Construction Services",
+                "context": "Construction covers the creation, renovation, repair, maintenance or extension of fixed assets in the form of buildings, land improvements, and other such engineering constructions as roads, bridges and dams.",
+                "exclusions": "construction where an independent subsidiary, branch, or an overseas accounting or banking facility is set-up to run the project",
+                "question":{
+                  "type": "matrix",
+                  "row_count": "2",
+                  "col_count": "2",
+                  "rows":[
+                    {
+                      "row_index": "1",
+                      "text": "Construction in the UK",
+                      "context": "Service Code - 27",
+                      "inclusions": [
+                        "For imports: the total amount of expenditure by your business to a business outside the UK for construction in the UK. Include any goods and services that are purchased in order to complete construction, regardless of country of origin.",
+                        "For exports:(if known) the amount of goods and services that the business located outside the UK purchases whilst in the UK, regardless of origin to aid in the completion of construction."
+                      ],
+                      "exclusions": "For exports: labour purchased outside the UK"
+                    },
+                    {
+                      "row_index": "2",
+                      "text": "Construction outside the UK",
+                      "context": "Service Code - 28",
+                      "inclusions": [
+                        "For imports: the value of goods and services, for example, bricks and engineering expertise purchased outside of the UK by your business for construction outside the UK.",
+                        "For exports: the total amount of revenue received by your business for construction outside the UK. Include any goods and services that are purchased in order to complete construction, regardless of country of origin"
+                      ],
+                      "exclusions": "For imports: labour purchased outside the UK"
+                    }
+                  ],
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "7001"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "7002"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "7003"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "7004"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Financial Services",
+                "question":{
+                  "type": "matrix",
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows":[
+                    {
+                      "row_index": "1",
+                      "text": "Construction in the UK",
+                      "context": "Service Code - 29",
+                      "inclusions": "services provided by banks, securities dealers,commodity traders, financial advisory services, merger and acquisition services, credit rating, foreign exchange spreads, custody services and explicit and implicit commissions and fees associated with financial transactions, such as: Deposit taking and lending, including mortgage and non-mortgage loan services for business and personal purposes, letters of credit, bankers' acceptances, lines of credit, financial leasing, factoring, financial derivative transactions, underwriting and clearing activities.",
+                      "exclusions": "insurance services, shares, dividends earned, non-financial advisory services provided by banks, gains and losses made on purchase and sales of securities and financial derivatives in own account and interest earned on deposits, loans, financial leases and debt securities"
+                    }
+                  ],
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "8001"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "8002"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Insurance and Pension Services",
+                "question":{
+                  "type": "matrix",
+                  "row_count": "11",
+                  "col_count": "2",
+                  "rows":[
+                    {
+                      "row_index": "1",
+                      "text": "Life insurance claims",
+                      "context": "Service Code - 30"
+                    },
+                    {
+                      "row_index": "2",
+                      "text": "Life insurance premiums",
+                      "context": "Service Code - 31"
+                    },
+                    {
+                      "row_index": "3",
+                      "text": "Freight insurance claims",
+                      "context": "Service Code - 32"
+                    },
+                    {
+                      "row_index": "4",
+                      "text": "Freight insurance premiums",
+                      "context": "Service Code - 33"
+                    },
+                    {
+                      "row_index": "5",
+                      "text": "Other direct insurance claims",
+                      "context": "Service Code - 34",
+                      "inclusions": "all payments received in respect of casualty, accident, health, transport (including marine and aviation), fire, property damage, liability, travel, loan and credit insurance"
+                    },
+                    {
+                      "row_index": "6",
+                      "text": "Other direct insurance premiums",
+                      "context": "Service Code - 35",
+                      "inclusions": "all payments made in respect of casualty, accident, health, transport (including marine and aviation), fire, property damage, liability, travel, loan and credit insurance."
+                    },
+                    {
+                      "row_index": "7",
+                      "text": "Auxiliary services",
+                      "context": "Service Code - 36",
+                      "inclusions": "payments made in respect of insurance brokering, agency, insurance, pension consultancy, evaluation and adjustments, actuarial, salvage administration, regulatory and monitoring services on indemnities and recovery services"
+                    },
+                    {
+                      "row_index": "8",
+                      "text": "Pension service receipts",
+                      "context": "Service Code - 37",
+                      "inclusions": "payments received in respect of funds to provide income on retirement for groups of employees by the government or insurance companies"
+                    },
+                    {
+                      "row_index": "9",
+                      "text": "Pension service charges",
+                      "context": "Service Code - 38",
+                      "inclusions": "payments made in respect of funds to provide income on retirement for groups of employees by the government or insurance companies"
+                    },
+                    {
+                      "row_index": "10",
+                      "text": "Standardised guarantee service claims",
+                      "context": "Service Code - 39",
+                      "inclusions": "payments received in respect of arrangements covering the losses of a lender in the event of a borrower defaulting (for example, guarantor services), export credit guarantees and student loan guarantees"
+                    },
+                    {
+                      "row_index": "11",
+                      "text": "Standardised guarantee service premiums",
+                      "context": "Service Code - 40",
+                      "inclusions": "payments made in respect of arrangements covering the losses of a lender in the event of a borrower defaulting (for example, guarantor services), export credit guarantees and student loan guarantees"
+                    }
+
+
+
+                  ],
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "9001"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "9004"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "9005"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "1",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "4",
+                      "col_index": "2",
+                      "tracking_code": "9008"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "1",
+                      "tracking_code": "9009"
+                    },
+                    {
+                      "row_index": "5",
+                      "col_index": "2",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "1",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "6",
+                      "col_index": "2",
+                      "tracking_code": "9012"
+                    },
+                    {
+                      "row_index": "7",
+                      "col_index": "1",
+                      "tracking_code": "9013"
+                    },
+                    {
+                      "row_index": "7",
+                      "col_index": "2",
+                      "tracking_code": "9014"
+                    },
+                    {
+                      "row_index": "8",
+                      "col_index": "1",
+                      "tracking_code": "9015"
+                    },
+                    {
+                      "row_index": "8",
+                      "col_index": "2",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "9",
+                      "col_index": "1",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "9",
+                      "col_index": "2",
+                      "tracking_code": "9018"
+                    },
+                    {
+                      "row_index": "10",
+                      "col_index": "1",
+                      "tracking_code": "9019"
+                    },
+                    {
+                      "row_index": "10",
+                      "col_index": "2",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "11",
+                      "col_index": "1",
+                      "NULL": "TRUE"
+                    },
+                    {
+                      "row_index": "11",
+                      "col_index": "2",
+                      "tracking_code": "9022"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Merchanting and Other Trade-related Services",
+                "segment":[
+                  {
+                    "text": "Merchanting",
+                    "context": "Service Code - 41",
+                    "question":{
+                      "type": "matrix",
+                      "row_count": "2",
+                      "col_count": "2",
+                      "rows":[
+                        {
+                          "row_index": "1",
+                          "text": "Total sales during the reporting period of goods purchased for resale that have remained outside the UK",
+                          "exclusions": "derivatives"
+                        },
+                        {
+                          "row_index": "2",
+                          "text": "Total goods purchased for resale during the reporting period that have remained outside the UK",
+                          "exclusions": "derivatives"
+                        }
+                      ],
+                      "cols":[
+                        {
+                          "col_index": "1",
+                          "text": "Income from Exports",
+                          "type": "pound_thousands_2"
+                        },
+                        {
+                          "col_index": "2",
+                          "text": "Expenditure on imports",
+                          "type": "pound_thousands_2"
+                        }
+                      ],
+                      "cells":[
+                        {
+                          "row_index": "1",
+                          "col_index": "1",
+                          "tracking_code": "1101"
+                        },
+                        {
+                          "row_index": "1",
+                          "col_index": "2",
+                          "NULL": "TRUE"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "1",
+                          "NULL": "TRUE"
+                        },
+                        {
+                          "row_index": "2",
+                          "col_index": "2",
+                          "tracking_code": "1104"
+                        }
+                      ]
+                    }
+                  }
+                ],
+                "question":{
+                  "type": "matrix",
+                  "row_count": "1",
+                  "col_count": "2",
+                  "rows":{
+                    "row_index": "1",
+                    "text": "Other trade-related services",
+                    "context": "Service Code - 42",
+                    "inclusions": "Commissions on goods and service transactions between merchants, commodity brokers, dealers and commission agents located in the UK and those located outside the UK.",
+                    "exclusions": "franchising fees, brokerage in financial services and transport related fees"
+                  },
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "1105"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "1106"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Personal, Cultural and Recreational Services",
+                "question":[
+                  {
+                    "type": "matrix",
+                    "row_count": "5",
+                    "col_count": "2",
+                    "rows":[
+                      {
+                        "row_index": "1",
+                        "text": "Audio-visual and related services",
+                        "context":[
+                          "Audio visual and related services consist of services and fees related to the production of motion pictures, radio and television programmes and musical recordings.",
+                          "Service Code - 43"
+                        ],
+                        "exclusions": "charges or licences to reproduce or distribute (or both) radio, television, film and music and mass-produced recordings and manuscripts that are purchased or sold outright or for continuous use, delivered on CD-ROM, disk or paper. (These should be included in the Intellectual Property section)"
+                      },
+                      {
+                        "row_index": "2",
+                        "text": "Medical services",
+                        "context":[
+                          "Medical services comprise services provided by doctors, nurses and paramedical and similar personnel, as well as laboratory and similar services, whether delivered remotely or on-site",
+                          "Service Code - 44"
+                        ]
+                      },
+                      {
+                        "row_index": "3",
+                        "text": "Training and educational services",
+                        "context": "Service Code - 45"
+                      },
+                      {
+                        "row_index": "4",
+                        "text": "Heritage and recreational services",
+                        "context": "Service Code - 46",
+                        "inclusions": "for example: Services associated with museums  and other cultural, sporting, gambling and recreational activities; fees and prizes for athletes.",
+                        "exclusions": "player transfer fees (include in Q18a)"
+                      },
+                      {
+                        "row_index": "5",
+                        "text": "Social, domestic and other personal services",
+                        "context": "Service Code - 47"
+                      }
+
+
+                    ],
+                    "cols":[
+                      {
+                        "col_index": "1",
+                        "text": "Income from Exports",
+                        "type": "pound_thousands_2"
+                      },
+                      {
+                        "col_index": "2",
+                        "text": "Expenditure on imports",
+                        "type": "pound_thousands_2"
+                      }
+                    ],
+                    "cells":[
+                      {
+                        "row_index": "1",
+                        "col_index": "1",
+                        "tracking_code": "1201"
+                      },
+                      {
+                        "row_index": "1",
+                        "col_index": "2",
+                        "tracking_code": "1202"
+                      },
+                      {
+                        "row_index": "2",
+                        "col_index": "1",
+                        "tracking_code": "1203"
+                      },
+                      {
+                        "row_index": "2",
+                        "col_index": "2",
+                        "tracking_code": "1204"
+                      },
+                      {
+                        "row_index": "3",
+                        "col_index": "1",
+                        "tracking_code": "1205"
+                      },
+                      {
+                        "row_index": "3",
+                        "col_index": "2",
+                        "tracking_code": "1206"
+                      },
+                      {
+                        "row_index": "4",
+                        "col_index": "1",
+                        "tracking_code": "1207"
+                      },
+                      {
+                        "row_index": "4",
+                        "col_index": "2",
+                        "tracking_code": "1208"
+                      },
+                      {
+                        "row_index": "5",
+                        "col_index": "1",
+                        "tracking_code": "1209"
+                      },
+                      {
+                        "row_index": "5",
+                        "col_index": "2",
+                        "tracking_code": "1210"
+                      }
+                    ]
+                  },
+                  {
+                    "text": "Detailed description:",
+                    "context": [
+                      "Social, domestic and other personal services",
+                      "Service Code - 47"
+                    ],
+                    "type": "open_text",
+                    "tracking_code": "1211"
+                  }
+                ]
+              },
+              {
+                "text": "Technical and Scientific Services",
+                "question": {
+                  "type": "matrix",
+                  "row_count": "3",
+                  "col_count": "2",
+                  "rows":[
+                    {
+                      "row_index": "1",
+                      "text": "Architectural services",
+                      "context": "Service Code - 48"
+                    },
+                    {
+                      "row_index": "2",
+                      "text": "Engineering services",
+                      "context": "Service Code - 49"
+                    },
+                    {
+                      "row_index": "3",
+                      "text": "Scientific and other technical services (including surveying)",
+                      "context": "Service Code - 50",
+                      "inclusions": "surveying, cartography, product testing and certification; and technical inspection services"
+                    }
+                  ],
+                  "cols":[
+                    {
+                      "col_index": "1",
+                      "text": "Income from Exports",
+                      "type": "pound_thousands_2"
+                    },
+                    {
+                      "col_index": "2",
+                      "text": "Expenditure on imports",
+                      "type": "pound_thousands_2"
+                    }
+                  ],
+                  "cells":[
+                    {
+                      "row_index": "1",
+                      "col_index": "1",
+                      "tracking_code": "1301"
+                    },
+                    {
+                      "row_index": "1",
+                      "col_index": "2",
+                      "tracking_code": "1302"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "1",
+                      "tracking_code": "1303"
+                    },
+                    {
+                      "row_index": "2",
+                      "col_index": "2",
+                      "tracking_code": "1304"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "1",
+                      "tracking_code": "1305"
+                    },
+                    {
+                      "row_index": "3",
+                      "col_index": "2",
+                      "tracking_code": "1306"
+                    }
+                  ]
+                }
+              },
+              {
+                "text": "Other Trade in Services",
+                "context": [
+                  "Any trade that cannot be categorised elsewhere should be included here.",
+                  "Before completing this section, please ensure that you have been as specific as possible when reporting international transactions. For example: If you have imported or exported computer services, report this value in Service Code 23 (Computer services); if you have imported or exported management consulting services, report this value in Service Code 8 (Business and management consulting services)."
+                ],
+                "question":[
+                  {
+                    "type": "matrix",
+                    "row_count": "2",
+                    "col_count": "2",
+                    "rows":[
+                      {
+                        "row_index": "1",
+                        "text": "Transactions between related businesses not included elsewhere",
+                        "context":[
+                          "By ‘related businesses’ we mean other businesses within your group of businesses (e.g. parent companies, branches, associates, subsidiaries or affiliates)",
+                          "Service Code - 51"
+                        ]
+                      },
+                      {
+                        "row_index": "2",
+                        "text": "Other trade in services",
+                        "context":[
+                          "Include here imports and exports between unrelated businesses that have not been included elsewhere",
+                          "Service Code - 52"
+                        ]
+                      }
+                    ],
+                    "cols":[
+                      {
+                        "col_index": "1",
+                        "text": "Income from Exports",
+                        "type": "pound_thousands_2"
+                      },
+                      {
+                        "col_index": "2",
+                        "text": "Expenditure on imports",
+                        "type": "pound_thousands_2"
+                      }
+                    ],
+                    "cells":[
+                      {
+                        "row_index": "1",
+                        "col_index": "1",
+                        "tracking_code": "1401"
+                      },
+                      {
+                        "row_index": "1",
+                        "col_index": "2",
+                        "tracking_code": "1402"
+                      },
+                      {
+                        "row_index": "2",
+                        "col_index": "1",
+                        "tracking_code": "1405"
+                      },
+                      {
+                        "row_index": "2",
+                        "col_index": "2",
+                        "tracking_code": "1406"
+                      }
+                    ]
+                  },
+                  {
+                    "text": "Detailed description:",
+                    "context": [
+                      "Transactions between related businesses not included elsewhere",
+                      "Service Code - 51"
+                    ],
+                    "type": "open_text",
+                    "tracking_code": "1403"
+                  },
+                  {
+                    "text": "Detailed description:",
+                    "context": [
+                      "Other trade in services",
+                      "Service Code - 52"
+                    ],
+                    "type": "open_text",
+                    "tracking_code": "1407"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "ID": "4",
+            "text": "During the reporting period for each international service that your business conducted, write: i) the service code (reported in question 3), ii) the code for the country that your business has exported from or imported to the UK. See annex 1 for country codes, iii) the value exported from the UK by country, iv) the value imported to the UK by country.",
+            "context": "We require a breakdown by country of the total value of each service exported from or imported to the UK by your business. If you require additional breakdown sheets please phone 0800 220973",
+            "segment":{
+              "text": "Breakdown by Country of International Trade in Services",
+              "question":{
+                "type": "matrix_dynamic_rows",
+                "row_count": "1",
+                "col_count": "4",
+                "rows":{
+                  "row_index": "1",
+                  "context": "Dynamic - User can fill in one or many rows within the matrix"
+                },
+                "cols":[
+                  {
+                    "col_index": "1",
+                    "text": "Service Code",
+                    "type": "single_select"
+                  },
+                  {
+                    "col_index": "2",
+                    "text": "Country Code",
+                    "type": "single_select",
+                    "note_ID": "ANNEX 1 - COUNTRY CODES LIST"
+                  },
+                  {
+                    "col_index": "3",
+                    "text": "Income from Exports",
+                    "type": "pound_thousands_2",
+                    "context": "Report all figures to the nearest £1,000."
+                  },
+                  {
+                    "col_index": "4",
+                    "text": "Expenditure on imports",
+                    "type": "pound_thousands_2",
+                    "context": "Report all figures to the nearest £1,000."
+                  }
+                ],
+                "cells":[
+                  {
+                    "row_index": "1",
+                    "col_index": "1",
+                    "tracking_code": "0202"
+                  },
+                  {
+                    "row_index": "1",
+                    "col_index": "2",
+                    "tracking_code": "0203"
+                  },
+                  {
+                    "row_index": "1",
+                    "col_index": "3",
+                    "tracking_code": "0204"
+                  },
+                  {
+                    "row_index": "1",
+                    "col_index": "4",
+                    "tracking_code": "0205"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "ID": "5",
+            "text": "Please enter below the total value of all your international trade in services.",
+            "exclusions": "Exclude tax both inside and outside the UK.",
+            "questions":{
+              "type": "matrix",
+              "row_count": "1",
+              "col_count": "2",
+              "rows":{
+                "row_index": "1",
+                "text": "Total value of international trade in services"
+              },
+              "cols":[
+                {
+                  "col_index": "1",
+                  "text": "Income from Exports",
+                  "type": "pound_thousands_2",
+                  "context": "Report to the nearest £1,000"
+                },
+                {
+                  "col_index": "2",
+                  "text": "Expenditure on imports",
+                  "type": "pound_thousands_2",
+                  "context": "Report to the nearest £1,000"
+                }
+              ],
+              "cells":[
+                {
+                  "row_index": "1",
+                  "col_index": "1",
+                  "tracking_code": "1501"
+                },
+                {
+                  "row_index": "1",
+                  "col_index": "2",
+                  "tracking_code": "1502"
+                }
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "ID": "Section B",
+        "text":"Section B - Comments and Contact Details",
+        "question":[
+          {
+            "ID": "6",
+            "text": "Does this questionnaire consolidate all the International Trade in Services of the UK group of which your company forms part of?",
+            "type": "boolean",
+            "tracking_code": "0101"
+          },
+          {
+            "ID": "7",
+            "text": "Please use the box below to:",
+            "context":[
+              "describe any significant movements in figures between this and previous questionnaires",
+              "tell us if you have merged with, or been acquired by, another business",
+              "tell us about any other changes to the structure of your business"
+            ],
+            "inclusions": "Please include details of any significant impacts upon your data resulting from changes in the accounting approaches you have taken:",
+            "type": "open_text",
+            "tracking_code": "0003"
+          },
+          {
+            "ID": "8",
+            "text": "Who should we call if we have any questions?",
+            "type": "contact_6"
+          },
+          {
+            "type": "signature_date"
+          }
+        ]
+      }
+    ]
+  },
+  "notes":{
+    "note_ID": "ANNEX 1 - COUNTRY CODES LIST",
+    "options":[
+      {
+        "100": "TAIWAN",
+        "101": "BOTSWANA",
+        "102": "SWAZILAND",
+        "103": "KOSOVO",
+        "104": "ANTIGUA & BARBUDA",
+        "105": "BARBADOS",
+        "106": "CAYMAN ISLANDS",
+        "107": "DOMINICA",
+        "108": "BRUNEI DARUSSALAM",
+        "110": "EGYPT",
+        "112": "CAMEROON",
+        "113": "ETHIOPIA",
+        "114": "COLOMBIA",
+        "116": "LEBANON",
+        "117": "PHILIPPINES",
+        "118": "ALGERIA",
+        "119": "MOROCCO",
+        "120": "TUNISIA",
+        "121": "QATAR",
+        "122": "BOLIVIA",
+        "123": "ECUADOR",
+        "124": "GABON",
+        "125": "SENEGAL",
+        "126": "PAPUA NEW GUINEA",
+        "127": "BULGARIA",
+        "128": "CZECH REPUBLIC",
+        "130": "HUNGARY",
+        "131": "POLAND",
+        "132": "ROMANIA",
+        "200": "UNITED KINGDOM",
+        "500": "BELARUS",
+        "501": "UKRAINE",
+        "502": "MOLDOVA",
+        "503": "ARMENIA",
+        "504": "AZERBAIJAN",
+        "505": "TAJIKISTAN",
+        "506": "UZBEKISTAN",
+        "507": "TURKMENISTAN",
+        "508": "KHAZAKHSTAN",
+        "509": "KYRGHYZSTAN",
+        "510": "ESTONIA",
+        "511": "LITHUANIA",
+        "512": "LATVIA",
+        "513": "GEORGIA",
+        "514": "ALBANIA",
+        "515": "CROATIA",
+        "516": "SLOVENIA",
+        "517": "BOSNIA-HERZEGOVINA",
+        "518": "MACEDONIA (Former Yugoslav Republic of)",
+        "519": "SLOVAKIA",
+        "520": "LUXEMBOURG",
+        "521": "VATICAN CITY STATE (HOLY SEE)",
+        "522": "ANDORRA",
+        "523": "JERSEY",
+        "524": "ISLE OF MAN",
+        "525": "LIECHTENSTEIN",
+        "526": "FAROE ISLANDS",
+        "527": "GUERNSEY",
+        "529": "SAN MARINO",
+        "530": "MONTENEGRO",
+        "600": "BAHRAIN",
+        "602": "OMAN",
+        "603": "MALDIVES",
+        "604": "BRITISH INDIAN OCEAN TERRITORY",
+        "605": "MACAO",
+        "606": "CAMBODIA (formerly DEMOCRATIC KAMPUCHEA)",
+        "607": "BHUTAN",
+        "608": "NEPAL",
+        "609": "AFGHANISTAN",
+        "610": "NORTH KOREA",
+        "611": "MONGOLIA",
+        "613": "NAURA",
+        "614": "SOLOMAN ISLANDS",
+        "615": "TUVALU",
+        "616": "KIRIBATI",
+        "617": "PITCAIRN",
+        "619": "FIJI",
+        "620": "TONGA",
+        "621": "SAMOA",
+        "624": "VANUATU",
+        "626": "GAZA & JERICHO (PALESTINIAN TERRITORIES)",
+        "627": "COOK ISLANDS",
+        "628": "MICRONESIA (Federated States of)",
+        "629": "MARSHALL ISLANDS",
+        "630": "NIUE",
+        "631": "PALAU",
+        "632": "TOKELAU",
+        "633": "NORTHERN MARIANA ISLANDS (excluding GUAM)",
+        "634": "NEW CALEDONIA",
+        "635": "FRENCH POLYNESIA",
+        "636": "WALLIS AND FUTUNA ISLANDS",
+        "637": "COCOS (KEELING) ISLANDS",
+        "638": "CHRISTMAS ISLANDS",
+        "639": "HEARD ISLANDS & MACDONALD ISLANDS",
+        "640": "NORFOLK ISLANDS",
+        "641": "AMERICAN SAMOA",
+        "642": "GUAM",
+        "643": "US MINOR OUTLYING ISLANDS",
+        "644": "ANTARCTICA",
+        "645": "BOUVET ISLAND",
+        "646": "SOUTH GEORGIA & SOUTH SANDWICH ISLANDS",
+        "647": "FRENCH SOUTHERN TERRITORIES",
+        "648": "TIMOR-LESTE",
+        "700": "MAURITANIA",
+        "701": "MALI",
+        "702": "BURKINA FASO",
+        "703": "NIGER",
+        "704": "CHAD",
+        "705": "CAPE VERDE",
+        "706": "GUINEA BISSAU",
+        "707": "GUINEA",
+        "708": "IVORY COAST",
+        "709": "CONGO",
+        "710": "RWANDA",
+        "711": "BURUNDI",
+        "712": "DJIBOUTI",
+        "713": "SOMALIA",
+        "714": "MADAGASCAR",
+        "715": "TOGO",
+        "716": "BENIN",
+        "717": "CENTRAL AFRICAN REPUBLIC",
+        "718": "EQUITORIAL GUINEA",
+        "719": "SAO TOME & PRINCIPE",
+        "720": "COMOROS",
+        "721": "ERITREA",
+        "800": "GUATEMALA",
+        "801": "HONDURAS",
+        "802": "EL SALVADOR",
+        "803": "NICARAGUA",
+        "804": "COSTA RICA",
+        "805": "HAITI",
+        "806": "DOMINICAN REPUBLIC",
+        "807": "CUBA",
+        "808": "US VIRGIN ISLANDS",
+        "809": "SURINAME",
+        "810": "BELIZE",
+        "811": "TURKS & CAICOS ISLANDS",
+        "812": "ST KITTS",
+        "813": "BRITISH VIRGIN ISLANDS",
+        "814": "ST LUCIA",
+        "815": "ST VINCENT",
+        "816": "GRENADA",
+        "817": "ARUBA",
+        "819": "GREENLAND",
+        "820": "MONTSERRAT",
+        "821": "ANGUILLA",
+        "822": "BONAIRE, ST.EUSTANTINS AND SABA",
+        "823": "CURACAO",
+        "824": "SOUTH SUDAN",
+        "825": "ST. MAARTEN",
+        "002": "ANGOLA",
+        "003": "ARGENTINA",
+        "004": "AUSTRALIA",
+        "005": "AUSTRIA",
+        "084": "BAHAMAS",
+        "095": "BANGLADESH",
+        "006": "BELGIUM",
+        "085": "BERMUDA",
+        "007": "BRAZIL",
+        "009": "CANADA",
+        "011": "CHILE",
+        "098": "CHINA",
+        "096": "CONGO, DEMOCRATIC REPUBLIC OF (formerly ZAIRE)",
+        "012": "CYPRUS",
+        "013": "DENMARK",
+        "081": "FALKLAND ISLANDS",
+        "014": "FINLAND",
+        "015": "FRANCE",
+        "016": "GAMBIA",
+        "017": "GERMANY",
+        "018": "GHANA",
+        "019": "GIBRALTAR",
+        "020": "GREECE",
+        "021": "GUYANA",
+        "022": "HONG KONG",
+        "094": "ICELAND",
+        "023": "INDIA",
+        "024": "INDONESIA",
+        "025": "IRAN",
+        "026": "IRAQ",
+        "027": "IRISH REPUBLIC",
+        "028": "ISRAEL",
+        "029": "ITALY",
+        "030": "JAMAICA",
+        "031": "JAPAN",
+        "032": "JORDAN",
+        "033": "KENYA",
+        "080": "KUWAIT",
+        "079": "LAOS (aka LAO PEOPLES DEMOCRATIC REPUBLIC)",
+        "087": "LESOTHO",
+        "034": "LIBERIA",
+        "035": "LIBYAN ARAB JAMAHIRIYA",
+        "036": "MALAWI",
+        "037": "MALAYSIA",
+        "038": "MALTA",
+        "039": "MAURITIUS",
+        "040": "MEXICO",
+        "041": "MOZAMBIQUE",
+        "008": "MYANMAR (formerly BURMA)",
+        "083": "NAMIBIA",
+        "042": "NETHERLANDS",
+        "043": "NEW ZEALAND",
+        "044": "NIGERIA",
+        "045": "NORWAY",
+        "046": "PAKISTAN",
+        "047": "PANAMA",
+        "048": "PARAGUAY",
+        "050": "PERU",
+        "051": "PORTUGAL",
+        "073": "RUSSIA",
+        "078": "SAUDI ARABIA",
+        "071": "SERBIA",
+        "053": "SEYCHELLES & DEPENDENCIES",
+        "054": "SIERRA LEONE",
+        "055": "SINGAPORE",
+        "056": "SOUTH AFRICA",
+        "099": "SOUTH KOREA",
+        "057": "SPAIN",
+        "010": "SRI LANKA",
+        "082": "ST HELENA & DEPENDENCIES",
+        "058": "SUDAN",
+        "059": "SWEDEN",
+        "060": "SWITZERLAND",
+        "097": "SYRIAN ARAB REPUBLIC",
+        "061": "TANZANIA",
+        "062": "THAILAND",
+        "063": "TRINIDAD AND TOBAGO",
+        "064": "TURKEY",
+        "065": "UGANDA",
+        "049": "UNITED ARAB EMIRATES (UAE)",
+        "067": "URUGUAY",
+        "066": "USA (including PUERTO RICO)",
+        "068": "VENEZUELA",
+        "069": "VIETNAM",
+        "001": "YEMEN",
+        "072": "ZAMBIA",
+        "052": "ZIMBABWE"
+      }
+    ]
+  }
+}
