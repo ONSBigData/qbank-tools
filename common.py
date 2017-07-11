@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../../data'
+DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../data'
 
 JSON_DIR = DATA_DIR + '/jsons'
 
