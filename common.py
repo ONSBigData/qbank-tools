@@ -5,7 +5,9 @@ DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../data'
 
 JSON_DIR = DATA_DIR + '/jsons'
 
-SCRAPE_STATUS_CSV_FNAME = 'scrape-status.csv'
+SCRAPE_STATUS_CSV_FNAME = 'scraped-status.csv'
+
+CLEAN_FPATH = DATA_DIR + '/clean.csv'
 
 
 def get_validated_jsons(scrape_status_csv_fname=SCRAPE_STATUS_CSV_FNAME):
