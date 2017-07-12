@@ -13,11 +13,12 @@ import multiprocessing as mp
 from pyjarowinkler import distance as ds
 import numpy as np
 import time
+import numpy as np
 
 df = pd.read_csv(DATA_DIR + '/../data/cleanInfoJune23.csv')
 df.columns = [c.lower() for c in df.columns]
 
-text = df['text'][:1000]
+text = df['text'][:100]
 n = len(text)
 print('n = {}'.format(n))
 
@@ -30,6 +31,9 @@ def similarity(p):
         return 0
 
     return ds.get_jaro_distance(text[x], text[y], winkler=True, scaling=0.1)
+
+
+
 
 
 print('computing...')
@@ -54,15 +58,36 @@ matrix = np.array(res).reshape(n, n)
 
 print(matrix)
 
-sns.set(context="paper", font="monospace")
 
-# Set up the matplotlib figure
-f, ax = plt.subplots(figsize=(12, 9))
 
-# Draw the heatmap using seaborn
-sns.heatmap(matrix, vmax=1, square=True)
 
-plt.xticks()
-vst.sparsify_tick_labels(plt.gca(), rough_limit=10)
 
-plt.show()
+t = time.time()
+print('computing vectorized...')
+
+def sim(t1, t2):
+    return ds.get_jaro_distance(t1, t2, winkler=True, scaling=0.1)
+
+vsim = np.vectorize(sim)
+
+A = np.tile(text, n).reshape(n, n)
+G = vsim(A, A.T)
+
+print('took {} sec'.format(time.time() - t))
+print(G)
+
+
+print(G == matrix)
+#
+# sns.set(context="paper", font="monospace")
+#
+# # Set up the matplotlib figure
+# f, ax = plt.subplots(figsize=(12, 9))
+#
+# # Draw the heatmap using seaborn
+# sns.heatmap(matrix, vmax=1, square=True)
+#
+# plt.xticks()
+# vst.sparsify_tick_labels(plt.gca(), rough_limit=10)
+#
+# plt.show()

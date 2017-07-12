@@ -2,11 +2,25 @@ import helpers.helper as helper
 from common import *
 
 import copy
-import collections
 import re
+import json
+import collections
+import io
+import traceback
+
+
+class Problems:
+    IncorrectTlSeg = 'INCORRECT_TOP_LEVEL_SEGMENT'
+    InvalidWords = 'INVALID_KEYWORDS'
+    ReportingPeriod = 'PROBLEM_WITH_REPORTING_PERIOD'
+    MatrixParsing = 'MATRIX_PARSING_PROBLEM'
+    NoData = 'NO_DATA'
+    Encoding = 'ENCODING_NOT_UTF8'
 
 
 VALID_PATH_WORDS = [
+    'Affiliate Company',
+    'Branch',
     'col_count',
     'context',
     'destination',
@@ -21,6 +35,7 @@ VALID_PATH_WORDS = [
     'ID',
     'note',
     'note_ID',
+    'NULL',
     'options',
     'reporting_period',
     'row_count',
@@ -38,6 +53,22 @@ VALID_PATH_WORDS = [
     'value'
 ]
 
+MATRIX_VALID_WORDS = [
+    'context',
+    'exclusions',
+    'ID',
+    'index',
+    'inclusions',
+    'note_ID',
+    'NULL',
+    'text',
+    'type',
+    'validation'
+]
+
+VALID_PATH_WORDS += ['row_' + w for w in MATRIX_VALID_WORDS]
+VALID_PATH_WORDS += ['col_' + w for w in MATRIX_VALID_WORDS]
+
 
 def get_children_iterator(node):
     if isinstance(node, dict):
@@ -53,7 +84,18 @@ def is_leaf(node):
     return get_children_iterator(node) is None
 
 
-def explode_matrix(matrix_node):
+def explode_matrix(matrix_node, problems=[]):
+    def check_field(kw):
+        if isinstance(matrix_node[kw], dict):
+            err_msg = '{} field for matrix node below is a dictionary (should be list)\n{}'.format(kw, json.dumps(matrix_node, indent=2))
+            problems.append((Problems.MatrixParsing, err_msg))
+
+            matrix_node[kw] = [matrix_node[kw]]
+
+    check_field('cols')
+    check_field('rows')
+    check_field('cells')
+
     rows = dict((row['row_index'], row) for row in matrix_node['rows'])
     cols = dict((col['col_index'], col) for col in matrix_node['cols'])
 
@@ -74,7 +116,7 @@ def explode_matrix(matrix_node):
     return cells
 
 
-def explode_all_matrices(nd):
+def explode_all_matrices(nd, problems=[]):
     nd = copy.deepcopy(nd)
 
     def _explode_all_matrices(node, node_key=None, parent_node=None):
@@ -82,8 +124,14 @@ def explode_all_matrices(nd):
             return
 
         if isinstance(node, dict) and 'cells' in node:  # it's a matrix node
-            exploded_items = explode_matrix(node)
-            parent_node[node_key] = exploded_items
+            try:
+                exploded_items = explode_matrix(node, problems=problems)
+                parent_node[node_key] = exploded_items
+            except Exception as e:
+                parent_node[node_key] = {}
+                problems.append((Problems.MatrixParsing, 'Exception occured parsing matrix node below: {}\n{}\n{}'.format(
+                    e, traceback.format_exc(), json.dumps(node, indent=2))))
+
             return
 
         children_iterator = get_children_iterator(node)
@@ -92,7 +140,38 @@ def explode_all_matrices(nd):
             _explode_all_matrices(child_node, key, node)
 
     _explode_all_matrices(nd)
+
     return nd
+
+
+def is_top_level_segment_incorrect(root_node):
+    tl_seg = root_node['segment']
+
+    # top level segment should not be a list - should be an object
+    return isinstance(tl_seg, list) and len(tl_seg) > 1
+
+
+def correct_top_level_segment_if_necessary(root_node):
+    root_node = copy.deepcopy(root_node)
+
+    is_survey_seg = lambda o: 'segment_type' in o and o['segment_type'] == 'survey'
+
+    tl_seg = root_node['segment']
+
+    if is_top_level_segment_incorrect(root_node):
+        # find the survey segment in the list - should be just 2 items, but one never knows!
+        survey_seg_index, survey_seg_object = [(i, o) for i, o in enumerate(root_node['segment']) if is_survey_seg(o)][0]
+
+        # delete the survey segment from the top-level segment
+        del tl_seg[survey_seg_index]
+
+        # survey seg will contain the TL seg list
+        survey_seg_object['segment'] = tl_seg
+
+        # survey seg is the new TL seg
+        root_node['segment'] = survey_seg_object
+
+    return root_node
 
 
 def is_traversable(key):
@@ -253,6 +332,8 @@ def create_df(traversed_data):
                 .replace('s1_form_type', 'form_type') \
                 .replace('period__', 'period_')
 
+            key = key.lower()
+
             attrs[key].append(attr['value'])
 
         # flatten lists
@@ -278,6 +359,10 @@ def create_df(traversed_data):
 
         # all text
         all_texts = list(segment_texts)
+        if 'col_text' in attrs:
+            all_texts.append(attrs['col_text'])
+        if 'row_text' in attrs:
+            all_texts.append(attrs['row_text'])
         if 'q_text' in attrs:
             all_texts.append(attrs['q_text'])
         row['all_text'] = MAJOR_SEP.join(all_texts)
@@ -297,6 +382,9 @@ def create_df(traversed_data):
     df = pd.DataFrame(rows)
     df.columns = [c.lower() for c in df.columns]
 
+    if len(df) == 0:
+        return df
+
     df = helper.reorder_cols(df, first_cols=['survey_id', 'form_type', 'tr_code'])
 
     df = df.set_index('uid')
@@ -304,5 +392,111 @@ def create_df(traversed_data):
     return df
 
 
+def load_json(json_fpath, problems=[], print_debug=True):
+    def _print(s):
+        if print_debug:
+            print(s)
+
+    _print('opening {}...'.format(json_fpath))
+    try:
+        with open(json_fpath, encoding='utf8') as f:
+            root_node = json.load(f)
+    except:
+        problems.append((Problems.Encoding, 'encoding is UTF-8-sig'))
+        with open(json_fpath, encoding='utf-8-sig') as f:
+            root_node = json.load(f)
+
+    if is_top_level_segment_incorrect(root_node):
+        _print('correcting top level segment...')
+        problems.append((Problems.IncorrectTlSeg, True))
+        root_node = correct_top_level_segment_if_necessary(root_node)
+
+    _print('exploding matrix questions...')
+    root_node = explode_all_matrices(root_node, problems=problems)
+
+    _print('traversing...')
+    traversed = traverse(root_node)
+
+    _print('validating...')
+    invalid = get_invalid_words(traversed)
+    if len(invalid) > 0:
+        if print_debug:
+            print_invalid_words(invalid)
+        problems.append((Problems.InvalidWords, invalid))
+    traversed = filter_invalid(traversed)
+
+    _print('creating dataframe...')
+    df = create_df(traversed)
+    if len(df) == 0:
+        problems.append((Problems.NoData, True))
+    elif df['period_days'].count() == 0:
+        _print('missing reporting period...')
+        problems.append((Problems.ReportingPeriod, True))
+
+    _print('dataframe with shape {} created'.format(df.shape))
+
+    return df
+
+
+def get_invalid_words_report(json_fpaths=get_all_jsons()):
+    stream = io.StringIO()
+
+    for json_fpath in json_fpaths:
+        try:
+            problems = []
+            load_json(json_fpath, problems, print_debug=False)
+        except:
+            continue
+
+        invalid_words = next((p[1] for p in problems if p[0] == Problems.InvalidWords), [])
+        if invalid_words == []:
+            continue
+
+        stream.write(os.path.basename(json_fpath) + '\n')
+        stream.write('\t' + '\n\t'.join(invalid_words) + '\n')
+        stream.write('\n')
+
+    s = stream.getvalue()
+
+    with open(DATA_DIR + '/invalid_words_report.txt', 'w') as f:
+        f.write(s)
+
+    return s
+
+
+def get_problems_report(json_fpaths=get_all_jsons()):
+    stream = io.StringIO()
+
+    for json_fpath in json_fpaths:
+        stream.write('\n')
+        stream.write('-'*100 + '\n')
+        stream.write(os.path.basename(json_fpath) + '\n')
+
+        try:
+            problems = []
+            load_json(json_fpath, problems, print_debug=False)
+        except Exception as e:
+            stream.write('ERROR: {}'.format(e)+ '\n')
+            continue
+
+        for p in problems:
+            stream.write('{}: {}'.format(p[0], p[1])+ '\n')
+
+        if len(problems) == 0:
+            stream.write('OK\n')
+
+    s = stream.getvalue()
+
+    with open(DATA_DIR + '/problems_report.txt', 'w') as f:
+        f.write(s)
+
+    return s
+
+
+def print_problems(problems):
+    for p in problems:
+        print('{}: {}'.format(p[0], p[1]))
+
 if __name__ == '__main__':
-    pass
+    get_problems_report()
+    get_invalid_words_report()
