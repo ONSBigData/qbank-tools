@@ -92,6 +92,11 @@ def explode_matrix(matrix_node, problems=[]):
 
             matrix_node[kw] = [matrix_node[kw]]
 
+    root_node_attrs = copy.deepcopy(matrix_node)
+    del root_node_attrs['cols']
+    del root_node_attrs['rows']
+    del root_node_attrs['cells']
+
     check_field('cols')
     check_field('rows')
     check_field('cells')
@@ -102,6 +107,7 @@ def explode_matrix(matrix_node, problems=[]):
     cells = matrix_node['cells']
 
     for cell in cells:
+        cell.update(root_node_attrs)
         row = rows[cell['row_index']]
         col = cols[cell['col_index']]
 
@@ -287,21 +293,45 @@ def print_invalid_words(invalid_words):
         print('\t' + '\n\t'.join(invalid_words))
 
 
+FIRST_COLS = [
+    'survey_id',
+    'form_type',
+    'tr_code',
+    'type',
+    'period_days',
+    'period_start',
+    'period_end',
+    'text',
+    'close_seg_text',
+    'all_seg_text',
+    'all_text',
+    'all_context',
+    'all_inclusions',
+    'all_exclusions'
+]
+
+
 def create_df(traversed_data):
     MINOR_SEP = ' | '
     MAJOR_SEP = ' ||| '
+    SEG = 'segment__'
 
     traversed_data = [tr for tr in traversed_data if 'tracking_code' in tr['path']]
 
     rows = []
     for tr in traversed_data:
-        row = {
-            'tr_code': tr['value'],
-            'path': path2str(tr['path'])
-        }
+        row = collections.defaultdict(lambda: None)
+        row['tr_code'] = tr['value']
+        row['path'] = path2str(tr['path'])
+
+        if row['tr_code'] == 'c_16':
+            x = 1
 
         # some attributes will be combined - thus the "list" value
         attrs = collections.defaultdict(list)
+
+        # depth of segment nesting
+        question_depth = max([path2str(attr['path']).count(SEG) for attr in tr['attrs']])
 
         # process attributes
         for attr in tr['attrs']:
@@ -315,68 +345,79 @@ def create_df(traversed_data):
 
             path = [p for p in path if not isinstance(p, int)]  # remove indices from path, they're not relevant
             key = path2str(path)
+            key = key.lower()
+
+            def _append(_key):
+                attrs[_key].append(attr['value'])
 
             if path[-2] == 'question':  # question attributes
                 key = 'q_' + path[-1]
+                _append(key)
+                continue
 
-            SEG = 'segment__'
-            if key.startswith(SEG):
-                counter = 0
-                while key.startswith(SEG):
-                    counter += 1
-                    key = key.replace(SEG, '', 1)
-                key = 's{}_{}'.format(counter, key)
+            if key.startswith(SEG):  # segment attribute
+                seg_depth = key.count(SEG)
+                key = key.replace(SEG, '')
+                _append('s{}_{}'.format(seg_depth - 1, key))
+                _append('i{}_{}'.format(question_depth - seg_depth, key))  #i0 will be closest segment to the question
+                continue
 
-            key = key.replace('s1_reporting_period', 'period') \
-                .replace('s1_survey_number', 'survey_id') \
-                .replace('s1_form_type', 'form_type') \
-                .replace('period__', 'period_')
+            _append(key)
 
-            key = key.lower()
-
-            attrs[key].append(attr['value'])
-
-        # flatten lists
+        # flatten lists and assign to row
         for key in attrs:
-            attrs[key] = MINOR_SEP.join(attrs[key])
+            row[key] = MINOR_SEP.join(attrs[key])
 
-        def get_all_seg_values_where_keys_like(pattern):
-            seg_keys = [key for key in attrs if re.search(pattern, key)]
+        # now create new attributes --------------------------------------------------------------------------
+        def get_all_values_where_keys_like(pattern):
+            seg_keys = [key for key in row if re.search(pattern, key)]
             seg_keys.sort()
-            return [attrs[key] for key in seg_keys]
+            return [row[key] for key in seg_keys]
 
-        # create new attributes
+        def get_all_value(field):
+            return MAJOR_SEP.join(get_all_values_where_keys_like(r's\d+.*_' + field) + get_all_values_where_keys_like(r'q.*_' + field))
+
+        row['period_start'] = row['s0_reporting_period__start']
+        row['period_end'] = row['s0_reporting_period__end']
+        row['survey_id'] = row['s0_survey_number']
+        row['form_type'] = row['s0_form_type']
+
+        def get_first_nonempty(keys):
+            for key in keys:
+                if row[key] is not None:
+                    return row[key]
+
+            return None
+
+        row['type'] = get_first_nonempty(['q_type', 'q_col_type', 'q_row_type'] + ['i{}_type'.format(i) for i in range(9)])
+
+        row['text'] = MINOR_SEP.join(get_all_values_where_keys_like(r'(q|q_row|q_col)_text'))
+        if row['text'] == '':
+            row['text'] = row['i0_text']
 
         # period days
         try:
-            row['period_days'] = (pd.to_datetime(attrs['period_end'], format='%d/%m/%Y') - pd.to_datetime(attrs['period_start'], format='%d/%m/%Y')).days
+            row['period_days'] = (pd.to_datetime(row['period_end'], format='%d/%m/%Y') - pd.to_datetime(row['period_start'], format='%d/%m/%Y')).days
         except:
             row['period_days'] = None
 
+        # text for 3 closest segments
+        close_segment_texts = reversed(get_all_values_where_keys_like(r'i[0-2].*_text'))
+        row['close_seg_text'] = MAJOR_SEP.join(close_segment_texts)
+
         # all text for segments
-        segment_texts = get_all_seg_values_where_keys_like(r's\d+.*_text')
+        segment_texts = get_all_values_where_keys_like(r's\d+.*_text')
         row['all_seg_text'] = MAJOR_SEP.join(segment_texts)
 
         # all text
-        all_texts = list(segment_texts)
-        if 'col_text' in attrs:
-            all_texts.append(attrs['col_text'])
-        if 'row_text' in attrs:
-            all_texts.append(attrs['row_text'])
-        if 'q_text' in attrs:
-            all_texts.append(attrs['q_text'])
-        row['all_text'] = MAJOR_SEP.join(all_texts)
-
-        # all context
-        all_contexts = get_all_seg_values_where_keys_like(r's\d+.*_context')
-        if 'q_context' in attrs:
-            all_contexts.append(attrs['q_context'])
-        row['all_context'] = MAJOR_SEP.join(all_contexts)
+        row['all_text'] = get_all_value('text')
+        row['all_context'] = get_all_value('context')
+        row['all_inclusions'] = get_all_value('inclusions')
+        row['all_exclusions'] = get_all_value('exclusions')
 
         # unique_id
-        row['uid'] = '{}_{}_{}'.format(attrs['survey_id'], attrs['form_type'], row['tr_code'])
+        row['uid'] = '{}_{}_{}'.format(row['survey_id'], row['form_type'], row['tr_code'])
 
-        row.update(attrs)
         rows.append(row)
 
     df = pd.DataFrame(rows)
@@ -385,7 +426,7 @@ def create_df(traversed_data):
     if len(df) == 0:
         return df
 
-    df = helper.reorder_cols(df, first_cols=['survey_id', 'form_type', 'tr_code'])
+    df = helper.reorder_cols(df, first_cols=FIRST_COLS)
 
     df = df.set_index('uid')
 
@@ -413,6 +454,7 @@ def load_json(json_fpath, problems=[], print_debug=True):
 
     _print('exploding matrix questions...')
     root_node = explode_all_matrices(root_node, problems=problems)
+    json.dump(root_node, open(DATA_DIR + '/jsons-exploded/' + os.path.basename(json_fpath), 'w'))
 
     _print('traversing...')
     traversed = traverse(root_node)
@@ -458,7 +500,7 @@ def get_invalid_words_report(json_fpaths=get_all_jsons()):
 
     s = stream.getvalue()
 
-    with open(DATA_DIR + '/invalid_words_report.txt', 'w') as f:
+    with open(PROBLEM_REPORTS_DIR + '/invalid_words_report.txt', 'w') as f:
         f.write(s)
 
     return s
@@ -487,7 +529,7 @@ def get_problems_report(json_fpaths=get_all_jsons()):
 
     s = stream.getvalue()
 
-    with open(DATA_DIR + '/problems_report.txt', 'w') as f:
+    with open(PROBLEM_REPORTS_DIR + '/problems_report.txt', 'w') as f:
         f.write(s)
 
     return s
@@ -497,6 +539,61 @@ def print_problems(problems):
     for p in problems:
         print('{}: {}'.format(p[0], p[1]))
 
+
+def create_full_df(print_debug=True):
+    def _print(s=''):
+        if print_debug:
+            print(s)
+
+    SEP_LEN = 100
+
+    all_invalid_words = set()
+    dfs = []
+
+    for i, json_fpath in enumerate(get_all_jsons()):
+        _print()
+        _print('{}.) {}'.format(i, '-' * SEP_LEN))
+
+        try:
+            problems = []
+            df = load_json(json_fpath, problems, print_debug=print_debug)
+        except json.JSONDecodeError as e:
+            _print('ERROR: {}'.format(e))
+            continue
+        except Exception as e:
+            _print('ERROR: {}'.format(e))
+            continue
+
+        invalid_words = next((p[1] for p in problems if p[0] == Problems.InvalidWords), [])
+        all_invalid_words = all_invalid_words.union(invalid_words)
+
+        csv_fpath = json_fpath.replace('/jsons/', '/csvs/').replace('.json', '.csv')
+        _print('dataframe saved to: {}'.format(csv_fpath))
+        df.to_csv(csv_fpath, index=True)
+
+        if len(problems) != 0:
+            _print('PROBLEMS: {}'.format(', '.join([p[0] for p in problems])))
+
+        dfs.append(df)
+
+    _print('=' * SEP_LEN)
+    _print('combining dataframes...')
+    cdf = pd.concat(dfs)
+    if print_debug:
+        print_invalid_words(all_invalid_words)
+    _print('shape of final dataframe: {}'.format(cdf.shape))
+
+    cdf = helper.reorder_cols(cdf, first_cols=FIRST_COLS)
+
+    cdf.to_csv(CLEAN_FULL_FPATH, index=True)
+    cdf[FIRST_COLS].to_csv(CLEAN_LIGHT_FPATH, index=True)
+
+    return cdf
+
+
 if __name__ == '__main__':
-    get_problems_report()
-    get_invalid_words_report()
+    # get_problems_report()
+    # get_invalid_words_report()
+    # create_full_df(False)
+    print(load_json(DATA_DIR + '/jsons/ex_sel092_COB_160517.json').head())
+
