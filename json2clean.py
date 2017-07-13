@@ -320,12 +320,10 @@ def create_df(traversed_data):
 
     rows = []
     for tr in traversed_data:
-        row = collections.defaultdict(lambda: None)
-        row['tr_code'] = tr['value']
-        row['path'] = path2str(tr['path'])
-
-        if row['tr_code'] == 'c_16':
-            x = 1
+        row = {
+            'tr_code': tr['value'],
+            'path': path2str(tr['path'])
+        }
 
         # some attributes will be combined - thus the "list" value
         attrs = collections.defaultdict(list)
@@ -370,21 +368,24 @@ def create_df(traversed_data):
 
         # now create new attributes --------------------------------------------------------------------------
         def get_all_values_where_keys_like(pattern):
-            seg_keys = [key for key in row if re.search(pattern, key)]
-            seg_keys.sort()
-            return [row[key] for key in seg_keys]
+            keys = [key for key in row if re.search(pattern, key)]
+            keys.sort()
+            return [row[key] for key in keys]
 
         def get_all_value(field):
             return MAJOR_SEP.join(get_all_values_where_keys_like(r's\d+.*_' + field) + get_all_values_where_keys_like(r'q.*_' + field))
 
-        row['period_start'] = row['s0_reporting_period__start']
-        row['period_end'] = row['s0_reporting_period__end']
-        row['survey_id'] = row['s0_survey_number']
-        row['form_type'] = row['s0_form_type']
+        def_row = collections.defaultdict(lambda: None)
+        def_row.update(row)
+
+        row['period_start'] = def_row['s0_reporting_period__start']
+        row['period_end'] = def_row['s0_reporting_period__end']
+        row['survey_id'] = def_row['s0_survey_number']
+        row['form_type'] = def_row['s0_form_type']
 
         def get_first_nonempty(keys):
             for key in keys:
-                if row[key] is not None:
+                if key in row:
                     return row[key]
 
             return None
@@ -393,7 +394,7 @@ def create_df(traversed_data):
 
         row['text'] = MINOR_SEP.join(get_all_values_where_keys_like(r'(q|q_row|q_col)_text'))
         if row['text'] == '':
-            row['text'] = row['i0_text']
+            row['text'] = def_row['i0_text']
 
         # period days
         try:
@@ -595,5 +596,5 @@ if __name__ == '__main__':
     # get_problems_report()
     # get_invalid_words_report()
     # create_full_df(False)
-    print(load_json(DATA_DIR + '/jsons/ex_sel092_COB_160517.json').head())
+    print(load_json(DATA_DIR + '/jsons/ex_sel350-ft0004_JS_170516.json').head())
 
