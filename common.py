@@ -1,7 +1,9 @@
 import os
 import pandas as pd
+import collections
 
 DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../data'
+CHECKPT_DIR = DATA_DIR + '/checkpoints'
 
 JSON_DIR = DATA_DIR + '/jsons'
 
@@ -10,6 +12,12 @@ SCRAPE_STATUS_CSV_FNAME = 'scraped-status.csv'
 CLEAN_FULL_FPATH = DATA_DIR + '/clean-full.csv'
 CLEAN_LIGHT_FPATH = DATA_DIR + '/clean-light.csv'
 PROBLEM_REPORTS_DIR = DATA_DIR + '/problem-reports'
+
+
+def get_survey_name_map():
+    sdf = pd.read_excel(DATA_DIR + '/survey-names.xlsx', index_col=0)
+    d = sdf['Survey Name'].to_dict()
+    return collections.defaultdict(lambda: None, d)
 
 
 def get_all_jsons():

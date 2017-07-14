@@ -8,3 +8,6 @@ pyjarowinkler
 matplotlib
 seaborn
 pycrypto
+gensim
+pyldavis
+xlrd

@@ -295,6 +295,7 @@ def print_invalid_words(invalid_words):
 
 FIRST_COLS = [
     'survey_id',
+    'survey_name',
     'form_type',
     'tr_code',
     'type',
@@ -476,6 +477,10 @@ def load_json(json_fpath, problems=[], print_debug=True):
         _print('missing reporting period...')
         problems.append((Problems.ReportingPeriod, True))
 
+    _print('adding survey names')
+    mp = get_survey_name_map()
+    df['survey_name'] = df['survey_id'].apply(lambda x: mp[int(x)])
+
     _print('dataframe with shape {} created'.format(df.shape))
 
     return df
@@ -596,5 +601,6 @@ if __name__ == '__main__':
     # get_problems_report()
     # get_invalid_words_report()
     # create_full_df(False)
-    print(load_json(DATA_DIR + '/jsons/ex_sel350-ft0004_JS_170516.json').head())
+    # print(load_json(DATA_DIR + '/jsons/ex_sel350-ft0004_JS_170516.json').head())
+    create_full_df()
 
