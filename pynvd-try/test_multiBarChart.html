@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.7.0/nv.d3.min.css" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.7.0/nv.d3.min.js"></script>
+    </head>
+    <body>
+        
+    
+
+<h2>multiBarChart</h2>
+
+<div id="multibarchart"><svg style="height:350px;"></svg></div>
+
+
+    <script>
+
+
+
+        data_multibarchart=[{"values": [{"x": 0, "y": 9}, {"x": 1, "y": 8}, {"x": 2, "y": 5}, {"x": 3, "y": 2}, {"x": 4, "y": 10}, {"x": 5, "y": 2}, {"x": 6, "y": 7}, {"x": 7, "y": 3}, {"x": 8, "y": 2}, {"x": 9, "y": 8}], "yAxis": "1", "key": "Count"}, {"values": [{"x": 0, "y": 18}, {"x": 1, "y": 16}, {"x": 2, "y": 10}, {"x": 3, "y": 4}, {"x": 4, "y": 20}, {"x": 5, "y": 4}, {"x": 6, "y": 14}, {"x": 7, "y": 6}, {"x": 8, "y": 4}, {"x": 9, "y": 16}], "yAxis": "1", "key": "Duration"}];
+
+    nv.addGraph(function() {
+        var chart = nv.models.multiBarChart();
+
+        chart.margin({top: 30, right: 60, bottom: 20, left: 60});
+
+        var datum = data_multibarchart;
+
+
+
+
+
+            chart.xAxis
+                .tickFormat(d3.format(',.2f'));
+            chart.yAxis
+                .tickFormat(d3.format(',.2f'));
+
+                    chart.tooltipContent(function(key, y, e, graph) {
+                        var x = String(graph.point.x);
+                        var y = String(graph.point.y);
+                                            if(key == 'Count'){
+                        var y =  String(graph.point.y)  + ' call';
+                    }
+                    if(key == 'Duration'){
+                        var y =  String(graph.point.y)  + ' min';
+                    }
+
+                        tooltip_str = '<center><b>'+key+'</b></center>' + y + ' at ' + x;
+                        return tooltip_str;
+                    });
+
+      chart.showLegend(true);
+
+
+
+        
+
+
+        d3.select('#multibarchart svg')
+            .datum(datum)
+            .transition().duration(500)
+            .attr('height', 350)
+            .call(chart);
+
+
+    });
+
+
+
+
+    </script>
+
+    </body>
+</html>

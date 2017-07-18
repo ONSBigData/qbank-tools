@@ -8,11 +8,16 @@
   </head>
   <body>
     <div class="container">
-      <div id="chart"></div>
+     <form action="/search" method="get">
+      <input type="text" name="kw"/>
+      <input type="submit" value="search">
+     </form>
+    <questions></questions>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
     <script src={{ url_for('static', filename='./bower_components/jquery/dist/jquery.min.js') }}></script>
+    <script src={{ url_for('static', filename='app.js') }}></script>
     <script src={{ url_for('static', filename='./bower_components/bootstrap/dist/js/bootstrap.min.js') }}></script>
     <script src={{ url_for('static', filename='./bower_components/d3/d3.min.js') }}></script>
-    <script src={{ url_for('static', filename='main.js') }}></script>
   </body>
 </html>
