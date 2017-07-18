@@ -10,6 +10,8 @@ from bokeh.models import ColumnDataSource, HoverTool, Div
 from bokeh.models.widgets import Slider, Select, TextInput
 from bokeh.io import curdoc
 from bokeh.sampledata.movies_data import movie_path
+from bokeh.io import output_file, show
+
 
 conn = sql.connect(movie_path)
 query = open(join(dirname(__file__), 'query.sql')).read()
@@ -50,7 +52,7 @@ x_axis = Select(title="X Axis", options=sorted(axis_map.keys()), value="Tomato M
 y_axis = Select(title="Y Axis", options=sorted(axis_map.keys()), value="Number of Reviews")
 
 # Create Column Data Source that will be used by the plot
-source = ColumnDataSource(data=dict(x=[], y=[], color=[], title=[], year=[], revenue=[], alpha=[]))
+qbank_source = ColumnDataSource(data=dict(x=[], y=[], color=[], title=[], year=[], revenue=[], alpha=[]))
 
 hover = HoverTool(tooltips=[
     ("Title", "@title"),
@@ -59,7 +61,7 @@ hover = HoverTool(tooltips=[
 ])
 
 p = figure(plot_height=600, plot_width=700, title="", toolbar_location=None, tools=[hover])
-p.circle(x="x", y="y", source=source, size=7, color="color", line_color=None, fill_alpha="alpha")
+p.circle(x="x", y="y", source=qbank_source, size=7, color="color", line_color=None, fill_alpha="alpha")
 
 
 def select_movies():
@@ -90,7 +92,7 @@ def update():
     p.xaxis.axis_label = x_axis.value
     p.yaxis.axis_label = y_axis.value
     p.title.text = "%d movies selected" % len(df)
-    source.data = dict(
+    qbank_source.data = dict(
         x=df[x_name],
         y=df[y_name],
         color=df["color"],
@@ -116,3 +118,5 @@ update()  # initial load of the data
 
 curdoc().add_root(l)
 curdoc().title = "Movies"
+
+show(l)

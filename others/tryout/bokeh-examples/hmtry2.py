@@ -28,7 +28,7 @@ df = pd.DataFrame(data.stack(), columns=['rate']).reset_index()
 colors = ["#75968f", "#a5bab7", "#c9d9d3", "#e2e2e2", "#dfccce", "#ddb7b1", "#cc7878", "#933b41", "#550b1d"]
 mapper = LinearColorMapper(palette=colors, low=df.rate.min(), high=df.rate.max())
 
-source = ColumnDataSource(df)
+qbank_source = ColumnDataSource(df)
 
 TOOLS = "hover,save,pan,box_zoom,reset,wheel_zoom"
 
@@ -45,7 +45,7 @@ p.axis.major_label_standoff = 0
 p.xaxis.major_label_orientation = pi / 3
 
 p.rect(x="Year", y="Month", width=1, height=1,
-       source=source,
+       source=qbank_source,
        fill_color={'field': 'rate', 'transform': mapper},
        line_color=None)
 
