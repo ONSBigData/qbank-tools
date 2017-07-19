@@ -1,21 +1,21 @@
 from bokeh.io import curdoc, show
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d, FactorRange
+from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d
 from bokeh.models.widgets import TextInput, DataTable, TableColumn
 from bokeh.layouts import widgetbox, layout
 
 from os.path import dirname, join
 
-import pandas as pd
+from common import *
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 # --- constants -----------------------------------------------------------
 
-MAX_SEARCH_RES = 50  # max number of displayed search results
-MAX_BARS = 15  # max number of bars
-DISPLAYED_COLS = ['survey_id', 'form_type', 'tr_code', 'text']  # the columns displayed in the table
+MAX_SEARCH_RES = 50
+MAX_BARS = 15
+DISPLAYED_COLS = ['survey_id', 'form_type', 'tr_code', 'text']
 
 # --- data -----------------------------------------------------------
 
@@ -34,7 +34,7 @@ class Data:
         df['similarity'] = csm[selected_index]
         df['color'] = df['survey_id'].apply(lambda si: 'green' if si == df.iloc[selected_index]['survey_id'] else 'red')
 
-        df = df.drop(df.index[selected_index])  # drop the row for selected question (so that we dont compare with itself)
+        df = df.drop(df.index[selected_index])
 
         df = df.sort_values(by='similarity', ascending=False)
 
@@ -62,7 +62,7 @@ class Data:
         cls.sims_df = cls.compute_sims_df(selected_index)
         
         if not hasattr(cls, 'sims_source'):
-            cls.sims_source = ColumnDataSource(cls.sims_df)  # Bokeh data source can be created just by wrapping a pandas data frame
+            cls.sims_source = ColumnDataSource(cls.sims_df)
         else:
             cls.sims_source.data = ColumnDataSource(cls.sims_df).data
 
@@ -70,7 +70,7 @@ class Data:
     def init(cls):
         cls.selected_index = 0
 
-        cls.base_df = pd.read_csv(join(dirname(__file__), '../clean-light.csv'), index_col=0)  # load the base csv file with all the questions
+        cls.base_df = load_clean_df()
 
         cls.update_search_res_source('')
         cls.update_sims_source(cls.selected_index)
@@ -82,7 +82,6 @@ Data.init()
 
 columns = [TableColumn(field=c, title=c) for c in DISPLAYED_COLS]
 search_res_table = DataTable(source=Data.search_res_source, columns=columns, width=1000, height=280)
-# note how the data source is provided as argument above - if the data source changes, so thus the table (they're bound)
 
 
 # --- bar chart -----------------------------------------------------------
@@ -108,40 +107,35 @@ sim_bar_chart.vbar(
     bottom=0,
     width=0.5,
     fill_color="color",
-    source=Data.sims_source  # this time we bind the similarity data source
+    source=Data.sims_source
 )
-sim_bar_chart.min_border_bottom = 200  # this is to give some space for the tooltip
+sim_bar_chart.min_border_bottom = 200
 sim_bar_chart.yaxis.axis_label = 'similarity'
 sim_bar_chart.xaxis.axis_label = 'question'
 
 # --- interactions -----------------------------------------------------------
 
-def selected_search_result_handler(attr, old, new):  # this method is executed when a selection in the table changes
+def selected_search_result_handler(attr, old, new):
     Data.selected_index = new['1d']['indices'][0]
-    Data.update_sims_source(Data.selected_index)  # update the similarity data source based on selection
+    Data.update_sims_source(Data.selected_index)
 
-    # update the title of the bar chart
     tr_code = Data.search_res_df.iloc[Data.selected_index].name
     sim_bar_chart.title.text = 'Top {} similar questions for question {}'.format(MAX_BARS, tr_code)
 
-Data.search_res_source.on_change('selected', selected_search_result_handler)  # here we register that the above method is run whenever selection changes
+Data.search_res_source.on_change('selected', selected_search_result_handler)
 
-qtext = TextInput(title="Search question text")  # this is the text edit input
+qtext = TextInput(title="Search question text")
 qtext.on_change('value', lambda attr, old, new: Data.update_search_res_source(qtext.value))
-# when the value changes (user types in), we want to update the search results source
 
 
 # --- final layout -----------------------------------------------------------
 
 sizing_mode = 'fixed'
 
-# this is the html (title and text at the top)
 desc = Div(text=open(join(dirname(__file__), "description.html")).read(), width=800)
 
-# here we wrap any inputs (right now just edit box) into a box
 inputs = widgetbox(*[qtext], sizing_mode=sizing_mode)
 
-# the layout can be influenced here - what goes under what and next to what
 l = layout([
     [desc],
     [inputs, search_res_table],

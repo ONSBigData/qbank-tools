@@ -40,7 +40,7 @@ class Data:
 
         df['index'] = range(len(df))
 
-        return df.iloc[:MAX_BARS]
+        return df.iloc[:MAX_BARS]   
 
     @classmethod
     def update_search_res_source(cls, search_kw):
