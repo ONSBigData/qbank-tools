@@ -1,26 +1,24 @@
 import sys
 sys.path.append('/home/ons21553/wspace/qbank/code')
+from common import *
+
+from bokeh.io import curdoc, show
+from bokeh.plotting import figure
+from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d
+from bokeh.models.widgets import TextInput, DataTable, TableColumn
+from bokeh.layouts import widgetbox, layout
 
 from os.path import dirname, join
-from bokeh.plotting import figure
-from bokeh.layouts import layout
-from bokeh.models import ColumnDataSource, HoverTool, Div
-from bokeh.models.widgets import TextInput
-from bokeh.io import curdoc
-from bokeh.models import ColumnDataSource
-from bokeh.models.widgets import DataTable, TableColumn
-from bokeh.layouts import widgetbox
-from bokeh.io import show
-from bokeh.models import Range1d
-
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-from common import *
+# --- constants -----------------------------------------------------------
 
 MAX_SEARCH_RES = 50
 MAX_BARS = 15
+
+# --- data -----------------------------------------------------------
 
 class Data:
     @classmethod
@@ -33,6 +31,7 @@ class Data:
         csm = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
         df['similarity'] = csm[selected_index]
+        df['color'] = df['survey_id'].apply(lambda si: 'green' if si == df.iloc[selected_index]['survey_id'] else 'red')
 
         df = df.drop(df.index[selected_index])
 
@@ -77,11 +76,15 @@ class Data:
 
 Data.init()
 
-# table
-columns = [TableColumn(field=c, title=c) for c in Data.search_res_df.columns]
-search_res_table = DataTable(source=Data.search_res_source, columns=columns, width=800, height=280)
 
-# plot
+# --- table -----------------------------------------------------------
+
+columns = [TableColumn(field=c, title=c) for c in Data.search_res_df.columns]
+search_res_table = DataTable(source=Data.search_res_source, columns=columns, width=1000, height=280)
+
+
+# --- bar chart -----------------------------------------------------------
+
 hover = HoverTool(tooltips=[
     ("Survey ID", "@survey_id"),
     ("Form Type", "@form_type"),
@@ -91,24 +94,27 @@ hover = HoverTool(tooltips=[
 
 sim_bar_chart = figure(
     plot_height=600,
-    plot_width=700,
+    plot_width=1300,
     title="",
     toolbar_location=None,
     tools=[hover],
-    y_range=Range1d(0, 1)
+    y_range=Range1d(0, 1),
 )
 sim_bar_chart.vbar(
     x="index",
     top="similarity",
     bottom=0,
     width=0.5,
-    fill_color="#b3de69",
+    fill_color="color",
     source=Data.sims_source
 )
 sim_bar_chart.min_border_bottom = 200
+sim_bar_chart.yaxis.axis_label = 'similarity'
+sim_bar_chart.xaxis.axis_label = 'question'
 
 
-# handling selection
+# --- interactions -----------------------------------------------------------
+
 def selected_search_result_handler(attr, old, new):
     Data.selected_index = new['1d']['indices'][0]
     Data.update_sims_source(Data.selected_index)
@@ -117,11 +123,13 @@ def selected_search_result_handler(attr, old, new):
     sim_bar_chart.title.text = 'Top {} similar questions for question {}'.format(MAX_BARS, tr_code)
 Data.search_res_source.on_change('selected', selected_search_result_handler)
 
-# controls
+
 qtext = TextInput(title="Search question text")
 qtext.on_change('value', lambda attr, old, new: Data.update_search_res_source(qtext.value))
 
-# final layout
+
+# --- final layout -----------------------------------------------------------
+
 sizing_mode = 'fixed'
 
 desc = Div(text=open(join(dirname(__file__), "description.html")).read(), width=800)
