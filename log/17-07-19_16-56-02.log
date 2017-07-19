@@ -1,0 +1,12 @@
+2017-07-19 16:56:02,973     DEBUG                                qbank >>> Logger qbank initialized
+2017-07-19 16:56:04,262     DEBUG                         SimpleCosSim >>> Logger SimpleCosSim initialized
+2017-07-19 16:56:04,272     DEBUG                         SimpleCosSim >>> Item:           are you able to report for the calendar year  1 january 2015 to 31 december 2015 
+2017-07-19 16:56:04,272     DEBUG                         SimpleCosSim >>> Processed item: abl report calendar year januari 2015 31 decemb 2015
+2017-07-19 16:56:04,272     DEBUG                         SimpleCosSim >>> Item:           from 
+2017-07-19 16:56:04,272     DEBUG                         SimpleCosSim >>> Processed item: 
+2017-07-19 16:56:04,272     DEBUG                         SimpleCosSim >>> Item:           to 
+2017-07-19 16:56:04,272     DEBUG                         SimpleCosSim >>> Processed item: 
+2017-07-19 16:56:04,273     DEBUG                         SimpleCosSim >>> Item:           code   civil defence
+2017-07-19 16:56:04,273     DEBUG                         SimpleCosSim >>> Processed item: code civil defenc
+2017-07-19 16:56:04,274     DEBUG                         SimpleCosSim >>> Item:           code   please select the code that best describes the sector for which in house r d has been carried out during the 12 month reporting period 
+2017-07-19 16:56:04,274     DEBUG                         SimpleCosSim >>> Processed item: code pleas select code best describ sector hous carri 12 month report

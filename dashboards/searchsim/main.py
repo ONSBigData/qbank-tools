@@ -1,3 +1,6 @@
+import sys
+sys.path.append('/home/ons21553/wspace/qbank/code')
+
 from bokeh.io import curdoc, show
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d
@@ -6,16 +9,17 @@ from bokeh.layouts import widgetbox, layout
 
 from os.path import dirname, join
 
-from common import *
+from siman.simple_cos_sim import SimpleCosSim
 
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+from common import *
 
 # --- constants -----------------------------------------------------------
 
 MAX_SEARCH_RES = 50
 MAX_BARS = 15
+ANALYSED_COLS = ['text', 'type', 'close_seg_text', 'all_inclusions', 'all_exclusions']
 DISPLAYED_COLS = ['survey_id', 'form_type', 'tr_code', 'text']
+DISPLAYED_COLS += [c for c in ANALYSED_COLS if c not in DISPLAYED_COLS]
 
 # --- data -----------------------------------------------------------
 
@@ -27,9 +31,7 @@ class Data:
         df = cls.search_res_df.copy()
         df['text'] = df['text'].fillna('')
 
-        tfidf_vectorizer = TfidfVectorizer(lowercase=True)
-        tfidf_matrix = tfidf_vectorizer.fit_transform(df['text'])
-        csm = cosine_similarity(tfidf_matrix, tfidf_matrix)
+        csm = SimpleCosSim(df, ANALYSED_COLS).get_similarity_matrix()
 
         df['similarity'] = csm[selected_index]
         df['color'] = df['survey_id'].apply(lambda si: 'green' if si == df.iloc[selected_index]['survey_id'] else 'red')
@@ -86,12 +88,18 @@ search_res_table = DataTable(source=Data.search_res_source, columns=columns, wid
 
 # --- bar chart -----------------------------------------------------------
 
-hover = HoverTool(tooltips=[
+tooltip_fields = [
     ("Survey ID", "@survey_id"),
     ("Form Type", "@form_type"),
     ("Tracking code", "@tr_code"),
-    ("Text", "@text"),
-])
+    ("Text", "@text")
+]
+
+for col in ANALYSED_COLS:
+    title = col.replace('_', ' ').title()
+    tooltip_fields.append((title, '@{}'.format(col)))
+
+hover = HoverTool(tooltips=tooltip_fields)
 
 sim_bar_chart = figure(
     plot_height=600,
