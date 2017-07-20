@@ -3,3 +3,5 @@ data
 node_modules
 bower_components
 dashboard/dashboard/*.csv
+log
+main.html

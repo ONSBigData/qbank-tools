@@ -1,11 +1,14 @@
 import sys
 sys.path.append('/home/ons21553/wspace/qbank/code')
 
+import collections
+
 from bokeh.io import curdoc, show
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d
-from bokeh.models.widgets import TextInput, DataTable, TableColumn
+from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d, CustomJS
+from bokeh.models.widgets import TextInput, DataTable, TableColumn, HTMLTemplateFormatter
 from bokeh.layouts import widgetbox, layout
+from bokeh.events import MouseMove, MouseEnter
 
 from os.path import dirname, join
 
@@ -20,6 +23,15 @@ MAX_BARS = 15
 ANALYSED_COLS = ['text', 'type', 'close_seg_text', 'all_inclusions', 'all_exclusions']
 DISPLAYED_COLS = ['survey_id', 'form_type', 'tr_code', 'text']
 DISPLAYED_COLS += [c for c in ANALYSED_COLS if c not in DISPLAYED_COLS]
+
+PAGE_WIDTH = 1300
+
+NARROW_COL_W = 100
+WIDE_COL_W = 600
+COL_WIDTHS = collections.defaultdict(lambda: NARROW_COL_W)
+for c in ['text', 'close_seg_text', 'all_inclusions', 'all_exclusions']:
+    COL_WIDTHS[c] = WIDE_COL_W
+COL_WIDTHS['type'] = 200
 
 # --- data -----------------------------------------------------------
 
@@ -82,9 +94,23 @@ Data.init()
 
 # --- table -----------------------------------------------------------
 
-columns = [TableColumn(field=c, title=c) for c in DISPLAYED_COLS]
-search_res_table = DataTable(source=Data.search_res_source, columns=columns, width=1000, height=280)
+temp = """<div class="tooltip-parent"><div class="tooltipped"><%= value %></div><div class="tooltip-text"><%= value %></div></div>"""
+temp = """<span href="#" data-toggle="tooltip" title="<%= value %>"><%= value %></span>"""
 
+columns = [TableColumn(
+    field=c,
+    title=c,
+    width=COL_WIDTHS[c],
+    formatter=HTMLTemplateFormatter(template=temp)
+) for c in DISPLAYED_COLS]
+
+search_res_table = DataTable(
+    source=Data.search_res_source,
+    columns=columns,
+    width=PAGE_WIDTH,
+    height=280,
+    editable=True
+)
 
 # --- bar chart -----------------------------------------------------------
 
@@ -103,7 +129,7 @@ hover = HoverTool(tooltips=tooltip_fields)
 
 sim_bar_chart = figure(
     plot_height=600,
-    plot_width=1300,
+    plot_width=PAGE_WIDTH,
     title="",
     toolbar_location=None,
     tools=[hover],
@@ -135,18 +161,18 @@ Data.search_res_source.on_change('selected', selected_search_result_handler)
 qtext = TextInput(title="Search question text")
 qtext.on_change('value', lambda attr, old, new: Data.update_search_res_source(qtext.value))
 
-
 # --- final layout -----------------------------------------------------------
 
 sizing_mode = 'fixed'
 
-desc = Div(text=open(join(dirname(__file__), "description.html")).read(), width=800)
+desc = Div(text=open(join(dirname(__file__), "description.html")).read(), width=PAGE_WIDTH)
 
 inputs = widgetbox(*[qtext], sizing_mode=sizing_mode)
 
 l = layout([
     [desc],
-    [inputs, search_res_table],
+    [inputs],
+    [search_res_table],
     [sim_bar_chart]
 ], sizing_mode=sizing_mode)
 

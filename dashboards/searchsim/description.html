@@ -28,6 +28,40 @@ p {
     max-width: 800;
 }
 
+.tooltip-parent {
+    width: 100%;
+}
+
+.tooltipped {
+    overflow: hidden;
+    width: 100%;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 250px;
+    background-color: rgba(0, 0, 0, 1);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 5px;
+    position: relative;
+    z-index: 1;
+    top: 100%;
+    left: 0%;
+    white-space: initial;
+    text-align: left;
+}
+
+.tooltipped:hover + .tooltip-text {
+    visibility: visible;
+}
+
+div.bk-slick-cell {
+    overflow: visible !important;
+    z-index: auto !important;
+}
+
 </style>
 
 <h1>Question bank exploration dashboard</h1>
