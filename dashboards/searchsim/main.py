@@ -1,14 +1,17 @@
 import sys
 sys.path.append('/home/ons21553/wspace/qbank/code')
 
+import traceback
 import collections
+import numpy as np
 
 from bokeh.io import curdoc, show
 from bokeh.plotting import figure
-from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d
+from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d, FuncTickFormatter, LinearColorMapper, ColorBar, BasicTicker, PrintfTickFormatter
 from bokeh.models.widgets import TextInput, DataTable, TableColumn, HTMLTemplateFormatter
 from bokeh.layouts import layout
 from bokeh.events import Tap
+import bokeh.palettes as palettes
 
 from os.path import dirname, join
 
@@ -20,13 +23,13 @@ import helpers.log_helper as lg
 
 # --- constants -----------------------------------------------------------
 
-MAX_SEARCH_RES = 200
-MAX_BARS = 15
+MAX_SEARCH_RES = 50
+MAX_BARS = 10
 ANALYSED_COLS = ['text', 'type', 'close_seg_text', 'all_inclusions', 'all_exclusions']
 DISPLAYED_COLS = ['survey_id', 'form_type', 'tr_code', 'text']
 DISPLAYED_COLS += [c for c in ANALYSED_COLS if c not in DISPLAYED_COLS]
 
-COMP_TBL_FIELDS = ['_field', 'selected', 'compared']  # field needs to be _field because otherwise it clashes with Bokeh
+COMP_TBL_FIELDS = ['selected', 'compared']
 
 PAGE_WIDTH = 1300
 
@@ -39,73 +42,177 @@ COL_WIDTHS['type'] = 200
 
 LOG = lg.get_logger('dashboard')
 
+INIT_KW = ''
+
 # --- data -----------------------------------------------------------
+
+class Data:
+    base_df = None
+    res_df = None
+    bar_chart_df = None
+    hm_df = None
+
+    sim_matrix = None
+
+    selected_result_index = None
+
+    @classmethod
+    def update_res_df(cls, search_kw):
+        cls.res_df = cls.base_df[cls.base_df['all_text'].str.contains(search_kw, na=False)]
+        if len(cls.res_df) > MAX_SEARCH_RES:
+            cls.res_df = cls.res_df.sample(MAX_SEARCH_RES)
+
+        cls.compute_sim_matrix()
+
+    @classmethod
+    def update_selected_result_index(cls, index):
+        cls.selected_result_index = index
+
+    @classmethod
+    def update_bar_chart_df(cls):
+        if len(cls.res_df) == 0 or cls.selected_result_index is None:
+            cls.bar_chart_df = None
+            return None
+
+        idx = cls.selected_result_index
+
+        df = cls.res_df.copy()
+
+        df['similarity'] = cls.sim_matrix[idx]
+        df['color'] = df['survey_id'].apply(lambda si: 'green' if si == df.iloc[idx]['survey_id'] else 'red')
+
+        df = df.drop(df.index[idx])
+
+        df = df.sort_values(by='similarity', ascending=False)
+
+        df['index'] = range(len(df))
+
+        cls.bar_chart_df = df.iloc[:MAX_BARS]
+
+    @classmethod
+    def update_heatmap_df(cls):
+        if len(cls.res_df) == 0:
+            cls.hm_df = None
+            return
+
+        df = cls.res_df.copy()
+
+        vdf = pd.DataFrame(cls.sim_matrix.flatten(), columns=['similarity'])
+
+        xdf = df.reset_index()
+        xdf = pd.concat([xdf] * len(df))
+        xdf.index = range(len(xdf))
+
+        ydf = df.reset_index()
+        ydf = ydf.loc[np.repeat(ydf.index.values, len(df))]
+        ydf.index = range(len(ydf))
+
+        df = pd.concat([xdf, ydf, vdf], axis=1, ignore_index=True)
+        df.columns = [c + '_x' for c in xdf.columns] + [c + '_y' for c in xdf.columns] + ['similarity']
+
+        cls.hm_df = df
+
+    @classmethod
+    def compute_sim_matrix(cls):
+        if len(cls.res_df) == 0:
+            cls.sim_matrix = None
+            return
+
+        cls.sim_matrix = SimpleCosSim(cls.res_df, ANALYSED_COLS).get_similarity_matrix()
+
+    @classmethod
+    def init(cls):
+        cls.base_df = load_clean_df()
+
+        cls.update_res_df(INIT_KW)
+        cls.update_selected_result_index(None)
+        cls.update_bar_chart_df()
+        cls.update_heatmap_df()
+
 
 class App:
     qtext = None
     nresults = None
     res_table = None
     bar_chart = None
-    comp_table = None
+    comp_div = None
 
-    search_res_df = None
-    sims_df = None
-    base_df = None
+    bar_chart_src = None
+    hm_src = None
 
-    results_src = None
-    similarity_src = None
-    comp_src = None
+    # --- actions -----------------------------------------------------------
 
     @classmethod
-    def compute_sims_df(cls, selected_index):
-        df = cls.search_res_df.copy()
-        df['text'] = df['text'].fillna('')
+    def search_for_kw_handler(cls, search_kw):
+        Data.update_res_df(search_kw)
+        Data.update_selected_result_index(None)
+        Data.update_bar_chart_df()
+        Data.update_heatmap_df()
 
-        csm = SimpleCosSim(df, ANALYSED_COLS).get_similarity_matrix()
-
-        df['similarity'] = csm[selected_index]
-        df['color'] = df['survey_id'].apply(lambda si: 'green' if si == df.iloc[selected_index]['survey_id'] else 'red')
-
-        df = df.drop(df.index[selected_index])
-
-        df = df.sort_values(by='similarity', ascending=False)
-
-        df['index'] = range(len(df))
-
-        return df.iloc[:MAX_BARS]
+        cls.update_nresults()
+        cls.update_res_table()
+        cls.update_bar_chart()
+        cls.update_hm()
+        cls.update_comp_div(None)
 
     @classmethod
-    def search_for_kw(cls, search_kw):
-        cls.update_results_src(search_kw)
+    def select_result_handler(cls, index):
+        Data.update_selected_result_index(index)
+        Data.update_bar_chart_df()
 
-        res = len(cls.search_res_df)
-        top_all = 'top' if res == MAX_SEARCH_RES else 'all'
-
-        cls.nresults.text = 'Showing {} {} results'.format(top_all, res)
-
-    @classmethod
-    def update_results_src(cls, search_kw):
-        cls.search_res_df = cls.base_df[cls.base_df['all_text'].str.contains(search_kw, na=False)]
-        if len(cls.search_res_df) > MAX_SEARCH_RES:
-            cls.search_res_df = cls.search_res_df.sample(MAX_SEARCH_RES)
-
-        if cls.results_src == None:  # creating
-            cls.results_src = ColumnDataSource(cls.search_res_df)
-            cls.results_src.on_change('selected', cls.selected_search_result_handler)
-        else:
-            cls.results_src.data = ColumnDataSource(cls.search_res_df).data
+        cls.update_bar_chart()
+        cls.update_comp_div(None)
 
     @classmethod
-    def update_similarity_src(cls, selected_index):
-        cls.sims_df = cls.compute_sims_df(selected_index)
-        
-        if cls.similarity_src == None:  # creating
-            cls.similarity_src = ColumnDataSource(cls.sims_df)
-        else:
-            cls.similarity_src.data = ColumnDataSource(cls.sims_df).data
+    def select_bar_handler(cls, bar_index):
+        cls.update_comp_div(bar_index)
+
+    # --- updates -----------------------------------------------------------
 
     @classmethod
-    def update_comp_src(cls, selected_q=None, compared_q=None):
+    def update_nresults(cls):
+        nresults = len(Data.res_df)
+        top_all = 'top' if nresults == MAX_SEARCH_RES else 'all'
+        cls.nresults.text = 'Showing {} {} results'.format(top_all, nresults)
+
+    @classmethod
+    def update_res_table(cls):
+        cls.res_table.source.data = ColumnDataSource(Data.res_df).data
+
+    @classmethod
+    def update_bar_chart(cls):
+        df = Data.bar_chart_df
+        cls.bar_chart.axis.visible = (df is None)
+
+        if df is None:
+            return
+
+        cls.bar_chart_src.data = ColumnDataSource(df).data
+
+        cls.update_bar_chart_title()
+        cls.update_bar_chart_ticks()
+
+    @classmethod
+    def update_bar_chart_title(cls):
+        tr_code = Data.res_df.iloc[Data.selected_result_index].name
+        cls.bar_chart.title.text = 'Top {} similar questions for question {}'.format(MAX_BARS, tr_code)
+
+    @classmethod
+    def update_bar_chart_ticks(cls):
+        labels = dict([(i, Data.bar_chart_df.iloc[i]['tr_code']) for i in range(len(Data.bar_chart_df))])
+        cls.bar_chart.xaxis.formatter = FuncTickFormatter(
+            code="""var labels = {}; return labels[tick]; """.format(labels))
+
+    @classmethod
+    def update_comp_div(cls, selected_bar_index):
+        if selected_bar_index is None:
+            return
+
+        selected_res_index = Data.selected_result_index
+
+        selected_q = Data.res_df.iloc[selected_res_index]
+        compared_q = Data.bar_chart_df.iloc[selected_bar_index]
+
         def _create_series(q):
             if q is None:
                 q = pd.Series()
@@ -115,18 +222,37 @@ class App:
 
         selected_q = _create_series(selected_q)
         compared_q = _create_series(compared_q)
-        df = pd.concat([selected_q, compared_q], axis=1).reset_index()
+        df = pd.concat([selected_q, compared_q], axis=1)
         df.columns = COMP_TBL_FIELDS
 
-        if cls.comp_src == None:  # creating
-            cls.comp_src = ColumnDataSource(df)
-        else:
-            cls.comp_src.data = ColumnDataSource(df).data
+        pd.set_option('display.max_colwidth', -1)
+
+        cls.comp_div.text = df.to_html()
+
+    @classmethod
+    def update_hm(cls):
+        df = Data.hm_df
+        cls.hm.axis.visible = (df is None)
+
+        if df is None:
+            return
+
+        cls.hm_src.data = ColumnDataSource(df).data
+
+    # --- create -----------------------------------------------------------
+
+    @classmethod
+    def create_qtext_box(cls):
+        cls.qtext = TextInput(title="Search question text")
+        cls.qtext.on_change('value', lambda attr, old, new: cls.search_for_kw_handler(cls.qtext.value))
+
+    @classmethod
+    def create_nresults_div(cls):
+        cls.nresults = Div(text=str(MAX_SEARCH_RES))
 
     @classmethod
     def create_res_table(cls):
         template = """<div class="tooltip-parent"><div class="tooltipped"><%= value %></div><div class="tooltip-text"><%= value %></div></div>"""
-
         columns = [TableColumn(
             field=c,
             title=c,
@@ -134,99 +260,140 @@ class App:
             formatter=HTMLTemplateFormatter(template=template)
         ) for c in DISPLAYED_COLS]
 
+        def _selected_handler(attr, old, new):
+            cls.select_result_handler(new['1d']['indices'][0])
+
+        source = ColumnDataSource(pd.DataFrame())
+        source.on_change('selected', _selected_handler)
+
         cls.res_table = DataTable(
-            source=cls.results_src,
+            source=source,
             columns=columns,
             width=PAGE_WIDTH,
             height=320,
             editable=True
         )
 
-    @classmethod
-    def create_comp_table(cls):
-        columns = [TableColumn(
-            field=f,
-            title=t,
-            width=300
-        ) for f, t in zip(COMP_TBL_FIELDS, ['Field', 'Selected question', 'Compared question'])]
-
-        cls.comp_table = DataTable(
-            source=cls.comp_src,
-            columns=columns,
-            width=PAGE_WIDTH,
-            height=320,
-            editable=True
-        )
-        
     @classmethod
     def create_bar_chart(cls):
         tooltip_fields = [
-            ("Survey", "@survey_id (@survey_name)"),
-            ("Form Type/Tr. code", "@form_type / @tr_code"),
-            ("Text", "@text")
+            ('Tr. code', '<div class="tooltip-field">@tr_code</div>'),
+            ('Survey', '<div class="tooltip-field">@survey_id (@survey_name)</div>'),
+            ('Form Type', '<div class="tooltip-field">@form_type</div>'),
+            ('Text', '<div class="tooltip-field">@text</div>')
         ]
 
         for col in ANALYSED_COLS:
             bar_char_title = col.replace('_', ' ').title()
-            tooltip_fields.append((bar_char_title, '@{}'.format(col)))
+            tooltip_fields.append((bar_char_title, '<div class="tooltip-field">@{}</div>'.format(col)))
 
         hover = HoverTool(tooltips=tooltip_fields)
 
         cls.bar_chart = figure(
             plot_height=400,
-            plot_width=PAGE_WIDTH,
+            plot_width=PAGE_WIDTH // 2 - 50,
             toolbar_location=None,
             tools=[hover],
             title="Select question",
             y_range=Range1d(0, 1)
         )
+
+        cls.bar_chart_src = ColumnDataSource(pd.DataFrame(columns=['index', 'similarity', 'question', 'color']))
         cls.bar_chart.vbar(
             x="index",
             top="similarity",
             bottom=0,
             width=0.5,
             fill_color="color",
-            source=cls.similarity_src
+            source=cls.bar_chart_src
         )
-        # cls.bar_chart.min_border_bottom = 0
+
+        cls.bar_chart.xaxis[0].ticker.desired_num_ticks = MAX_BARS
         cls.bar_chart.yaxis.axis_label = 'similarity'
         cls.bar_chart.xaxis.axis_label = 'question'
+        cls.bar_chart.xaxis.major_label_orientation = 1
 
         def on_tap(event):
-            si = cls.get_selected_res_index()
-            ci = int(event.x)
-
-            selected_q = cls.search_res_df.iloc[si]
-            compared_q = cls.sims_df.iloc[ci]
-
-            cls.update_comp_src(selected_q, compared_q)
+            index = round(event.x)
+            cls.select_bar_handler(index)
 
         cls.bar_chart.on_event(Tap, on_tap)
 
     @classmethod
-    def get_selected_res_index(cls):
-        return cls.results_src.selected['1d']['indices'][0]
+    def create_comp_div(cls):
+        cls.comp_div = Div(text='')
 
     @classmethod
-    def selected_search_result_handler(cls, attr, old, new):
-        cls.select_index(new['1d']['indices'][0])
-        cls.update_comp_src()
+    def create_heatmap(cls):
 
-    @classmethod
-    def select_index(cls, selected_index):
-        cls.update_similarity_src(selected_index)
+        dff = load_clean_df().iloc[:10]
 
-        tr_code = cls.search_res_df.iloc[selected_index].name
-        cls.bar_chart.title.text = 'Top {} similar questions for question {}'.format(MAX_BARS, tr_code)
+        sim_matrix = np.random.rand(10, 10)
 
-    @classmethod
-    def create_qtext_box(cls):
-        cls.qtext = TextInput(title="Search question text")
-        cls.qtext.on_change('value', lambda attr, old, new: cls.search_for_kw(cls.qtext.value))
+        vdf = pd.DataFrame(sim_matrix.flatten(), columns=['similarity'])
 
-    @classmethod
-    def create_nresults_div(cls):
-        cls.nresults = Div(text=str(MAX_SEARCH_RES))
+        xdf = dff.reset_index()
+        xdf = pd.concat([xdf] * len(dff))
+        xdf.index = range(len(xdf))
+
+        ydf = dff.reset_index()
+        ydf = ydf.loc[np.repeat(ydf.index.values, len(dff))]
+        ydf.index = range(len(ydf))
+
+        df = pd.concat([xdf, ydf, vdf], axis=1, ignore_index=True)
+        df.columns = [c + '_x' for c in xdf.columns] + [c + '_y' for c in xdf.columns] + ['similarity']
+
+        Data.hm_df = df
+
+
+        palette = palettes.Magma256
+        mapper = LinearColorMapper(palette=palette, low=0, high=1)
+        tools = "hover"
+        xy_range = list(dff.index)
+
+        # plot
+        hm = figure(
+            title="Heatmap",
+            tools=tools,
+            toolbar_location=None,
+            x_range=xy_range,
+            y_range=xy_range,
+            plot_width=600
+        )
+
+        cls.hm_src = ColumnDataSource(Data.hm_df)
+        hm.rect(
+            x="uid_x",  # this needs to be column from DF
+            y="uid_y",
+            width=1,
+            height=1,
+            source=cls.hm_src,
+            fill_color={'field': 'similarity', 'transform': mapper},  # mapper gives the coloring
+            line_color='white'
+        )
+
+        hm.xaxis.major_label_orientation = 3.14 / 3  # rotation is in radians
+
+        # color bar
+        color_bar = ColorBar(
+            color_mapper=mapper,
+            major_label_text_font_size="8pt",
+            ticker=BasicTicker(desired_num_ticks=10),
+            formatter=PrintfTickFormatter(format="%0.1f"),
+            label_standoff=10,
+            border_line_color=None,
+            location=(0, 0)
+        )
+        hm.add_layout(color_bar, 'right')
+
+        # hover tool
+        hm.select_one(HoverTool).tooltips = [
+            ('Similarity', '@similarity'),
+            ('Survey X', '@survey_name_x'),
+            ('Survey Y', '@survey_name_y'),
+        ]
+
+        cls.hm = hm
 
     @classmethod
     def show(cls):
@@ -239,8 +406,9 @@ class App:
         l = layout([
             [desc, search],
             [cls.res_table],
-            [cls.bar_chart],
-            [cls.comp_table]
+            [cls.bar_chart, cls.hm],
+            [cls.comp_div],
+            [Div(height=200)]  # some empty space
         ], sizing_mode=sizing_mode)
 
         curdoc().add_root(l)
@@ -250,25 +418,17 @@ class App:
 
     @classmethod
     def init(cls):
-        INIT_INDEX = 0
-        INIT_KW = ''
+        Data.init()
 
-        cls.base_df = load_clean_df()
-
-        cls.update_results_src(INIT_KW)
-        cls.update_similarity_src(INIT_INDEX)
-        cls.update_comp_src()
-
-        cls.create_res_table()
-        cls.create_bar_chart()
         cls.create_qtext_box()
         cls.create_nresults_div()
-        cls.create_comp_table()
+        cls.create_res_table()
+        cls.create_bar_chart()
+        cls.create_heatmap()
+        cls.create_comp_div()
 
-        cls.select_index(INIT_INDEX)
-        cls.search_for_kw(INIT_KW)
+        cls.search_for_kw_handler(INIT_KW)
 
         cls.show()
-
 
 App.init()
