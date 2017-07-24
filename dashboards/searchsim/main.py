@@ -136,6 +136,7 @@ class App:
     res_table = None
     bar_chart = None
     comp_div = None
+    hm = None
 
     bar_chart_src = None
     hm_src = None
@@ -232,12 +233,14 @@ class App:
     @classmethod
     def update_hm(cls):
         df = Data.hm_df
-        cls.hm.axis.visible = (df is None)
 
         if df is None:
+            cls.hm.text = ''
             return
 
-        cls.hm_src.data = ColumnDataSource(df).data
+        script, div = cls.get_heatmap()
+        cls.hm.text = script + div
+
 
     # --- create -----------------------------------------------------------
 
@@ -324,32 +327,11 @@ class App:
         cls.comp_div = Div(text='')
 
     @classmethod
-    def create_heatmap(cls):
-
-        dff = load_clean_df().iloc[:10]
-
-        sim_matrix = np.random.rand(10, 10)
-
-        vdf = pd.DataFrame(sim_matrix.flatten(), columns=['similarity'])
-
-        xdf = dff.reset_index()
-        xdf = pd.concat([xdf] * len(dff))
-        xdf.index = range(len(xdf))
-
-        ydf = dff.reset_index()
-        ydf = ydf.loc[np.repeat(ydf.index.values, len(dff))]
-        ydf.index = range(len(ydf))
-
-        df = pd.concat([xdf, ydf, vdf], axis=1, ignore_index=True)
-        df.columns = [c + '_x' for c in xdf.columns] + [c + '_y' for c in xdf.columns] + ['similarity']
-
-        Data.hm_df = df
-
-
+    def get_heatmap(cls):
         palette = palettes.Magma256
         mapper = LinearColorMapper(palette=palette, low=0, high=1)
         tools = "hover"
-        xy_range = list(dff.index)
+        xy_range = list(Data.res_df.index)
 
         # plot
         hm = figure(
@@ -393,7 +375,12 @@ class App:
             ('Survey Y', '@survey_name_y'),
         ]
 
-        cls.hm = hm
+        from bokeh.embed import components
+        return components(hm)
+
+    @classmethod
+    def create_heatmap(cls):
+        cls.hm = Div(text='', width=700)
 
     @classmethod
     def show(cls):
