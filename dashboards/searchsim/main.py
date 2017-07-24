@@ -5,6 +5,7 @@ import traceback
 import collections
 import numpy as np
 
+from bokeh.embed import components
 from bokeh.io import curdoc, show
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d, FuncTickFormatter, LinearColorMapper, ColorBar, BasicTicker, PrintfTickFormatter
@@ -12,6 +13,11 @@ from bokeh.models.widgets import TextInput, DataTable, TableColumn, HTMLTemplate
 from bokeh.layouts import layout
 from bokeh.events import Tap
 import bokeh.palettes as palettes
+
+from tornado.ioloop import IOLoop
+from bokeh.server.server import Server
+from bokeh.application.handlers import FunctionHandler
+from bokeh.application import Application
 
 from os.path import dirname, join
 
@@ -138,8 +144,13 @@ class App:
     comp_div = None
     hm = None
 
-    bar_chart_src = None
-    hm_src = None
+    # --- static -----------------------------------------------------------
+
+    @staticmethod
+    def format_tooltip_fields(tooltip_fields):
+        tooltip_fields = [(tf[0], '<div class="tooltip-field">{}</div>'.format(tf[1])) for tf in tooltip_fields]
+
+        return tooltip_fields
 
     # --- actions -----------------------------------------------------------
 
@@ -183,26 +194,13 @@ class App:
     @classmethod
     def update_bar_chart(cls):
         df = Data.bar_chart_df
-        cls.bar_chart.axis.visible = (df is None)
 
         if df is None:
+            cls.bar_chart.text = ''
             return
 
-        cls.bar_chart_src.data = ColumnDataSource(df).data
-
-        cls.update_bar_chart_title()
-        cls.update_bar_chart_ticks()
-
-    @classmethod
-    def update_bar_chart_title(cls):
-        tr_code = Data.res_df.iloc[Data.selected_result_index].name
-        cls.bar_chart.title.text = 'Top {} similar questions for question {}'.format(MAX_BARS, tr_code)
-
-    @classmethod
-    def update_bar_chart_ticks(cls):
-        labels = dict([(i, Data.bar_chart_df.iloc[i]['tr_code']) for i in range(len(Data.bar_chart_df))])
-        cls.bar_chart.xaxis.formatter = FuncTickFormatter(
-            code="""var labels = {}; return labels[tick]; """.format(labels))
+        script, div = cls.get_bar_chart()
+        cls.bar_chart.text = script + div
 
     @classmethod
     def update_comp_div(cls, selected_bar_index):
@@ -278,21 +276,21 @@ class App:
         )
 
     @classmethod
-    def create_bar_chart(cls):
+    def get_bar_chart(cls):
         tooltip_fields = [
-            ('Tr. code', '<div class="tooltip-field">@tr_code</div>'),
-            ('Survey', '<div class="tooltip-field">@survey_id (@survey_name)</div>'),
-            ('Form Type', '<div class="tooltip-field">@form_type</div>'),
-            ('Text', '<div class="tooltip-field">@text</div>')
+            ('Tr. code', '@tr_code'),
+            ('Survey', '@survey_id (@survey_name)'),
+            ('Form Type', '@form_type'),
+            ('Text', '@text')
         ]
 
         for col in ANALYSED_COLS:
             bar_char_title = col.replace('_', ' ').title()
-            tooltip_fields.append((bar_char_title, '<div class="tooltip-field">@{}</div>'.format(col)))
+            tooltip_fields.append((bar_char_title, '@{}'.format(col)))
 
-        hover = HoverTool(tooltips=tooltip_fields)
+        hover = HoverTool(tooltips=App.format_tooltip_fields(tooltip_fields))
 
-        cls.bar_chart = figure(
+        bc = figure(
             plot_height=400,
             plot_width=PAGE_WIDTH // 2 - 50,
             toolbar_location=None,
@@ -301,26 +299,38 @@ class App:
             y_range=Range1d(0, 1)
         )
 
-        cls.bar_chart_src = ColumnDataSource(pd.DataFrame(columns=['index', 'similarity', 'question', 'color']))
-        cls.bar_chart.vbar(
+        src = ColumnDataSource(Data.bar_chart_df)
+        bc.vbar(
             x="index",
             top="similarity",
             bottom=0,
             width=0.5,
             fill_color="color",
-            source=cls.bar_chart_src
+            source=src
         )
 
-        cls.bar_chart.xaxis[0].ticker.desired_num_ticks = MAX_BARS
-        cls.bar_chart.yaxis.axis_label = 'similarity'
-        cls.bar_chart.xaxis.axis_label = 'question'
-        cls.bar_chart.xaxis.major_label_orientation = 1
+        bc.xaxis[0].ticker.desired_num_ticks = MAX_BARS
+        bc.yaxis.axis_label = 'similarity'
+        bc.xaxis.axis_label = 'question'
+        bc.xaxis.major_label_orientation = 1
+
+        tr_code = Data.res_df.iloc[Data.selected_result_index].name
+        bc.title.text = 'Top {} similar questions for question {}'.format(MAX_BARS, tr_code)
+
+        labels = dict([(i, Data.bar_chart_df.iloc[i]['tr_code']) for i in range(len(Data.bar_chart_df))])
+        bc.xaxis.formatter = FuncTickFormatter(code="""var labels = {}; return labels[tick]; """.format(labels))
 
         def on_tap(event):
             index = round(event.x)
             cls.select_bar_handler(index)
 
-        cls.bar_chart.on_event(Tap, on_tap)
+        bc.on_event(Tap, on_tap)
+
+        return components(bc)
+
+    @classmethod
+    def create_bar_chart(cls):
+        cls.bar_chart = Div(text='', height=400, width=PAGE_WIDTH // 2 - 50)
 
     @classmethod
     def create_comp_div(cls):
@@ -340,16 +350,16 @@ class App:
             toolbar_location=None,
             x_range=xy_range,
             y_range=xy_range,
-            plot_width=600
+            plot_width=PAGE_WIDTH // 2 - 50
         )
 
-        cls.hm_src = ColumnDataSource(Data.hm_df)
+        src = ColumnDataSource(Data.hm_df)
         hm.rect(
             x="uid_x",  # this needs to be column from DF
             y="uid_y",
             width=1,
             height=1,
-            source=cls.hm_src,
+            source=src,
             fill_color={'field': 'similarity', 'transform': mapper},  # mapper gives the coloring
             line_color='white'
         )
@@ -368,22 +378,28 @@ class App:
         )
         hm.add_layout(color_bar, 'right')
 
-        # hover tool
-        hm.select_one(HoverTool).tooltips = [
+        hm.select_one(HoverTool).tooltips = App.format_tooltip_fields([
             ('Similarity', '@similarity'),
-            ('Survey X', '@survey_name_x'),
-            ('Survey Y', '@survey_name_y'),
-        ]
+            ('X', '@uid_x'),
+            ('Y', '@uid_y'),
 
-        from bokeh.embed import components
+            ('Survey X', '@survey_id_x (@survey_name_x)'),
+            ('Form type X', '@form_type_x'),
+            ('Tr. code X', '@tr_code_x'),
+
+            ('Survey Y', '@survey_id_y (@survey_name_y)'),
+            ('Form type Y', '@form_type_y'),
+            ('Tr. code Y', '@tr_code_y'),
+        ])
+
         return components(hm)
 
     @classmethod
     def create_heatmap(cls):
-        cls.hm = Div(text='', width=700)
+        cls.hm = Div(text='', width=PAGE_WIDTH // 2 - 50)
 
     @classmethod
-    def show(cls):
+    def get_layout(cls):
         sizing_mode = 'fixed'
 
         desc = Div(text=open(join(dirname(__file__), "description.html")).read(), width=700)
@@ -398,10 +414,7 @@ class App:
             [Div(height=200)]  # some empty space
         ], sizing_mode=sizing_mode)
 
-        curdoc().add_root(l)
-        curdoc().title = "Question bank exploration dashboard"
-
-        show(l)
+        return l
 
     @classmethod
     def init(cls):
@@ -416,6 +429,21 @@ class App:
 
         cls.search_for_kw_handler(INIT_KW)
 
-        cls.show()
+def modify_doc(doc):
+    App.init()
+    l = App.get_layout()
 
-App.init()
+    doc.add_root(l)
+
+
+io_loop = IOLoop.current()
+
+bokeh_app = Application(FunctionHandler(modify_doc))
+
+server = Server({'/': bokeh_app}, io_loop=io_loop)
+server.start()
+
+if __name__ == '__main__':
+    print('Opening Bokeh application on http://localhost:5006/')
+    io_loop.add_callback(server.show, "/")
+    io_loop.start()
