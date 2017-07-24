@@ -1,0 +1,45 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+
+
+        <link rel="stylesheet" href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.6.min.css" type="text/css" />
+        <link href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.6.min.css" rel="stylesheet" type="text/css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.6.min.js"></script>
+        <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.6.min.js"></script>
+
+        <script src="{{ url_for('static', filename='scripts.js') }}"></script>
+    </head>
+
+    <body>
+        <h1>Question bank exploration dashboard</h1>
+
+        <p>
+        Search for questions using exact search phrase, then click on one to get similar items from result set
+        </p>
+
+        <form action="javascript:search_for_kw($('#kw').val())">
+            <label>Search</label>
+            <input id="kw" name="kw" type="text" value="{{ search_kw }}"/>
+            <input type="submit">
+        </form>
+        <label><input type='checkbox' id="cs-only" onclick='toggle_cs_only(this)'>Only cross-survey similarities</label>
+
+        <div class="row">
+            <div class="col-md-12" id="nresults-div"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="res-table"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-6" id="bar-chart"></div>
+            <div class="col-md-6" id="heatmap"></div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" id="comp-div"></div>
+        </div>
+    </body>
+</html>
+

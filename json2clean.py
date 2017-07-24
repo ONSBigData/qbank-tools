@@ -107,7 +107,7 @@ def explode_matrix(matrix_node, problems=[]):
     cells = matrix_node['cells']
 
     for cell in cells:
-        cell.update(root_node_attrs)
+        cell.search_for_kw(root_node_attrs)
         row = rows[cell['row_index']]
         col = cols[cell['col_index']]
 

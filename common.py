@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import collections
+import helpers.general_helper as gh
 
 DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../data'
 CHECKPT_DIR = DATA_DIR + '/checkpoints'
@@ -42,9 +43,13 @@ def load_clean_df(full=False):
     if full:
         fpath = CLEAN_FULL_FPATH
 
-    return pd.read_csv(fpath, index_col=0)
+    df = pd.read_csv(fpath)
+
+    df['uuid'] = gh.uniquify(df, 'uid')
+    df = df.set_index('uuid')
+
+    return df
 
 
 if __name__ == '__main__':
     print('\n'.join(get_validated_jsons()))
-

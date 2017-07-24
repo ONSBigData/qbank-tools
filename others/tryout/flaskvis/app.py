@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flaskapp import Flask, render_template, jsonify, request
 import flaskvis.data_provider as dp
 import os
 
