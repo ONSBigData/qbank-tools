@@ -1,4 +1,12 @@
-class Data:
+import sys
+sys.path.append('/home/ons21553/wspace/qbank/code')
+
+import numpy as np
+from siman.simple_cos_sim import SimpleCosSim
+from common import *
+from dashboard.settings import *
+
+class Model:
     base_df = None
     res_df = None
     bar_chart_df = None
@@ -108,7 +116,10 @@ class Data:
 
     @classmethod
     def init(cls):
-        cls.base_df = load_clean_df()
+        try:
+            cls.base_df = load_clean_df()
+        except:
+            cls.base_df = load_clean_df(fpath='./clean-light.csv')
 
     # --- actions -----------------------------------------------------------
 
@@ -131,8 +142,8 @@ class Data:
             cls.comp_df = None
             return
 
-        qx = Data.res_df.iloc[cls.selected_result_index]
-        qy = Data.bar_chart_df.iloc[bar_index]
+        qx = Model.res_df.iloc[cls.selected_result_index]
+        qy = Model.bar_chart_df.iloc[bar_index]
 
         cls.update_comp_df(qx, qy)
 
@@ -142,7 +153,7 @@ class Data:
             cls.comp_df = None
             return
 
-        qx = Data.res_df.loc[uuid_x]
-        qy = Data.res_df.loc[uuid_y]
+        qx = Model.res_df.loc[uuid_x]
+        qy = Model.res_df.loc[uuid_y]
 
         cls.update_comp_df(qx, qy)

@@ -38,10 +38,11 @@ def get_validated_jsons(scrape_status_csv_fname=SCRAPE_STATUS_CSV_FNAME):
     return jsons
 
 
-def load_clean_df(full=False):
-    fpath = CLEAN_LIGHT_FPATH
-    if full:
-        fpath = CLEAN_FULL_FPATH
+def load_clean_df(full=False, fpath=None):
+    if fpath is None:
+        fpath = CLEAN_LIGHT_FPATH
+        if full:
+            fpath = CLEAN_FULL_FPATH
 
     df = pd.read_csv(fpath)
 
