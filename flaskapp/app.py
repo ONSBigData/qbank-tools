@@ -26,11 +26,11 @@ import helpers.log_helper as lg
 
 # --- constants -----------------------------------------------------------
 
-MAX_SEARCH_RES = 100
+MAX_SEARCH_RES = 500
 MAX_HEATMAP_ITEMS = 50
 MAX_BARS = 10
 ANALYSED_COLS = ['text', 'type', 'close_seg_text', 'all_inclusions', 'all_exclusions']
-DISPLAYED_COLS = ['uuid', 'survey_id', 'form_type', 'tr_code', 'text']
+DISPLAYED_COLS = ['uuid', 'survey_id', 'survey_name', 'form_type', 'tr_code', 'text']
 DISPLAYED_COLS += [c for c in ANALYSED_COLS if c not in DISPLAYED_COLS]
 
 COMP_TBL_FIELDS = ['question X', 'question Y']
@@ -43,6 +43,7 @@ COL_WIDTHS = collections.defaultdict(lambda: NARROW_COL_W)
 for c in ['text', 'close_seg_text', 'all_inclusions', 'all_exclusions']:
     COL_WIDTHS[c] = WIDE_COL_W
 COL_WIDTHS['type'] = 200
+COL_WIDTHS['survey_name'] = 200
 COL_WIDTHS['uuid'] = 200
 
 LOG = lg.get_logger('dashboard')
@@ -61,6 +62,8 @@ class Data:
 
     only_cross_survey = False
 
+    sim_matrix = None
+
     @staticmethod
     def compute_sim_matrix(df):
         return SimpleCosSim(df, ANALYSED_COLS).get_similarity_matrix()
@@ -69,9 +72,11 @@ class Data:
     def update_res_df(cls, search_kw):
         search_kw = search_kw if search_kw is not None else ''
 
-        cls.res_df = cls.base_df[cls.base_df['all_text'].str.contains(search_kw, na=False)]
+        cls.res_df = cls.base_df[cls.base_df['all_text'].str.contains(search_kw, na=False, case=False)]
         if len(cls.res_df) > MAX_SEARCH_RES:
             cls.res_df = cls.res_df.sample(MAX_SEARCH_RES)
+
+        cls.sim_matrix = cls.compute_sim_matrix(cls.res_df)
 
     @classmethod
     def update_selected_result_index(cls, index):
@@ -87,8 +92,7 @@ class Data:
 
         df = cls.res_df.copy()
 
-        sim_matrix = cls.compute_sim_matrix(df)
-        df['similarity'] = sim_matrix[idx]
+        df['similarity'] = cls.sim_matrix[idx]
         df['color'] = df['survey_id'].apply(lambda si: 'green' if si == df.iloc[idx]['survey_id'] else 'red')
         if cls.only_cross_survey:
             df = df[df['color'] == 'red']
