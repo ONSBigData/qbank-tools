@@ -3,3 +3,4 @@ pycrypto
 xlrd
 beautifulsoup4
 gunicorn
+pyjarowinkler

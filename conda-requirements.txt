@@ -4,7 +4,6 @@ scikit-learn
 scipy
 matplotlib
 seaborn
-pyjarowinkler
 nltk
 bokeh
 flask
