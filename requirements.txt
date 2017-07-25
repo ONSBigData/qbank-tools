@@ -13,6 +13,6 @@ pyldavis
 xlrd
 nltk
 flask
-
 python-nvd3
 bokeh
+beautifulsoup4

@@ -5,6 +5,7 @@ import numpy as np
 from siman.simple_cos_sim import SimpleCosSim
 from common import *
 from dashboard.settings import *
+from pyjarowinkler import distance as pyjarodist
 
 class Model:
     base_df = None
@@ -105,11 +106,16 @@ class Model:
             q['uuid'] = q.name
 
             q = pd.Series([q[c] if c in q else 'none' for c in DISPLAYED_COLS], index=DISPLAYED_COLS)
+
+
             return q
 
         qx = _create_series(qx)
         qy = _create_series(qy)
-        df = pd.concat([qx, qy], axis=1)
+        sim = [pyjarodist.get_jaro_distance(str(qx.iloc[i]), str(qy.iloc[i]), winkler=True, scaling=0.1) for i in range(len(qx))]
+        sim = pd.Series(sim, index=qx.index)
+
+        df = pd.concat([qx, qy, sim], axis=1, ignore_index=True)
         df.columns = COMP_TBL_FIELDS
 
         cls.comp_df = df

@@ -1,5 +1,6 @@
 import sys
 sys.path.append('/home/ons21553/wspace/qbank/code')
+from bs4 import BeautifulSoup
 
 from bokeh.plotting import figure
 from bokeh.models import \
@@ -32,6 +33,8 @@ for c in ['text', 'close_seg_text', 'all_inclusions', 'all_exclusions']:
 COL_WIDTHS['type'] = 200
 COL_WIDTHS['survey_name'] = 200
 COL_WIDTHS['uuid'] = 200
+
+PALETTE = palettes.Magma256
 
 LOG = lg.get_logger('dashboard')
 
@@ -138,7 +141,15 @@ class Presentation:
             return Div(text='')
 
         pd.set_option('display.max_colwidth', -1)
-        comp_div = Div(text=Model.comp_df.to_html(), width=PAGE_WIDTH)
+
+        soup = BeautifulSoup(Model.comp_df.to_html())
+        for tr in soup.find_all('tr')[1:]:
+            td = tr.find_all('td')[-1]
+            sim = float(td.text)
+            color = PALETTE[int(sim*(len(PALETTE) - 1))]
+            td.attrs['style'] = 'background-color: {}'.format(color)
+
+        comp_div = Div(text=str(soup), width=PAGE_WIDTH)
 
         return comp_div
 
@@ -147,8 +158,7 @@ class Presentation:
         if Model.hm_df is None:
             return Div(text='')
 
-        palette = palettes.Magma256
-        mapper = LinearColorMapper(palette=palette, low=0, high=1)
+        mapper = LinearColorMapper(palette=PALETTE, low=0, high=1)
         tools = "hover"
         xy_range = list(Model.hm_base_df.index)
 
