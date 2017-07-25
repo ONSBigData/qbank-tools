@@ -1,7 +1,6 @@
-import pandas as pd
 import numpy as np
 
-from common import *
+from helpers.common import *
 
 matrix = np.loadtxt(DATA_DIR + '/survey-lda-matrix.txt')
 

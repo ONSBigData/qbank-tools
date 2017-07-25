@@ -1,17 +1,10 @@
 import sys
 sys.path.append('/home/ons21553/wspace/dstools')
-from dstools import *
 
-
-import seaborn as sns
-import matplotlib.pyplot as plt
-
-
-from common import *
+from helpers.common import *
 import pandas as pd
 import multiprocessing as mp
 from pyjarowinkler import distance as ds
-import numpy as np
 import time
 import numpy as np
 

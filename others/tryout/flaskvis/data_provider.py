@@ -1,6 +1,4 @@
-import csv
-import requests
-from common import *
+from helpers.common import *
 
 
 MAX = 100

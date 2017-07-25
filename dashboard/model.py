@@ -1,9 +1,12 @@
-import numpy as np
-from siman.simple_cos_sim import SimpleCosSim
-from common import *
-from dashboard.settings import *
-from pyjarowinkler import distance as pyjarodist
 from os.path import dirname, join
+
+import numpy as np
+from pyjarowinkler import distance as pyjarodist
+
+from dashboard.settings import *
+from helpers.common import *
+from siman.simple_cos_sim import SimpleCosSim
+
 
 class Model:
     base_df = None

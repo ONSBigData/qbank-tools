@@ -2,7 +2,7 @@ import json
 
 import nose.tools as nstools
 
-import json2clean
+from utilities import json2clean
 
 SMALL_MQ = json.JSONDecoder().decode("""{
   "row_count": "1",

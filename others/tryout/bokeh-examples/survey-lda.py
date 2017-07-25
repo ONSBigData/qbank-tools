@@ -9,11 +9,8 @@ sys.path.append('/home/ons21553/wspace/dstools')
 sys.path.append('/home/ons21553/wspace/qbank/code')
 from dstools import *
 
-from common import *
+from helpers.common import *
 
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 import gensim as gs
 import numpy as np
 
@@ -31,8 +28,6 @@ import nltk
 from nltk.corpus import stopwords
 import re
 from six import iteritems
-import pyLDAvis.gensim
-
 
 df = load_clean_df()
 df.shape
@@ -160,8 +155,7 @@ matrix = np.array(index)
 # f.subplots_adjust(bottom=0.2)
 
 
-from bokeh.charts import HeatMap, show, output_file
-import pandas as pd, numpy as np
+from bokeh.charts import HeatMap, show
 
 # Normalize the data columns and sort.
 

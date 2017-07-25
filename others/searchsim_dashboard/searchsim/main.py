@@ -1,12 +1,9 @@
 import sys
 sys.path.append('/home/ons21553/wspace/qbank/code')
 
-import traceback
-import collections
 import numpy as np
 
 from bokeh.embed import components
-from bokeh.io import curdoc, show
 from bokeh.plotting import figure
 from bokeh.models import ColumnDataSource, HoverTool, Div, Range1d, FuncTickFormatter, LinearColorMapper, ColorBar, BasicTicker, PrintfTickFormatter
 from bokeh.models.widgets import TextInput, DataTable, TableColumn, HTMLTemplateFormatter
@@ -23,7 +20,7 @@ from os.path import dirname, join
 
 from siman.simple_cos_sim import SimpleCosSim
 
-from common import *
+from helpers.common import *
 
 import helpers.log_helper as lg
 

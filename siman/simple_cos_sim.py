@@ -1,13 +1,14 @@
-from common import *
-import helpers.log_helper as lg
-import siman.qsim as qsim
 import logging
-import numpy as np
-import nltk
 import re
 
+import nltk
+import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
+
+import helpers.log_helper as lg
+import siman.qsim as qsim
+from helpers.common import *
 
 nltk.download('punkt')
 

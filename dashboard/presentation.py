@@ -1,5 +1,4 @@
-from bs4 import BeautifulSoup
-from bokeh.plotting import figure
+import bokeh.palettes as palettes
 from bokeh.models import \
     ColumnDataSource, \
     HoverTool, \
@@ -12,14 +11,13 @@ from bokeh.models import \
     PrintfTickFormatter, \
     CustomJS
 from bokeh.models.widgets import DataTable, TableColumn, HTMLTemplateFormatter
-import bokeh.palettes as palettes
-
-from common import *
-
-from dashboard.model import Model
-from dashboard.settings import *
+from bokeh.plotting import figure
+from bs4 import BeautifulSoup
 
 import helpers.log_helper as lg
+from dashboard.model import Model
+from dashboard.settings import *
+from helpers.common import *
 
 PAGE_WIDTH = 1800
 NARROW_COL_W = 100
