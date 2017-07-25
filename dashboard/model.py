@@ -3,6 +3,7 @@ from siman.simple_cos_sim import SimpleCosSim
 from common import *
 from dashboard.settings import *
 from pyjarowinkler import distance as pyjarodist
+from os.path import dirname, join
 
 class Model:
     base_df = None
@@ -124,7 +125,8 @@ class Model:
         try:
             cls.base_df = load_clean_df()
         except:
-            cls.base_df = load_clean_df(fpath='./clean-light.csv')
+            fpath = join(dirname(__file__), 'clean-light.csv')
+            cls.base_df = load_clean_df(fpath=fpath)
 
     # --- actions -----------------------------------------------------------
 

@@ -6,3 +6,14 @@ gunicorn
 pyjarowinkler
 pyldavis
 flask
+
+numpy
+pandas
+scikit-learn
+scipy
+matplotlib
+seaborn
+nltk
+bokeh
+flask
+gensim

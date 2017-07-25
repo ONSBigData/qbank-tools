@@ -1,4 +1,3 @@
-import sys
 from bs4 import BeautifulSoup
 from bokeh.plotting import figure
 from bokeh.models import \
