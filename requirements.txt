@@ -6,7 +6,7 @@ gunicorn
 pyjarowinkler
 pyldavis
 flask
-
+html5lib
 numpy
 pandas
 scikit-learn

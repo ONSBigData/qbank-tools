@@ -9,6 +9,7 @@ import re
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
+nltk.download('punkt')
 
 class SimpleCosSim:
     def __init__(self, df, cols=None, debug=False):
