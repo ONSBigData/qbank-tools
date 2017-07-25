@@ -142,7 +142,7 @@ class Presentation:
 
         pd.set_option('display.max_colwidth', -1)
 
-        soup = BeautifulSoup(Model.comp_df.to_html())
+        soup = BeautifulSoup(Model.comp_df.to_html(), 'html5lib')
         for tr in soup.find_all('tr')[1:]:
             td = tr.find_all('td')[-1]
             sim = float(td.text)
