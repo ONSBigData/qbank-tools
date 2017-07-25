@@ -4,3 +4,4 @@ xlrd
 beautifulsoup4
 gunicorn
 pyjarowinkler
+pyldavis
