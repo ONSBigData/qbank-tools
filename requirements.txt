@@ -16,3 +16,4 @@ flask
 python-nvd3
 bokeh
 beautifulsoup4
+gunicorn
