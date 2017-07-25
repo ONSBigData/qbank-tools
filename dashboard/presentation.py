@@ -23,7 +23,7 @@ PAGE_WIDTH = 1800
 NARROW_COL_W = 100
 WIDE_COL_W = 600
 COL_WIDTHS = collections.defaultdict(lambda: NARROW_COL_W)
-for c in ['text', 'close_seg_text', 'all_inclusions', 'all_exclusions']:
+for c in ['qtext', 'close_seg_text', 'all_inclusions', 'all_exclusions']:
     COL_WIDTHS[c] = WIDE_COL_W
 COL_WIDTHS['type'] = 200
 COL_WIDTHS['survey_name'] = 200
@@ -201,8 +201,8 @@ class Presentation:
             ('Similarity', '@similarity'),
             ('X', '@uuid_x (@survey_name_x)'),
             ('Y', '@uuid_y (@survey_name_y)'),
-            ('Text X', '@text_x'),
-            ('Text Y', '@text_y'),
+            ('Text X', '@qtext_x'),
+            ('Text Y', '@qtext_y'),
         ])
 
         callback = CustomJS(code="""

@@ -3,7 +3,7 @@ import pandas as pd
 import collections
 import helpers.general_helper as gh
 
-DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../data'
+DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../../data'
 CHECKPT_DIR = DATA_DIR + '/checkpoints'
 
 JSON_DIR = DATA_DIR + '/jsons'
@@ -44,10 +44,7 @@ def load_clean_df(full=False, fpath=None):
         if full:
             fpath = CLEAN_FULL_FPATH
 
-    df = pd.read_csv(fpath)
-
-    df['uuid'] = gh.uniquify(df, 'uid')
-    df = df.set_index('uuid')
+    df = pd.read_csv(fpath, index_col=0)
 
     return df
 

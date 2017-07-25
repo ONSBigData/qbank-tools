@@ -4,6 +4,7 @@ import io
 import json
 import re
 import traceback
+import helpers.general_helper as gh
 
 import helpers.helper as helper
 from helpers.common import *
@@ -68,6 +69,28 @@ MATRIX_VALID_WORDS = [
 
 VALID_PATH_WORDS += ['row_' + w for w in MATRIX_VALID_WORDS]
 VALID_PATH_WORDS += ['col_' + w for w in MATRIX_VALID_WORDS]
+
+
+FIRST_COLS = [
+    'uid',
+    'survey_id',
+    'survey_name',
+    'form_type',
+    'tr_code',
+    'type',
+    'period_days',
+    'period_start',
+    'period_end',
+    'text',
+    'qtext',
+    'closest_text',
+    'close_seg_text',
+    'all_seg_text',
+    'all_text',
+    'all_context',
+    'all_inclusions',
+    'all_exclusions'
+]
 
 
 def get_children_iterator(node):
@@ -293,25 +316,6 @@ def print_invalid_words(invalid_words):
         print('\t' + '\n\t'.join(invalid_words))
 
 
-FIRST_COLS = [
-    'survey_id',
-    'survey_name',
-    'form_type',
-    'tr_code',
-    'type',
-    'period_days',
-    'period_start',
-    'period_end',
-    'text',
-    'close_seg_text',
-    'all_seg_text',
-    'all_text',
-    'all_context',
-    'all_inclusions',
-    'all_exclusions'
-]
-
-
 def create_df(traversed_data):
     MINOR_SEP = ' | '
     MAJOR_SEP = ' ||| '
@@ -394,8 +398,24 @@ def create_df(traversed_data):
         row['type'] = get_first_nonempty(['q_type', 'q_col_type', 'q_row_type'] + ['i{}_type'.format(i) for i in range(9)])
 
         row['text'] = MINOR_SEP.join(get_all_values_where_keys_like(r'(q|q_row|q_col)_text'))
-        if row['text'] == '':
-            row['text'] = def_row['i0_text']
+
+        closest = row['text']
+        if closest == '':
+            closest = get_first_nonempty(['i{}_text'.format(i) for i in range(9)])
+        row['closest_text'] = closest
+
+        qtext = row['text']
+        last = qtext
+        for key in ['i{}_text'.format(i) for i in range(9)]:
+            last_words = list(filter(None, re.sub('[^0-9a-zA-Z]+', ' ', last).split(' ')))
+            if key not in def_row or len(last_words) > 5:
+                break
+            last = def_row[key]
+            if qtext == '':
+                qtext = last
+                continue
+            qtext = '{} ||| {}'.format(last, qtext)
+        row['qtext'] = qtext
 
         # period days
         try:
@@ -587,6 +607,11 @@ def create_full_df(print_debug=True):
     cdf = pd.concat(dfs)
     if print_debug:
         print_invalid_words(all_invalid_words)
+
+    cdf = cdf.reset_index()
+    cdf['uuid'] = gh.uniquify(cdf, 'uid')
+    cdf = cdf.set_index('uuid')
+
     _print('shape of final dataframe: {}'.format(cdf.shape))
 
     cdf = helper.reorder_cols(cdf, first_cols=FIRST_COLS)
