@@ -1,0 +1,13 @@
+numpy
+pandas
+scikit-learn
+scipy
+sklearn
+matplotlib
+seaborn
+pyjarowinkler
+nltk
+bokeh
+flask
+gensim
+pyldavis
