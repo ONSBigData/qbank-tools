@@ -37,7 +37,7 @@ div.bk-slick-cell {
 }
 
 table.dataframe {
-    width: 1300px;
+    width: 1800px;
     text-align: left;
 }
 
@@ -56,7 +56,6 @@ table.dataframe tr {
 
 #comp-div {
     padding-bottom: 100px;
-    padding-left: 100px;
 }
 
 #comp-div td {

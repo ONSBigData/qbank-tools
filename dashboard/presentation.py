@@ -145,9 +145,10 @@ class Presentation:
         soup = BeautifulSoup(Model.comp_df.to_html(), 'html5lib')
         for tr in soup.find_all('tr')[1:]:
             td = tr.find_all('td')[-1]
-            sim = float(td.text)
-            color = PALETTE[int(sim*(len(PALETTE) - 1))]
-            td.attrs['style'] = 'background-color: {}'.format(color)
+            if td.text != '':
+                sim = float(td.text)
+                color = PALETTE[int(sim*(len(PALETTE) - 1))]
+                td.attrs['style'] = 'background-color: {}'.format(color)
 
         comp_div = Div(text=str(soup), width=PAGE_WIDTH)
 

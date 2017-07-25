@@ -112,8 +112,10 @@ class Model:
 
         qx = _create_series(qx)
         qy = _create_series(qy)
-        sim = [pyjarodist.get_jaro_distance(str(qx.iloc[i]), str(qy.iloc[i]), winkler=True, scaling=0.1) for i in range(len(qx))]
-        sim = pd.Series(sim, index=qx.index)
+
+        sim = pd.Series(['']*len(qx), index=qx.index)
+        for i in ANALYSED_COLS:
+            sim.loc[i] = pyjarodist.get_jaro_distance(str(qx[i]), str(qy[i]), winkler=True, scaling=0.1)
 
         df = pd.concat([qx, qy, sim], axis=1, ignore_index=True)
         df.columns = COMP_TBL_FIELDS
