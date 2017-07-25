@@ -2,20 +2,9 @@ from common import *
 import helpers.log_helper as lg
 import siman.qsim as qsim
 import logging
-
-
-import pandas as pd
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import seaborn as sns
-import gensim as gs
 import numpy as np
-
 import nltk
-from nltk.corpus import stopwords
 import re
-from six import iteritems
-import pyLDAvis.gensim
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity

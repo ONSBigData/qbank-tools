@@ -1,6 +1,3 @@
-import sys
-sys.path.append('/home/ons21553/wspace/qbank/code')
-
 import numpy as np
 from siman.simple_cos_sim import SimpleCosSim
 from common import *
