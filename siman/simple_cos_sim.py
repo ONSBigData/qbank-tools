@@ -1,3 +1,6 @@
+from utilities.dl_nltk import dl_nltk
+dl_nltk()
+
 import logging
 import re
 
@@ -9,8 +12,6 @@ from sklearn.metrics.pairwise import cosine_similarity
 import helpers.log_helper as lg
 import siman.qsim as qsim
 from helpers.common import *
-
-nltk.download('punkt')
 
 class SimpleCosSim:
     def __init__(self, df, cols=None, debug=False):

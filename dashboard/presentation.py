@@ -137,13 +137,16 @@ class Presentation:
 
         pd.set_option('display.max_colwidth', -1)
 
+        FONT_COLOR_PALETTE = palettes.Greys256
+
         soup = BeautifulSoup(Model.comp_df.to_html(), 'html5lib')
         for tr in soup.find_all('tr')[1:]:
             td = tr.find_all('td')[-1]
             if td.text != '':
                 sim = float(td.text)
-                color = PALETTE[int(sim*(len(PALETTE) - 1))]
-                td.attrs['style'] = 'background-color: {}'.format(color)
+                bg_color = PALETTE[int(sim*(len(PALETTE) - 1))]
+                color = FONT_COLOR_PALETTE[int((1 - sim) * (len(FONT_COLOR_PALETTE) - 1))]
+                td.attrs['style'] = 'background-color: {}; color: {}'.format(bg_color, color)
 
         comp_div = Div(text=str(soup), width=PAGE_WIDTH)
 

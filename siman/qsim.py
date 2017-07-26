@@ -1,3 +1,6 @@
+from utilities.dl_nltk import dl_nltk
+dl_nltk()
+
 from nltk.corpus import stopwords
 
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -20,6 +23,13 @@ def get_cos_doc_sim(x, y):
     vect = TfidfVectorizer()
     tfidf = vect.fit_transform([x, y])
     return (tfidf * tfidf.T).A[0, 1]
+
+
+def get_exact_doc_sim(x, y):
+    if pd.isnull(x) or pd.isnull(y):
+        return 0
+
+    return 1 if x == y else 0
 
 
 def get_jaro_doc_sim(x, y):

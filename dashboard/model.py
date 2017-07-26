@@ -114,8 +114,10 @@ class Model:
         qy = _create_series(qy)
 
         sim = pd.Series(['']*len(qx), index=qx.index)
-        for i in ANALYSED_COLS:
-            sim.loc[i] = qsim.get_cos_doc_sim(qx.loc[i], qy.loc[i])
+        for i in ANALYSED_COLS + ['survey_name']:
+            sim.loc[i] = qsim.get_cos_doc_sim(str(qx.loc[i]), str(qy.loc[i]))
+        for i in ['survey_id', 'form_type', 'tr_code']:
+            sim.loc[i] = qsim.get_exact_doc_sim(str(qx.loc[i]), str(qy.loc[i]))
 
         df = pd.concat([qx, qy, sim], axis=1, ignore_index=True)
         df.columns = COMP_TBL_FIELDS
