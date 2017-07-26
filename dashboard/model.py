@@ -1,11 +1,11 @@
 from os.path import dirname, join
 
 import numpy as np
-from pyjarowinkler import distance as pyjarodist
 
 from dashboard.settings import *
 from helpers.common import *
 from siman.simple_cos_sim import SimpleCosSim
+import siman.qsim as qsim
 
 
 class Model:
@@ -108,7 +108,6 @@ class Model:
 
             q = pd.Series([q[c] if c in q else 'none' for c in DISPLAYED_COLS], index=DISPLAYED_COLS)
 
-
             return q
 
         qx = _create_series(qx)
@@ -116,7 +115,7 @@ class Model:
 
         sim = pd.Series(['']*len(qx), index=qx.index)
         for i in ANALYSED_COLS:
-            sim.loc[i] = pyjarodist.get_jaro_distance(str(qx[i]), str(qy[i]), winkler=True, scaling=0.1)
+            sim.loc[i] = qsim.get_cos_doc_sim(qx.loc[i], qy.loc[i])
 
         df = pd.concat([qx, qy, sim], axis=1, ignore_index=True)
         df.columns = COMP_TBL_FIELDS

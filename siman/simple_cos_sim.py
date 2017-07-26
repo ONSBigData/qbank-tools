@@ -70,5 +70,5 @@ class SimpleCosSim:
 
 if __name__ == '__main__':
     df = load_clean_df().iloc[:5]
-    sm = SimpleCosSim(debug=True).get_similarity_matrix(df['text'])
+    sm = SimpleCosSim(df, debug=True).get_similarity_matrix(df['text'])
     print(sm)

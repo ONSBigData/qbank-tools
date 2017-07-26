@@ -11,4 +11,6 @@ git commit -m "$dt"
 
 git push heroku master
 
+heroku run python 'scripts/dl_nltk.py' --app=qbank-dashboard
+
 heroku open
