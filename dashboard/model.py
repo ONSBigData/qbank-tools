@@ -103,7 +103,7 @@ class Model:
             return None
 
         df = cls.get_res_df(payload)
-        selected_res_index = int(payload[SELECTED_RES_INDEX])
+        selected_res_index = payload[SELECTED_RES_INDEX]
         cs_only = payload[CS_ONLY] if CS_ONLY in payload else False
 
         sim_matrix = cls.get_res_sim_matrix(payload)
@@ -159,9 +159,9 @@ class Model:
 
         if payload[COMPARED_BASE] == COMPARED_BASE_BAR:
             res_df = cls.get_res_df(payload)
-            selected_res_index = int(payload[SELECTED_RES_INDEX])
+            selected_res_index = payload[SELECTED_RES_INDEX]
             bar_chart_df = cls.get_bar_chart_df(payload)
-            selected_bar_index = int(payload[SELECTED_BAR_INDEX])
+            selected_bar_index = payload[SELECTED_BAR_INDEX]
 
             qx = res_df.iloc[selected_res_index]
             qy = bar_chart_df.iloc[selected_bar_index]

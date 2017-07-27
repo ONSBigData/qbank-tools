@@ -4,6 +4,8 @@ from bokeh.embed import components
 from dashboard.model import Model
 from dashboard.presentation import Presentation
 
+from dashboard.settings import *
+
 app = Flask(__name__)
 
 Model.init()
@@ -21,6 +23,13 @@ def add_header(r):  #this is just to prevent caching of JS code
 def nresults_div():
     id = request.args.get('id')
     payload = request.args.to_dict()
+
+    if SELECTED_RES_INDEX in payload:
+        payload[SELECTED_RES_INDEX] = int(payload[SELECTED_RES_INDEX])
+    if SELECTED_BAR_INDEX in payload:
+        payload[SELECTED_BAR_INDEX] = int(payload[SELECTED_BAR_INDEX])
+    if CS_ONLY in payload:
+        payload[CS_ONLY] = payload[CS_ONLY] == 'true'
 
     comp = None
 

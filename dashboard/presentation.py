@@ -84,7 +84,7 @@ class Presentation:
             return Div(text='')
 
         res_df = Model.get_res_df(payload)
-        selected_res_index = int(payload[SELECTED_RES_INDEX])
+        selected_res_index = payload[SELECTED_RES_INDEX]
 
         tooltip_fields = [
             ('Tr. code', '@tr_code'),
