@@ -17,71 +17,23 @@ def add_header(r):  #this is just to prevent caching of JS code
     return r
 
 
-@app.route('/search-for-kw', methods=['POST'])
-def search_for_kw():
-    search_kw = request.form.get("kw")
-    if search_kw is not None:
-        Model.search_for_kw(search_kw)
-
-    return 'OK'
-
-
-@app.route('/select-res', methods=['POST'])
-def select_res():
-    index = request.form.get("index")
-    if index is not None:
-        Model.select_search_res(int(index))
-
-    return 'OK'
-
-
-@app.route('/select-bar', methods=['POST'])
-def select_bar():
-    index = request.form.get("index")
-    if index is not None:
-        Model.select_bar(int(index))
-
-    return 'OK'
-
-
-@app.route('/select-hm-cell', methods=['POST'])
-def select_hm_cell():
-    uuid_x = request.form.get('uuid_x')
-    uuid_y = request.form.get('uuid_y')
-
-    if uuid_x is not None and uuid_y is not None:
-        Model.select_hm_cell(uuid_x, uuid_y)
-
-    return 'OK'
-
-
-@app.route('/toggle-cs-only', methods=['POST'])
-def toggle_cs_only():
-    value = request.form.get('cs_only') == 'true'
-
-    Model.only_cross_survey = value
-    Model.update_heatmap_df()
-    Model.update_bar_chart_df()
-
-    return 'OK'
-
-
 @app.route('/component')
 def nresults_div():
     id = request.args.get('id')
+    payload = request.args.to_dict()
 
     comp = None
 
     if id == 'nresults-div':
-        comp = Presentation.get_nresults_div()
+        comp = Presentation.get_nresults_div(payload)
     if id == 'res-table':
-        comp = Presentation.get_res_table()
+        comp = Presentation.get_res_table(payload)
     if id == 'bar-chart':
-        comp = Presentation.get_bar_chart()
+        comp = Presentation.get_bar_chart(payload)
     if id == 'heatmap':
-        comp = Presentation.get_heatmap()
+        comp = Presentation.get_heatmap(payload)
     if id == 'comp-div':
-        comp = Presentation.get_comp_div()
+        comp = Presentation.get_comp_div(payload)
 
     def get_code(obj):
         script, div = components(obj)

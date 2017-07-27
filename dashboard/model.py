@@ -7,78 +7,132 @@ from helpers.common import *
 from siman.simple_cos_sim import SimpleCosSim
 import siman.qsim as qsim
 
+import hashlib
+import queue
+
+
+class Cache:
+    MAX_ITEMS = 1000
+
+    def __init__(self):
+        self.cache = {}
+        self.keys = queue.Queue()
+
+    def _hash_key(self, key):
+        return hashlib.md5(key.encode()).hexdigest()
+
+    def store(self, key, item):
+        key = self._hash_key(key)
+
+        self.keys.put(key)
+        if self.keys.qsize() > self.MAX_ITEMS:
+            key_to_rem = self.keys.get()
+            del self.cache[key_to_rem]
+
+        self.cache[key] = item
+
+    def retrieve(self, key):
+        key = self._hash_key(key)
+
+        if key in self.cache:
+            return self.cache[key]
+
+        return None
+
 
 class Model:
     base_df = None
-    res_df = None
-    bar_chart_df = None
-    hm_base_df = None
-    hm_df = None
-    comp_df = None
+    cache = Cache()
 
-    selected_result_index = None
-
-    only_cross_survey = False
-
-    sim_matrix = None
-
-    @staticmethod
-    def compute_sim_matrix(df):
+    @classmethod
+    def _compute_sim_matrix(cls, df):
         return SimpleCosSim(df, ANALYSED_COLS).get_similarity_matrix()
 
-    @classmethod
-    def update_res_df(cls, search_kw):
-        search_kw = search_kw if search_kw is not None else ''
-
-        cls.res_df = cls.base_df[cls.base_df['all_text'].str.contains(search_kw, na=False, case=False)]
-        if len(cls.res_df) > MAX_SEARCH_RES:
-            cls.res_df = cls.res_df.sample(MAX_SEARCH_RES)
-
-        cls.sim_matrix = cls.compute_sim_matrix(cls.res_df)
+    # --- caching -----------------------------------------------------------
 
     @classmethod
-    def update_selected_result_index(cls, index):
-        cls.selected_result_index = index
+    def _using_cache(cls, method, payload, relevant):
+        key = method.__name__ + str([(k, None if k not in payload else payload[k]) for k in relevant])
+
+        res = cls.cache.retrieve(key)
+        if res is not None:
+            return res
+
+        res = method(payload)
+
+        cls.cache.store(key, res)
+
+        return res
 
     @classmethod
-    def update_bar_chart_df(cls):
-        if len(cls.res_df) == 0 or cls.selected_result_index is None:
-            cls.bar_chart_df = None
+    def get_res_sim_matrix(cls, payload):
+        return cls._using_cache(cls._get_res_sim_matrix, payload, relevant=[KW])
+
+    @classmethod
+    def get_res_df(cls, payload):
+        return cls._using_cache(cls._get_res_df, payload, relevant=[KW])
+
+    @classmethod
+    def get_bar_chart_df(cls, payload):
+        return cls._using_cache(cls._get_bar_chart_df, payload, relevant=[KW, SELECTED_RES_INDEX, CS_ONLY])
+
+    @classmethod
+    def get_heatmap_df(cls, payload):
+        return cls._get_heatmap_df(payload)  # don't use cache here - we always want a new random chart
+
+    @classmethod
+    def get_comp_df(cls, payload):
+        return cls._get_comp_df(payload)
+
+    # --- functions -----------------------------------------------------------
+
+    @classmethod
+    def _get_res_sim_matrix(cls, payload):
+        res_df = cls.get_res_df(payload)
+        return cls._compute_sim_matrix(res_df)
+
+    @classmethod
+    def _get_res_df(cls, payload):
+        df = cls.base_df[cls.base_df['all_text'].str.contains(payload[KW], na=False, case=False)]
+
+        return df.iloc[:MAX_SEARCH_RES]
+
+    @classmethod
+    def _get_bar_chart_df(cls, payload):
+        if SELECTED_RES_INDEX not in payload:
             return None
 
-        idx = cls.selected_result_index
+        df = cls.get_res_df(payload)
+        selected_res_index = int(payload[SELECTED_RES_INDEX])
+        cs_only = payload[CS_ONLY] if CS_ONLY in payload else False
 
-        df = cls.res_df.copy()
+        sim_matrix = cls.get_res_sim_matrix(payload)
 
-        df['similarity'] = cls.sim_matrix[idx]
-        df['color'] = df['survey_id'].apply(lambda si: 'green' if si == df.iloc[idx]['survey_id'] else 'red')
-        if cls.only_cross_survey:
+        df['similarity'] = sim_matrix[selected_res_index]
+        df['color'] = df['survey_id'].apply(lambda si: 'green' if si == df.iloc[selected_res_index]['survey_id'] else 'red')
+
+        df = df.drop(df.index[selected_res_index])
+
+        if cs_only:
             df = df[df['color'] == 'red']
-
-        df = df.drop(df.index[idx])
 
         df = df.sort_values(by='similarity', ascending=False)
 
         df['index'] = range(len(df))
 
-        cls.bar_chart_df = df.iloc[:MAX_BARS]
+        df = df.iloc[:MAX_BARS]
+
+        return df
 
     @classmethod
-    def update_selected_bar_index(cls, index):
-        cls.selected_bar_index = index
+    def _get_heatmap_df(cls, payload):
+        df = cls.get_res_df(payload)
+        cs_only = payload[CS_ONLY] if CS_ONLY in payload else False
 
-    @classmethod
-    def update_heatmap_df(cls):
-        if len(cls.res_df) == 0:
-            cls.hm_df = None
-            return
-
-        df = cls.res_df.copy()
         if len(df) > MAX_HEATMAP_ITEMS:
             df = df.sample(MAX_HEATMAP_ITEMS)
-        cls.hm_base_df = df
 
-        sim_matrix = cls.compute_sim_matrix(df)
+        sim_matrix = cls._compute_sim_matrix(df)
 
         vdf = pd.DataFrame(sim_matrix.flatten(), columns=['similarity'])
 
@@ -93,13 +147,40 @@ class Model:
         df = pd.concat([xdf, ydf, vdf], axis=1, ignore_index=True)
         df.columns = [c + '_x' for c in xdf.columns] + [c + '_y' for c in xdf.columns] + ['similarity']
 
-        if cls.only_cross_survey:
+        if cs_only:
             df['similarity'] = df.apply(lambda row: row['similarity'] if row['survey_id_x'] != row['survey_id_y'] else 0, axis=1)
 
-        cls.hm_df = df
+        return df
 
     @classmethod
-    def update_comp_df(cls, qx, qy):
+    def _get_comp_df(cls, payload):
+        if COMPARED_BASE not in payload:
+            return None
+
+        if payload[COMPARED_BASE] == COMPARED_BASE_BAR:
+            res_df = cls.get_res_df(payload)
+            selected_res_index = int(payload[SELECTED_RES_INDEX])
+            bar_chart_df = cls.get_bar_chart_df(payload)
+            selected_bar_index = int(payload[SELECTED_BAR_INDEX])
+
+            qx = res_df.iloc[selected_res_index]
+            qy = bar_chart_df.iloc[selected_bar_index]
+
+            return cls._create_comp_df(qx, qy)
+
+        if payload[COMPARED_BASE] == COMPARED_BASE_HM:
+            res_df = cls.get_res_df(payload)
+
+            uuid_x = payload[SELECTED_HM_X]
+            uuid_y = payload[SELECTED_HM_Y]
+
+            qx = res_df.loc[uuid_x]
+            qy = res_df.loc[uuid_y]
+
+            return cls._create_comp_df(qx, qy)
+
+    @classmethod
+    def _create_comp_df(cls, qx, qy):
         def _create_series(q):
             if q is None:
                 q = pd.Series()
@@ -122,7 +203,7 @@ class Model:
         df = pd.concat([qx, qy, sim], axis=1, ignore_index=True)
         df.columns = COMP_TBL_FIELDS
 
-        cls.comp_df = df
+        return df
 
     @classmethod
     def init(cls):
@@ -131,40 +212,3 @@ class Model:
         except:
             fpath = join(dirname(__file__), 'clean-light.csv')
             cls.base_df = load_clean_df(fpath=fpath)
-
-    # --- actions -----------------------------------------------------------
-
-    @classmethod
-    def search_for_kw(cls, search_kw=None):
-        cls.update_res_df(search_kw)
-        cls.update_selected_result_index(None)
-        cls.update_bar_chart_df()
-        cls.update_heatmap_df()
-
-    @classmethod
-    def select_search_res(cls, selected_result_index=None):
-        cls.update_selected_result_index(selected_result_index)
-        cls.update_bar_chart_df()
-        cls.update_heatmap_df()
-
-    @classmethod
-    def select_bar(cls, bar_index=None):
-        if cls.selected_result_index is None or bar_index is None:
-            cls.comp_df = None
-            return
-
-        qx = Model.res_df.iloc[cls.selected_result_index]
-        qy = Model.bar_chart_df.iloc[bar_index]
-
-        cls.update_comp_df(qx, qy)
-
-    @classmethod
-    def select_hm_cell(cls, uuid_x, uuid_y):
-        if uuid_x is None or uuid_y is None:
-            cls.comp_df = None
-            return
-
-        qx = Model.res_df.loc[uuid_x]
-        qy = Model.res_df.loc[uuid_y]
-
-        cls.update_comp_df(qx, qy)

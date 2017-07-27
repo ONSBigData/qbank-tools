@@ -9,6 +9,7 @@ import pandas as pd
 
 
 def get_stop_words():
+    dl_nltk()
     sws = set(stopwords.words('english'))
     for x in ['survey', 'section', 'business', 'period', 'total', 'service', 'services']:
         sws.add(x)

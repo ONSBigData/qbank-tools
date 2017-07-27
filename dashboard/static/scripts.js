@@ -1,49 +1,65 @@
+var KW = 'kw'
+var SELECTED_RES_INDEX = 'selected_res_index'
+var COMPARED_BASE = 'compared_base'
+var COMPARED_BASE_BAR = 'bar'
+var COMPARED_BASE_HM = 'hm'
+var SELECTED_BAR_INDEX = 'selected_bar_index'
+var SELECTED_HM_X = 'selected_hm_x'
+var SELECTED_HM_Y = 'selected_hm_y'
+var CS_ONLY = 'cs_only'
+
+var _data = {}
+
 function run_action(route, data, done) {
     $.post(route, data, done);
 }
 
 function update_plot(id) {
-    $.get('/component', {id: id}, function(data) {
+    payload = $.extend({}, _data);
+    payload['id'] = id
+
+    $.get('/component', payload, function(data) {
         $('#' + id).html(data);
     });
 }
 
 function search_for_kw(kw) {
-    run_action('search-for-kw', {kw: kw}, function() {
-        update_plot('nresults-div');
-        update_plot('res-table');
-        update_plot('bar-chart');
-        update_plot('heatmap');
-        update_plot('comp-div');
-    })
+    _data[KW] = kw
+    delete _data[SELECTED_RES_INDEX]
+
+    update_plot('nresults-div');
+    update_plot('res-table');
+    update_plot('bar-chart');
+    update_plot('heatmap');
 }
 
 function select_res(index) {
-    run_action('select-res', {index: index}, function() {
-        update_plot('bar-chart');
-        update_plot('comp-div');
-    })
+    _data[SELECTED_RES_INDEX] = index
+
+    update_plot('bar-chart');
 }
 
 function select_bar(index) {
-    run_action('select-bar', {index: index}, function() {
-        update_plot('comp-div');
-    })
+    _data[COMPARED_BASE] = COMPARED_BASE_BAR
+    _data[SELECTED_BAR_INDEX] = index
+
+    update_plot('comp-div');
 }
 
 function select_hm_cell(uuid_x, uuid_y) {
-    run_action('select-hm-cell', {uuid_x: uuid_x, uuid_y: uuid_y}, function() {
-        update_plot('comp-div');
-    })
+    _data[COMPARED_BASE] = COMPARED_BASE_HM
+    _data[SELECTED_HM_X] = uuid_x
+    _data[SELECTED_HM_Y] = uuid_y
+
+    update_plot('comp-div');
 }
 
 function toggle_cs_only() {
-    cs_only = $('#cs-only').is(":checked")
-    run_action('toggle-cs-only', {cs_only: cs_only}, function() {
-        update_plot('heatmap');
-        update_plot('bar-chart');
-    })
+    _data[CS_ONLY] = $('#cs-only').is(":checked")
+    delete _data[COMPARED_BASE]
 
+    update_plot('heatmap');
+    update_plot('bar-chart');
 }
 
 $(document).ready(function(){

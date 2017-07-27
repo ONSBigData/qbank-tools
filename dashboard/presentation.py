@@ -41,8 +41,9 @@ class Presentation:
         return tooltip_fields
 
     @classmethod
-    def get_nresults_div(cls):
-        nresults = len(Model.res_df)
+    def get_nresults_div(cls, payload):
+        df = Model.get_res_df(payload)
+        nresults = len(df)
         top_all = 'top' if nresults == MAX_SEARCH_RES else 'all'
 
         nresults = Div(text='Showing {} {} results'.format(top_all, nresults))
@@ -50,9 +51,8 @@ class Presentation:
         return nresults
 
     @classmethod
-    def get_res_table(cls):
-        if Model.res_df is None:
-            return Div(text='')
+    def get_res_table(cls, payload):
+        df = Model.get_res_df(payload)
 
         template = """<div class="tooltip-parent"><div class="tooltipped"><%= value %></div><div class="tooltip-text"><%= value %></div></div>"""
         columns = [TableColumn(
@@ -62,7 +62,7 @@ class Presentation:
             formatter=HTMLTemplateFormatter(template=template)
         ) for c in DISPLAYED_COLS]
 
-        source = ColumnDataSource(Model.res_df)
+        source = ColumnDataSource(df)
 
         callback = CustomJS(args=dict(source=source), code="""select_res(source.attributes.selected['1d']['indices'][0])""")
         source.js_on_change('selected', callback)
@@ -78,9 +78,13 @@ class Presentation:
         return res_table
 
     @classmethod
-    def get_bar_chart(cls):
-        if Model.bar_chart_df is None:
+    def get_bar_chart(cls, payload):
+        bar_chart_df = Model.get_bar_chart_df(payload)
+        if bar_chart_df is None:
             return Div(text='')
+
+        res_df = Model.get_res_df(payload)
+        selected_res_index = int(payload[SELECTED_RES_INDEX])
 
         tooltip_fields = [
             ('Tr. code', '@tr_code'),
@@ -102,7 +106,7 @@ class Presentation:
             y_range=Range1d(0, 1)
         )
 
-        src = ColumnDataSource(Model.bar_chart_df)
+        src = ColumnDataSource(bar_chart_df)
         bc.vbar(
             x="index",
             top="similarity",
@@ -117,10 +121,10 @@ class Presentation:
         bc.xaxis.axis_label = 'question'
         bc.xaxis.major_label_orientation = 1
 
-        tr_code = Model.res_df.iloc[Model.selected_result_index].name
+        tr_code = res_df.iloc[selected_res_index].name
         bc.title.text = 'Top {} similar questions for question {}'.format(MAX_BARS, tr_code)
 
-        labels = dict([(i, Model.bar_chart_df.iloc[i]['tr_code']) for i in range(len(Model.bar_chart_df))])
+        labels = dict([(i, bar_chart_df.iloc[i]['tr_code']) for i in range(len(bar_chart_df))])
         bc.xaxis.formatter = FuncTickFormatter(code="""var labels = {}; return labels[tick]; """.format(labels))
 
         callback = CustomJS(code="""
@@ -131,15 +135,17 @@ class Presentation:
         return bc
 
     @classmethod
-    def get_comp_div(cls):
-        if Model.comp_df is None:
+    def get_comp_div(cls, payload):
+        comp_df = Model.get_comp_df(payload)
+
+        if comp_df is None:
             return Div(text='')
 
         pd.set_option('display.max_colwidth', -1)
 
         FONT_COLOR_PALETTE = palettes.Greys256
 
-        soup = BeautifulSoup(Model.comp_df.to_html(), 'html5lib')
+        soup = BeautifulSoup(comp_df.to_html(), 'html5lib')
         for tr in soup.find_all('tr')[1:]:
             td = tr.find_all('td')[-1]
             if td.text != '':
@@ -153,13 +159,16 @@ class Presentation:
         return comp_div
 
     @classmethod
-    def get_heatmap(cls):
-        if Model.hm_df is None:
+    def get_heatmap(cls, payload):
+        res_df = Model.get_res_df(payload)
+        hm_df = Model.get_heatmap_df(payload)
+
+        if hm_df is None:
             return Div(text='')
 
         mapper = LinearColorMapper(palette=PALETTE, low=0, high=1)
         tools = "hover"
-        xy_range = list(Model.hm_base_df.index)
+        xy_range = list(hm_df['uuid_x'].unique())
 
         # plot
         hm = figure(
@@ -171,11 +180,11 @@ class Presentation:
         )
 
         title = "Similarity heatmap"
-        if len(Model.res_df) > MAX_HEATMAP_ITEMS:
+        if len(res_df) > MAX_HEATMAP_ITEMS:
             title += ' (showing only random {} entries from results)'.format(MAX_HEATMAP_ITEMS)
         hm.title.text = title
 
-        src = ColumnDataSource(Model.hm_df)
+        src = ColumnDataSource(hm_df)
         hm.rect(
             x="uuid_x",  # this needs to be column from DF
             y="uuid_y",
