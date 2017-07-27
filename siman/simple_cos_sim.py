@@ -26,6 +26,7 @@ class SimpleCosSim:
     def preprocess(self):
         dl_nltk()
 
+
         self._lg.debug('Processing...')
 
         items = []
