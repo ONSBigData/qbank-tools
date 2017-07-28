@@ -21,6 +21,7 @@ VALID_PATH_WORDS = [
     'ID',
     'note',
     'note_ID',
+    'note_id',
     'NULL',
     'options',
     'reporting_period',
@@ -107,7 +108,7 @@ def filter_invalid_words(tc_nodes, return_invalid=False, problems=[]):
     if return_invalid:
         return invalid_words
 
-    return tc_nodes
+    return filtered
 
 
 def get_invalid_words(tc_nodes):

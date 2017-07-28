@@ -9,6 +9,28 @@ from helpers.common import *
 # ---------------------------------------------------------------------
 
 
+def get_children_iterator(node):
+    if isinstance(node, dict):
+        return node.items()
+
+    if isinstance(node, list):
+        return enumerate(node)
+
+    return None
+
+
+def is_leaf(node):
+    """
+    Returns true if node has no more children
+    """
+    return get_children_iterator(node) is None
+
+
+# ---------------------------------------------------------------------
+# --- main segment traversing
+# ---------------------------------------------------------------------
+
+
 def check_and_correct_top_level_segment(root_node, problems=[]):
     if is_top_level_segment_incorrect(root_node):
         problems.append((Problems.IncorrectTlSeg, True))
@@ -47,23 +69,6 @@ def correct_top_level_segment_if_necessary(root_node):
     return root_node
 
 
-def get_children_iterator(node):
-    if isinstance(node, dict):
-        return node.items()
-
-    if isinstance(node, list):
-        return enumerate(node)
-
-    return None
-
-
-def is_leaf(node):
-    """
-    Returns true if node has no more children
-    """
-    return get_children_iterator(node) is None
-
-
 def should_be_traversed(key):
     """
     Only arrays and nodes with segment and question keys should be traversed
@@ -93,6 +98,9 @@ def traverse_generator(node, path_prefix=[], parent_recursive_attrs=[]):
     node_attrs = get_node_attrs(node, path_prefix)
 
     for key, child_node in get_children_iterator(node):
+        if key == 'notes':  #skip notes here - we traverse them separately
+            continue
+
         if should_be_traversed(key):
             yield from traverse_generator(
                 child_node,
@@ -128,6 +136,9 @@ def get_node_attrs(node, path_prefix=[]):
 
     attrs = []
     for key, child_node in children_iterator:
+        if key == 'notes':  #skip notes here - we traverse them separately
+            continue
+
         if is_leaf(child_node):
             attrs.append({
                 PATH: path_prefix + [key],
@@ -216,6 +227,58 @@ def explode_all_matrices(nd, problems=[]):
 # --- notes traversing
 # ---------------------------------------------------------------------
 
+
+def get_note_attrs(note_node):
+    attrs = []
+
+    def _collect_attrs(node, path_prefix):
+        children_iterator = get_children_iterator(node)
+
+        for key, child_node in children_iterator:
+            if is_leaf(child_node):
+                attrs.append({
+                    PATH: path_prefix + [key],
+                    VALUE: child_node
+                })
+            else:
+                _collect_attrs(child_node, path_prefix + [key])
+
+
+    _collect_attrs(note_node, [])
+
+    return attrs
+
+
+def traverse_notes(node):
+    return list(traverse_notes_generator(node))
+
+
+def traverse_notes_generator(node):
+    if isinstance(node, dict):
+        children = dict((key.lower(), val) for key, val in get_children_iterator(node))
+        if 'id' in children or 'note_id' in children:
+            note_id = children['note_id'] if 'note_id' in children else children['id']
+            attrs = get_note_attrs(node)
+
+            yield {
+                NOTE_ID: note_id,
+                ATTRS: attrs
+            }
+            return
+
+    for key, child_node in get_children_iterator(node):
+        yield from traverse_notes_generator(child_node)
+
+
+def get_note_nodes(json_fpath):
+    root_node = get_json_root(json_fpath)
+
+    if 'notes' in root_node:
+        return traverse_notes(root_node['notes'])
+
+    return []
+
+
 # ---------------------------------------------------------------------
 # --- others
 # ---------------------------------------------------------------------
@@ -223,7 +286,7 @@ def explode_all_matrices(nd, problems=[]):
 
 def get_tc_nodes(json_fpath, problems=[]):
     """
-    Convenience function, bundling together
+    Convenience function, bundling together code to get Tr. code nodes
     """
     root_node = get_json_root(json_fpath, problems=problems)
     root_node = check_and_correct_top_level_segment(root_node, problems=problems)
@@ -237,9 +300,11 @@ def get_tc_nodes(json_fpath, problems=[]):
 if __name__ == '__main__':
     import pprint
 
-    fpath = get_json_fpath('ex_sel108-ft0002')
-    tc_nodes = get_tc_nodes(fpath)
+    fpath = get_json_fpath('ex_sel120-ft0001_JS_170510')
+
+    # nodes = get_note_nodes(fpath)
+    nodes = get_tc_nodes(fpath)
 
     print(fpath)
-    pprint.pprint(tc_nodes, indent=4, width=200)
+    pprint.pprint(nodes, indent=4, width=200)
 

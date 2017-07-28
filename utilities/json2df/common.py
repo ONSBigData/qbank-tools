@@ -3,12 +3,14 @@ import json
 PATH = 'path'
 VALUE = 'value'
 ATTRS = 'attrs'
+NOTE_ID = 'note_id'
 
 # JSON keys
 JK_SEGMENT = 'segment'
 JK_QUESTION = 'question'
 JK_SCRAPE_INFO = 'survey_scrape_info'
 JK_TR_CODE = 'tracking_code'
+JK_NOTE_ID = 'note_id'
 
 FIRST_COLS = [
     'uid',
@@ -33,6 +35,7 @@ FIRST_COLS = [
     'sci_scrape_date',
     'sci_file_name',
     'sci_folder_name',
+    'notes'
 ]
 
 

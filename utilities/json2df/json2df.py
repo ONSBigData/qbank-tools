@@ -20,8 +20,11 @@ def json2df(json_fpath, problems=[], print_debug=True, save_csv=False):
     _print('filtering invalid words...')
     tc_nodes = validation.filter_invalid_words(tc_nodes, problems=problems)
 
+    _print('traversing to get Note nodes...')
+    note_nodes = traversing.get_note_nodes(json_fpath)
+
     _print('creating dataframe...')
-    df = dataframing.create_df(tc_nodes, problems=problems)
+    df = dataframing.create_df(tc_nodes, note_nodes, problems=problems)
 
     _print('dataframe with shape {} created'.format(df.shape))
 
@@ -111,5 +114,9 @@ def get_problems_report(json_fpaths=get_json_fpaths()):
 
 
 if __name__ == '__main__':
+    # fpath = get_json_fpath('ex_sel120-ft0001_JS_170510')
+    # df = json2df(fpath, save_csv=True)
+    # print(list(df.columns).index('notes'))
+
     create_full_df()
     # print(get_problems_report())

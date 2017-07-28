@@ -1,6 +1,7 @@
 import re
 from utilities.json2df.common import *
 from helpers.common import *
+import io
 
 MINOR_SEP = ' | '
 MAJOR_SEP = ' ||| '
@@ -10,7 +11,30 @@ def path2str(path):
     return '__'.join(str(p) for p in path)
 
 
-def extract_useful_attrs(tc_node):
+def get_note_text(note_id, note_nodes_dict):
+    if note_id not in note_nodes_dict:
+        return None
+
+    note_attrs = note_nodes_dict[note_id]
+
+    stream = io.StringIO()
+    stream.write('NOTE {} {}\n'.format(note_id, '*'*10))
+
+    for attr in note_attrs:
+        path = [p.lower() for p in attr[PATH] if not isinstance(p, int)]  # filter out array indices from path - they're not relevant
+        path = path2str(path)
+
+        if path == 'note_id' or path == 'id':
+            continue
+
+        value = attr[VALUE]
+
+        stream.write('{}: {}\n'.format(path, value))
+
+    return stream.getvalue()
+
+
+def extract_useful_attrs(tc_node, note_nodes_dict):
     question_seg_depth = tc_node['path'].count(JK_SEGMENT)
 
     useful_attrs = collections.defaultdict(list)
@@ -22,6 +46,11 @@ def extract_useful_attrs(tc_node):
         path = attr[PATH]
         path = [p for p in path if not isinstance(p, int)]  # filter out array indices from path - they're not relevant
         path = [p.lower() for p in path]  # make everything lower case
+
+        if path[-1] == JK_NOTE_ID:
+            note_text = get_note_text(attr[VALUE], note_nodes_dict)
+            if note_text is not None:
+                useful_attrs['notes'].append(note_text)
 
         if JK_TR_CODE in path:  # we have that already
             continue
@@ -134,16 +163,15 @@ def create_new_attrs(row):
     return new_attrs
 
 
-def create_row(tc_node):
-    if tc_node[VALUE] =='5901':
-        x = 1
-
+def create_row(tc_node, note_nodes):
     row = {
         'tr_code': tc_node[VALUE],
         'path': path2str(tc_node[PATH])
     }
 
-    useful_attrs = extract_useful_attrs(tc_node)
+    note_nodes_dict = dict((node[NOTE_ID], node[ATTRS]) for node in note_nodes)
+
+    useful_attrs = extract_useful_attrs(tc_node, note_nodes_dict)
     row.update(useful_attrs)
 
     new_attrs = create_new_attrs(row)
@@ -152,8 +180,8 @@ def create_row(tc_node):
     return row
 
 
-def create_df(tc_nodes, problems=[]):
-    rows = [create_row(tc_node) for tc_node in tc_nodes]
+def create_df(tc_nodes, note_nodes, problems=[]):
+    rows = [create_row(tc_node, note_nodes) for tc_node in tc_nodes]
 
     df = pd.DataFrame(rows)
     df.columns = [c.lower() for c in df.columns]
@@ -168,10 +196,10 @@ def create_df(tc_nodes, problems=[]):
     if df['form_type'].count() == 0:
         problems.append((Problems.FormType, True))
 
-    df = gh.reorder_cols(df, FIRST_COLS)
-
     mp = get_survey_name_map()
     df['survey_name'] = df['survey_id'].apply(lambda x: mp[int(x)])
+
+    df = gh.reorder_cols(df, FIRST_COLS)
 
     df = df.set_index('uid')
 
@@ -184,9 +212,11 @@ if __name__ == '__main__':
 
     pd.set_option('max_colwidth', 1800)
 
-    fpath = get_json_fpath('ex_sel108-ft0002')
+    fpath = get_json_fpath('ex_sel120-ft0001_JS_170510')
     tc_nodes = traversing.get_tc_nodes(fpath)
-    df = create_df(tc_nodes)
+    note_nodes = traversing.get_note_nodes(fpath)
+
+    df = create_df(tc_nodes, note_nodes)
 
     print(df)
     print(df.columns)
