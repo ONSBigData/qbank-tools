@@ -56,47 +56,6 @@ VALID_PATH_WORDS += ['row_' + w for w in MATRIX_VALID_WORDS]
 VALID_PATH_WORDS += ['col_' + w for w in MATRIX_VALID_WORDS]
 
 
-# --- Top level segment -----------------------------------------------------------
-
-
-def check_and_correct_top_level_segment(root_node, problems=[]):
-    if is_top_level_segment_incorrect(root_node):
-        problems.append((Problems.IncorrectTlSeg, True))
-        root_node = correct_top_level_segment_if_necessary(root_node)
-
-    return root_node
-
-
-def is_top_level_segment_incorrect(root_node):
-    tl_seg = root_node[JK_SEGMENT]
-
-    # top level segment should not be a list - should be an object
-    return isinstance(tl_seg, list) and len(tl_seg) > 1
-
-
-def correct_top_level_segment_if_necessary(root_node):
-    root_node = copy.deepcopy(root_node)
-
-    is_survey_seg = lambda o: 'segment_type' in o and o['segment_type'] == 'survey'
-
-    tl_seg = root_node[JK_SEGMENT]
-
-    if is_top_level_segment_incorrect(root_node):
-        # find the survey segment in the list - should be just 2 items, but one never knows!
-        survey_seg_index, survey_seg_object = [(i, o) for i, o in enumerate(root_node[JK_SEGMENT]) if is_survey_seg(o)][0]
-
-        # delete the survey segment from the top-level segment
-        del tl_seg[survey_seg_index]
-
-        # survey seg will contain the TL seg list
-        survey_seg_object[JK_SEGMENT] = tl_seg
-
-        # survey seg is the new TL seg
-        root_node[JK_SEGMENT] = survey_seg_object
-
-    return root_node
-
-
 # --- invalid words in path -----------------------------------------------------------
 
 
@@ -151,8 +110,8 @@ def filter_invalid_words(tc_nodes, return_invalid=False, problems=[]):
     return tc_nodes
 
 
-def get_invalid_words(traversed_data):
-    return filter_invalid_words(traversed_data, return_invalid=True)
+def get_invalid_words(tc_nodes):
+    return filter_invalid_words(tc_nodes, return_invalid=True)
 
 
 def print_invalid_words(invalid_words):

@@ -104,7 +104,7 @@ class TestCreateNewAttrs:
             'period_end': '31/12/2015',
             'period_start': '01/01/2015',
             'qtext': 'Please provide here the contact details',
-            'sufficient_qtext': 'Please provide here the contact details',
+            'suff_qtext': 'Please provide here the contact details',
             'survey_id': '002',
             'type': 'contact_6',
             'uid': '002_0001_TR CODE'
@@ -130,5 +130,5 @@ class TestCreateNewAttrs:
 
         expected_sufficient_qtext = 'Survey of Research and Development Carried Out in the United Kingdom ||| Section E - Workplace Information ||| contact'
 
-        nstools.assert_equals(actual['sufficient_qtext'], expected_sufficient_qtext)
+        nstools.assert_equals(actual['suff_qtext'], expected_sufficient_qtext)
 

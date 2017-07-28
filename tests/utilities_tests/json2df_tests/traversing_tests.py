@@ -64,7 +64,7 @@ class TestTraverse:
     ]
 
     def setup(self):
-        self.patches, self.mocks = patch_helper.patch(['utilities.json2csv.traversing.get_node_attrs'])
+        self.patches, self.mocks = patch_helper.patch(['utilities.json2df.traversing.get_node_attrs'])
 
     def teardown(self):
         patch_helper.unpatch(self.patches)

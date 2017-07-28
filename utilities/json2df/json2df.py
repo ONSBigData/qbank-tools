@@ -14,17 +14,8 @@ def json2df(json_fpath, problems=[], print_debug=True, save_csv=False):
         if print_debug:
             print(s)
 
-    _print('opening {}...'.format(json_fpath))
-    root_node = get_json_root(json_fpath, problems)
-
-    _print('checking and correcting top level segment...')
-    root_node = validation.check_and_correct_top_level_segment(root_node, problems=problems)
-
-    _print('exploding matrix questions...')
-    root_node = traversing.explode_all_matrices(root_node, problems=problems)
-
-    _print('traversing...')
-    tc_nodes = traversing.traverse(root_node)
+    _print('traversing to get Tr. code nodes...')
+    tc_nodes = traversing.get_tc_nodes(json_fpath, problems=problems)
 
     _print('filtering invalid words...')
     tc_nodes = validation.filter_invalid_words(tc_nodes, problems=problems)

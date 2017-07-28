@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import collections
 import helpers.general_helper as gh
+import re
 
 DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../../data'
 CHECKPT_DIR = DATA_DIR + '/checkpoints'
@@ -26,6 +27,12 @@ def get_json_fpaths():
     jsons.sort()
 
     return [JSON_DIR + '/' + j for j in jsons]
+
+
+def get_json_fpath(pattern=''):
+    jsons = [f for f in os.listdir(JSON_DIR) if re.search(pattern, f) is not None and f.endswith('.json')]
+
+    return JSON_DIR + '/' + jsons[0]
 
 
 def get_validated_json_fpaths(scrape_status_csv_fname=SCRAPE_STATUS_CSV_FNAME):

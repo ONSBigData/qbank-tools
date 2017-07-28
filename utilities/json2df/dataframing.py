@@ -95,19 +95,15 @@ def create_new_attrs(row):
     new_attrs['first_text'] = first_text
 
     # long enough/sufficient question text
-    sufficient_qtext = new_attrs['qtext']
-    last_text = sufficient_qtext
-    for key in ['i{}_text'.format(i) for i in range(9)]:
-        last_words = list(filter(None, re.sub('[^0-9a-zA-Z]+', ' ', last_text).split(' ')))
-        if key not in def_row or len(last_words) > 5:  # break when the last text contained sufficient amount of words
-            break
+    texts = list(filter(None, [new_attrs['qtext']] + _get_all_values_where_keys_like(r'i\d+.*_text')))
+    sufficient_qtext = []
+    for text in texts:
+        sufficient_qtext.append(text)
 
-        last_text = def_row[key]
-        if sufficient_qtext == '':
-            sufficient_qtext = last_text
-            continue
-        sufficient_qtext = '{} ||| {}'.format(last_text, sufficient_qtext)
-    new_attrs['sufficient_qtext'] = sufficient_qtext
+        text_words = list(filter(None, re.sub('[^0-9a-zA-Z]+', ' ', text).split(' ')))
+        if len(text_words) > 5:  # break when the last text contained sufficient amount of words
+            break
+    new_attrs['suff_qtext'] = MAJOR_SEP.join(reversed(sufficient_qtext))
 
     # construct period days
     try:
@@ -119,7 +115,7 @@ def create_new_attrs(row):
         new_attrs['period_days'] = None
 
     # text for 3 closest segments
-    close_segment_texts = reversed(_get_all_values_where_keys_like(r'i[0-2].*_text'))
+    close_segment_texts = reversed(_get_all_values_where_keys_like(r'i\d+.*_text')[:3])
     new_attrs['close_seg_text'] = MAJOR_SEP.join(close_segment_texts)
 
     # all text for segments
@@ -139,6 +135,9 @@ def create_new_attrs(row):
 
 
 def create_row(tc_node):
+    if tc_node[VALUE] =='5901':
+        x = 1
+
     row = {
         'tr_code': tc_node[VALUE],
         'path': path2str(tc_node[PATH])
@@ -153,7 +152,7 @@ def create_row(tc_node):
     return row
 
 
-def create_df(tc_nodes, problems):
+def create_df(tc_nodes, problems=[]):
     rows = [create_row(tc_node) for tc_node in tc_nodes]
 
     df = pd.DataFrame(rows)
@@ -165,6 +164,9 @@ def create_df(tc_nodes, problems):
 
     if df['period_days'].count() == 0:
         problems.append((Problems.ReportingPeriod, True))
+
+    if df['form_type'].count() == 0:
+        problems.append((Problems.FormType, True))
 
     df = gh.reorder_cols(df, FIRST_COLS)
 
@@ -182,9 +184,8 @@ if __name__ == '__main__':
 
     pd.set_option('max_colwidth', 1800)
 
-    fpath = get_json_fpaths()[0]
-    node = get_json_root(fpath)
-    tc_nodes = traversing.traverse(node)
+    fpath = get_json_fpath('ex_sel108-ft0002')
+    tc_nodes = traversing.get_tc_nodes(fpath)
     df = create_df(tc_nodes)
 
     print(df)

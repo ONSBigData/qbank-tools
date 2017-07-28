@@ -21,14 +21,18 @@ FIRST_COLS = [
     'period_start',
     'period_end',
     'qtext',
-    'sufficient_qtext',
+    'suff_qtext',
     'first_text',
     'close_seg_text',
     'all_seg_text',
     'all_text',
     'all_context',
     'all_inclusions',
-    'all_exclusions'
+    'all_exclusions',
+    'sci_download_date',
+    'sci_scrape_date',
+    'sci_file_name',
+    'sci_folder_name',
 ]
 
 
@@ -36,6 +40,7 @@ class Problems:
     IncorrectTlSeg = 'INCORRECT_TOP_LEVEL_SEGMENT'
     InvalidWords = 'INVALID_KEYWORDS'
     ReportingPeriod = 'PROBLEM_WITH_REPORTING_PERIOD'
+    FormType = 'MISSING_FORM_TYPE'
     MatrixParsing = 'MATRIX_PARSING_PROBLEM'
     NoData = 'NO_DATA'
     Encoding = 'ENCODING_NOT_UTF8'

@@ -8,6 +8,45 @@ from helpers.common import *
 # --- general traversing
 # ---------------------------------------------------------------------
 
+
+def check_and_correct_top_level_segment(root_node, problems=[]):
+    if is_top_level_segment_incorrect(root_node):
+        problems.append((Problems.IncorrectTlSeg, True))
+        root_node = correct_top_level_segment_if_necessary(root_node)
+
+    return root_node
+
+
+def is_top_level_segment_incorrect(root_node):
+    tl_seg = root_node[JK_SEGMENT]
+
+    # top level segment should not be a list - should be an object
+    return isinstance(tl_seg, list) and len(tl_seg) > 1
+
+
+def correct_top_level_segment_if_necessary(root_node):
+    root_node = copy.deepcopy(root_node)
+
+    is_survey_seg = lambda o: 'segment_type' in o and o['segment_type'] == 'survey'
+
+    tl_seg = root_node[JK_SEGMENT]
+
+    if is_top_level_segment_incorrect(root_node):
+        # find the survey segment in the list - should be just 2 items, but one never knows!
+        survey_seg_index, survey_seg_object = [(i, o) for i, o in enumerate(root_node[JK_SEGMENT]) if is_survey_seg(o)][0]
+
+        # delete the survey segment from the top-level segment
+        del tl_seg[survey_seg_index]
+
+        # survey seg will contain the TL seg list
+        survey_seg_object[JK_SEGMENT] = tl_seg
+
+        # survey seg is the new TL seg
+        root_node[JK_SEGMENT] = survey_seg_object
+
+    return root_node
+
+
 def get_children_iterator(node):
     if isinstance(node, dict):
         return node.items()
@@ -172,16 +211,34 @@ def explode_all_matrices(nd, problems=[]):
 
     return nd
 
+
 # ---------------------------------------------------------------------
 # --- notes traversing
 # ---------------------------------------------------------------------
 
+# ---------------------------------------------------------------------
+# --- others
+# ---------------------------------------------------------------------
+
+
+def get_tc_nodes(json_fpath, problems=[]):
+    """
+    Convenience function, bundling together
+    """
+    root_node = get_json_root(json_fpath, problems=problems)
+    root_node = check_and_correct_top_level_segment(root_node, problems=problems)
+    root_node = explode_all_matrices(root_node, problems=problems)
+
+    tc_nodes = traverse(root_node)
+
+    return tc_nodes
+
+
 if __name__ == '__main__':
     import pprint
 
-    fpath = get_json_fpaths()[0]
-    node = get_json_root(fpath)
-    tc_nodes = traverse(node)
+    fpath = get_json_fpath('ex_sel108-ft0002')
+    tc_nodes = get_tc_nodes(fpath)
 
     print(fpath)
     pprint.pprint(tc_nodes, indent=4, width=200)
