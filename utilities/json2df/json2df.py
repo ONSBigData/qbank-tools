@@ -1,7 +1,9 @@
-import utilities.json2csv.traversing as traversing
-import utilities.json2csv.validation as validation
-import utilities.json2csv.dataframing as dataframing
-from utilities.json2csv.common import *
+import utilities.json2df.traversing as traversing
+import utilities.json2df.validation as validation
+import utilities.json2df.dataframing as dataframing
+from utilities.json2df.common import *
+import io
+
 
 import helpers.general_helper as gh
 from helpers.common import *
@@ -25,7 +27,7 @@ def json2df(json_fpath, problems=[], print_debug=True, save_csv=False):
     tc_nodes = traversing.traverse(root_node)
 
     _print('filtering invalid words...')
-    tc_nodes = validation.filter_invalid(tc_nodes, problems=problems)
+    tc_nodes = validation.filter_invalid_words(tc_nodes, problems=problems)
 
     _print('creating dataframe...')
     df = dataframing.create_df(tc_nodes, problems=problems)
@@ -88,5 +90,35 @@ def create_full_df(print_debug=True):
     return cdf
 
 
+def get_problems_report(json_fpaths=get_json_fpaths()):
+    stream = io.StringIO()
+
+    for json_fpath in json_fpaths:
+        stream.write('\n')
+        stream.write('-'*100 + '\n')
+        stream.write(os.path.basename(json_fpath) + '\n')
+
+        try:
+            problems = []
+            json2df(json_fpath, problems, print_debug=False)
+        except Exception as e:
+            stream.write('ERROR: {}'.format(e)+ '\n')
+            continue
+
+        for p in problems:
+            stream.write('{}: {}'.format(p[0], p[1])+ '\n')
+
+        if len(problems) == 0:
+            stream.write('OK\n')
+
+    s = stream.getvalue()
+
+    with open(PROBLEM_REPORTS_DIR + '/problems_report.txt', 'w') as f:
+        f.write(s)
+
+    return s
+
+
 if __name__ == '__main__':
     create_full_df()
+    # print(get_problems_report())

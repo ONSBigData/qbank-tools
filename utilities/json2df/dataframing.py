@@ -1,5 +1,5 @@
 import re
-from utilities.json2csv.common import *
+from utilities.json2df.common import *
 from helpers.common import *
 
 MINOR_SEP = ' | '
@@ -177,7 +177,7 @@ def create_df(tc_nodes, problems):
 
 
 if __name__ == '__main__':
-    import utilities.json2csv.traversing as traversing
+    import utilities.json2df.traversing as traversing
     import pandas as pd
 
     pd.set_option('max_colwidth', 1800)

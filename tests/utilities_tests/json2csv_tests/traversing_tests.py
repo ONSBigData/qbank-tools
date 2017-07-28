@@ -3,7 +3,7 @@ import json
 import nose.tools as nstools
 import tests.helpers.patch_helper as patch_helper
 
-from utilities.json2csv import traversing
+from utilities.json2df import traversing
 
 # ---------------------------------------------------------------------
 # --- general traversing
