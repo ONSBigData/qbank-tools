@@ -1,5 +1,6 @@
 import copy
 from helpers.common import *
+from utilities.json2csv.common import *
 import io
 
 
@@ -55,6 +56,44 @@ VALID_PATH_WORDS += ['row_' + w for w in MATRIX_VALID_WORDS]
 VALID_PATH_WORDS += ['col_' + w for w in MATRIX_VALID_WORDS]
 
 
+def check_and_correct_top_level_segment(root_node, problems=[]):
+    if is_top_level_segment_incorrect(root_node):
+        problems.append((Problems.IncorrectTlSeg, True))
+        root_node = correct_top_level_segment_if_necessary(root_node)
+
+    return root_node
+
+
+def is_top_level_segment_incorrect(root_node):
+    tl_seg = root_node[JK_SEGMENT]
+
+    # top level segment should not be a list - should be an object
+    return isinstance(tl_seg, list) and len(tl_seg) > 1
+
+
+def correct_top_level_segment_if_necessary(root_node):
+    root_node = copy.deepcopy(root_node)
+
+    is_survey_seg = lambda o: 'segment_type' in o and o['segment_type'] == 'survey'
+
+    tl_seg = root_node[JK_SEGMENT]
+
+    if is_top_level_segment_incorrect(root_node):
+        # find the survey segment in the list - should be just 2 items, but one never knows!
+        survey_seg_index, survey_seg_object = [(i, o) for i, o in enumerate(root_node[JK_SEGMENT]) if is_survey_seg(o)][0]
+
+        # delete the survey segment from the top-level segment
+        del tl_seg[survey_seg_index]
+
+        # survey seg will contain the TL seg list
+        survey_seg_object[JK_SEGMENT] = tl_seg
+
+        # survey seg is the new TL seg
+        root_node[JK_SEGMENT] = survey_seg_object
+
+    return root_node
+
+
 def path_word_valid(path_word):
     return isinstance(path_word, int) or path_word in VALID_PATH_WORDS
 
@@ -63,7 +102,7 @@ def path_valid(path):
     return all(path_word_valid(p) for p in path)
 
 
-def filter_invalid(traversed_data, return_invalid=False):
+def filter_invalid(tc_nodes, return_invalid=False, problems=[]):
     invalid = set()
 
     def fix_path(path):
@@ -73,9 +112,9 @@ def filter_invalid(traversed_data, return_invalid=False):
 
             invalid.add(w)
 
-            if 'includ' in w:
+            if 'inclu' in w:
                 w = 'inclusions'
-            if 'exclud' in w:
+            if 'exclu' in w:
                 w = 'exclusions'
 
             if w == 'finish':
@@ -88,9 +127,9 @@ def filter_invalid(traversed_data, return_invalid=False):
 
         return True
 
-    traversed_data = copy.deepcopy(traversed_data)
+    tc_nodes = copy.deepcopy(tc_nodes)
     filtered = []
-    for tr in traversed_data:
+    for tr in tc_nodes:
         if not fix_path(tr['path']):
             continue
 
@@ -101,7 +140,7 @@ def filter_invalid(traversed_data, return_invalid=False):
     if return_invalid:
         return invalid
 
-    return traversed_data
+    return tc_nodes
 
 
 def get_invalid_words(traversed_data):
@@ -114,7 +153,7 @@ def print_invalid_words(invalid_words):
         print('\t' + '\n\t'.join(invalid_words))
 
 
-def get_invalid_words_report(json_fpaths=get_all_jsons()):
+def get_invalid_words_report(json_fpaths=get_json_fpaths()):
     stream = io.StringIO()
 
     for json_fpath in json_fpaths:
@@ -140,7 +179,7 @@ def get_invalid_words_report(json_fpaths=get_all_jsons()):
     return s
 
 
-def get_problems_report(json_fpaths=get_all_jsons()):
+def get_problems_report(json_fpaths=get_json_fpaths()):
     stream = io.StringIO()
 
     for json_fpath in json_fpaths:

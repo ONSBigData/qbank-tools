@@ -21,19 +21,19 @@ def get_survey_name_map():
     return collections.defaultdict(lambda: None, d)
 
 
-def get_all_jsons():
+def get_json_fpaths():
     jsons = [f for f in os.listdir(JSON_DIR) if f.endswith('.json')]
     jsons.sort()
 
     return [JSON_DIR + '/' + j for j in jsons]
 
 
-def get_validated_jsons(scrape_status_csv_fname=SCRAPE_STATUS_CSV_FNAME):
+def get_validated_json_fpaths(scrape_status_csv_fname=SCRAPE_STATUS_CSV_FNAME):
     df = pd.read_csv(DATA_DIR + '/' + scrape_status_csv_fname)
     vdf = df[df['Validated?'].notnull()]
     validated = list(vdf['Filename (includes formtype)'])
 
-    jsons = [f for f in get_all_jsons() if any(v in f for v in validated)]
+    jsons = [f for f in get_json_fpaths() if any(v in f for v in validated)]
 
     return jsons
 
@@ -50,4 +50,4 @@ def load_clean_df(full=False, fpath=None):
 
 
 if __name__ == '__main__':
-    print('\n'.join(get_validated_jsons()))
+    print('\n'.join(get_validated_json_fpaths()))

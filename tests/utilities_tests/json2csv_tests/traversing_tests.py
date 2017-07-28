@@ -13,7 +13,7 @@ from utilities.json2csv import traversing
 NODE = {
     'question': {
         'text': 'qtext1',
-        'tr_code': 'tr1',
+        'tracking_code': 'tr1',
         'inclusions': [
             'i1', 'i2'
         ]
@@ -23,12 +23,12 @@ NODE = {
         'question': [
             {
                 'text': 'qtext2',
-                'tr_code': 'tr2',
+                'tracking_code': 'tr2',
                 'context': 'context1'
             },
             {
                 'text': 'qtext3',
-                'tr_code': 'tr3',
+                'tracking_code': 'tr3',
                 'context': 'context2'
             },
         ]
@@ -49,17 +49,17 @@ class TestTraverse:
         {
             'value': 'tr1',
             'attrs': ['attrs-[]', "attrs-['question']"],
-            'path': ['question', 'tr_code']
+            'path': ['question', 'tracking_code']
         },
         {
             'value': 'tr2',
             'attrs': ['attrs-[]', "attrs-['segment']", "attrs-['segment', 'question']", "attrs-['segment', 'question', 0]"],
-            'path': ['segment', 'question', 0, 'tr_code']
+            'path': ['segment', 'question', 0, 'tracking_code']
         },
         {
             'value': 'tr3',
             'attrs': ['attrs-[]', "attrs-['segment']", "attrs-['segment', 'question']","attrs-['segment', 'question', 1]"],
-            'path': ['segment', 'question', 1, 'tr_code']
+            'path': ['segment', 'question', 1, 'tracking_code']
         }
     ]
 

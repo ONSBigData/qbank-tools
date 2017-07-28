@@ -1,13 +1,6 @@
-import collections
 import copy
-import io
-import json
-import re
 import traceback
-import helpers.general_helper as gh
-from utilities.json2csv.problems import Problems
-
-import helpers.helper as helper
+from utilities.json2csv.common import *
 from helpers.common import *
 
 
@@ -47,12 +40,12 @@ def traverse_generator(node, path_prefix=[], parent_recursive_attrs=[]):
     """
     Recursively traverses the structure under the specified node, outputing tracking code nodes.
 
-    The output contains path to the node, value (tracking code value) and a list of attributes for each node along the
+    The output contains path to the node, value (tracking code value) and a list of all attributes for all nodes along the
     way from the root. E.g. if the path to the tracking code looks like this
 
     'path': ['segment', 'question', 1, 'tr_code']
 
-    there will be a list of attributes for each of these nodes:
+    there will be a list containing all attributes for all of these nodes:
         []
         ['segment']
         ['segment', 'question']
@@ -67,11 +60,11 @@ def traverse_generator(node, path_prefix=[], parent_recursive_attrs=[]):
                 path_prefix=path_prefix + [key],
                 parent_recursive_attrs=parent_recursive_attrs + node_attrs
             )
-        elif key == 'tr_code':
+        elif key == 'tracking_code':
             yield {
-                'path': path_prefix + [key],
-                'value': child_node,
-                'attrs': parent_recursive_attrs + node_attrs
+                PATH: path_prefix + [key],
+                VALUE: child_node,
+                ATTRS: parent_recursive_attrs + node_attrs
             }
 
 
@@ -98,8 +91,8 @@ def get_node_attrs(node, path_prefix=[]):
     for key, child_node in children_iterator:
         if is_leaf(child_node):
             attrs.append({
-                'path': path_prefix + [key],
-                'value': child_node
+                PATH: path_prefix + [key],
+                VALUE: child_node
             })
 
         elif not should_be_traversed(key):
@@ -153,8 +146,6 @@ def explode_matrix(matrix_node, problems=[]):
 
 
 def explode_all_matrices(nd, problems=[]):
-
-
     nd = copy.deepcopy(nd)
 
     def _explode_all_matrices(node, node_key=None, parent_node=None):
@@ -184,4 +175,14 @@ def explode_all_matrices(nd, problems=[]):
 # ---------------------------------------------------------------------
 # --- notes traversing
 # ---------------------------------------------------------------------
+
+if __name__ == '__main__':
+    import pprint
+
+    fpath = get_json_fpaths()[0]
+    node = get_json_root(fpath)
+    tc_nodes = traverse(node)
+
+    print(fpath)
+    pprint.pprint(tc_nodes, indent=4, width=200)
 
