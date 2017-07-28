@@ -9,68 +9,6 @@ import helpers.general_helper as gh
 import helpers.helper as helper
 from helpers.common import *
 
-
-class Problems:
-    IncorrectTlSeg = 'INCORRECT_TOP_LEVEL_SEGMENT'
-    InvalidWords = 'INVALID_KEYWORDS'
-    ReportingPeriod = 'PROBLEM_WITH_REPORTING_PERIOD'
-    MatrixParsing = 'MATRIX_PARSING_PROBLEM'
-    NoData = 'NO_DATA'
-    Encoding = 'ENCODING_NOT_UTF8'
-
-
-VALID_PATH_WORDS = [
-    'Affiliate Company',
-    'Branch',
-    'col_count',
-    'context',
-    'destination',
-    'download_date',
-    'end',
-    'exclusions',
-    'file_name',
-    'folder_name',
-    'form_type',
-    'question',
-    'inclusions',
-    'ID',
-    'note',
-    'note_ID',
-    'NULL',
-    'options',
-    'reporting_period',
-    'row_count',
-    'routing',
-    'scrape_date',
-    'segment',
-    'segment_type',
-    'start',
-    'survey_number',
-    'survey_scrape_info',
-    'text',
-    'tracking_code',
-    'type',
-    'validation',
-    'value'
-]
-
-MATRIX_VALID_WORDS = [
-    'context',
-    'exclusions',
-    'ID',
-    'index',
-    'inclusions',
-    'note_ID',
-    'NULL',
-    'text',
-    'type',
-    'validation'
-]
-
-VALID_PATH_WORDS += ['row_' + w for w in MATRIX_VALID_WORDS]
-VALID_PATH_WORDS += ['col_' + w for w in MATRIX_VALID_WORDS]
-
-
 FIRST_COLS = [
     'uid',
     'survey_id',
@@ -91,86 +29,6 @@ FIRST_COLS = [
     'all_inclusions',
     'all_exclusions'
 ]
-
-
-def get_children_iterator(node):
-    if isinstance(node, dict):
-        return node.items()
-
-    if isinstance(node, list):
-        return enumerate(node)
-
-    return None
-
-
-def is_leaf(node):
-    return get_children_iterator(node) is None
-
-
-def explode_matrix(matrix_node, problems=[]):
-    def check_field(kw):
-        if isinstance(matrix_node[kw], dict):
-            err_msg = '{} field for matrix node below is a dictionary (should be list)\n{}'.format(kw, json.dumps(matrix_node, indent=2))
-            problems.append((Problems.MatrixParsing, err_msg))
-
-            matrix_node[kw] = [matrix_node[kw]]
-
-    root_node_attrs = copy.deepcopy(matrix_node)
-    del root_node_attrs['cols']
-    del root_node_attrs['rows']
-    del root_node_attrs['cells']
-
-    check_field('cols')
-    check_field('rows')
-    check_field('cells')
-
-    rows = dict((row['row_index'], row) for row in matrix_node['rows'])
-    cols = dict((col['col_index'], col) for col in matrix_node['cols'])
-
-    cells = matrix_node['cells']
-
-    for cell in cells:
-        cell.search_for_kw(root_node_attrs)
-        row = rows[cell['row_index']]
-        col = cols[cell['col_index']]
-
-        for k, v in row.items():
-            if k != 'row_index':
-                cell['row_' + k] = v
-
-        for k, v in col.items():
-            if k != 'col_index':
-                cell['col_' + k] = v
-
-    return cells
-
-
-def explode_all_matrices(nd, problems=[]):
-    nd = copy.deepcopy(nd)
-
-    def _explode_all_matrices(node, node_key=None, parent_node=None):
-        if is_leaf(node):
-            return
-
-        if isinstance(node, dict) and 'cells' in node:  # it's a matrix node
-            try:
-                exploded_items = explode_matrix(node, problems=problems)
-                parent_node[node_key] = exploded_items
-            except Exception as e:
-                parent_node[node_key] = {}
-                problems.append((Problems.MatrixParsing, 'Exception occured parsing matrix node below: {}\n{}\n{}'.format(
-                    e, traceback.format_exc(), json.dumps(node, indent=2))))
-
-            return
-
-        children_iterator = get_children_iterator(node)
-
-        for key, child_node in children_iterator:
-            _explode_all_matrices(child_node, key, node)
-
-    _explode_all_matrices(nd)
-
-    return nd
 
 
 def is_top_level_segment_incorrect(root_node):
@@ -203,117 +61,11 @@ def correct_top_level_segment_if_necessary(root_node):
     return root_node
 
 
-def is_traversable(key):
-    return isinstance(key, int) or key in ['segment', 'question']
 
-
-def get_node_attrs(node, path_prefix=[]):
-    children_iterator = get_children_iterator(node)
-
-    attrs = []
-    for key, child_node in children_iterator:
-        if is_leaf(child_node):
-            attrs.append({
-                'path': path_prefix + [key],
-                'value': child_node
-            })
-
-        elif not is_traversable(key):
-            child_attrs = get_node_attrs(child_node, path_prefix + [key])
-            attrs.extend(child_attrs)
-
-    return attrs
 
 
 def path2str(path):
     return '__'.join(str(p) for p in path)
-
-
-def traverse(node):
-    return list(traverse_generator(node))
-
-
-def traverse_generator(node, path_prefix=[], parent_recursive_attrs=[]):
-    if is_leaf(node):
-        yield {
-            'path': path_prefix,
-            'value': node,
-            'attrs': parent_recursive_attrs
-        }
-        return
-
-    if path_prefix != [] and not is_traversable(path_prefix[-1]):
-        return
-
-    node_attrs = get_node_attrs(node, path_prefix)
-
-    children_iterator = get_children_iterator(node)
-
-    for key, child_node in children_iterator:
-        yield from traverse_generator(
-            child_node,
-            path_prefix=list(path_prefix) + [key],
-            parent_recursive_attrs=parent_recursive_attrs + node_attrs
-        )
-
-
-def path_word_valid(path_word):
-    return isinstance(path_word, int) or path_word in VALID_PATH_WORDS
-
-
-def path_valid(path):
-    return all(path_word_valid(p) for p in path)
-
-
-def filter_invalid(traversed_data, return_invalid=False):
-    invalid = set()
-
-    def fix_path(path):
-        for i, w in enumerate(path):
-            if path_word_valid(w):
-                continue
-
-            invalid.add(w)
-
-            if 'includ' in w:
-                w = 'inclusions'
-            if 'exclud' in w:
-                w = 'exclusions'
-
-            if w == 'finish':
-                w = 'end'
-
-            if not path_word_valid(w):
-                return False
-
-            path[i] = w
-
-        return True
-
-    traversed_data = copy.deepcopy(traversed_data)
-    filtered = []
-    for tr in traversed_data:
-        if not fix_path(tr['path']):
-            continue
-
-        tr['attrs'] = [a for a in tr['attrs'] if fix_path(a['path'])]
-
-        filtered.append(tr)
-
-    if return_invalid:
-        return invalid
-
-    return traversed_data
-
-
-def get_invalid_words(traversed_data):
-    return filter_invalid(traversed_data, return_invalid=True)
-
-
-def print_invalid_words(invalid_words):
-    print('found {} invalid words'.format(len(invalid_words)))
-    if len(invalid_words) != 0:
-        print('\t' + '\n\t'.join(invalid_words))
 
 
 def create_df(traversed_data):
@@ -506,64 +258,6 @@ def load_json(json_fpath, problems=[], print_debug=True):
     return df
 
 
-def get_invalid_words_report(json_fpaths=get_all_jsons()):
-    stream = io.StringIO()
-
-    for json_fpath in json_fpaths:
-        try:
-            problems = []
-            load_json(json_fpath, problems, print_debug=False)
-        except:
-            continue
-
-        invalid_words = next((p[1] for p in problems if p[0] == Problems.InvalidWords), [])
-        if invalid_words == []:
-            continue
-
-        stream.write(os.path.basename(json_fpath) + '\n')
-        stream.write('\t' + '\n\t'.join(invalid_words) + '\n')
-        stream.write('\n')
-
-    s = stream.getvalue()
-
-    with open(PROBLEM_REPORTS_DIR + '/invalid_words_report.txt', 'w') as f:
-        f.write(s)
-
-    return s
-
-
-def get_problems_report(json_fpaths=get_all_jsons()):
-    stream = io.StringIO()
-
-    for json_fpath in json_fpaths:
-        stream.write('\n')
-        stream.write('-'*100 + '\n')
-        stream.write(os.path.basename(json_fpath) + '\n')
-
-        try:
-            problems = []
-            load_json(json_fpath, problems, print_debug=False)
-        except Exception as e:
-            stream.write('ERROR: {}'.format(e)+ '\n')
-            continue
-
-        for p in problems:
-            stream.write('{}: {}'.format(p[0], p[1])+ '\n')
-
-        if len(problems) == 0:
-            stream.write('OK\n')
-
-    s = stream.getvalue()
-
-    with open(PROBLEM_REPORTS_DIR + '/problems_report.txt', 'w') as f:
-        f.write(s)
-
-    return s
-
-
-def print_problems(problems):
-    for p in problems:
-        print('{}: {}'.format(p[0], p[1]))
 
 
 def create_full_df(print_debug=True):
@@ -623,9 +317,5 @@ def create_full_df(print_debug=True):
 
 
 if __name__ == '__main__':
-    # get_problems_report()
-    # get_invalid_words_report()
-    # create_full_df(False)
-    # print(load_json(DATA_DIR + '/jsons/ex_sel350-ft0004_JS_170516.json').head())
     create_full_df()
 

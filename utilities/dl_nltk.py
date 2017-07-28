@@ -4,6 +4,7 @@ from nltk.downloader import Downloader
 
 nltk.data.path.append(ph.from_root('nltk_data/'))
 
+
 def dl_nltk():
     TO_DL = ['stopwords', 'punkt']
 
