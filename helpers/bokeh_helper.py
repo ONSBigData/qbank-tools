@@ -3,7 +3,6 @@ import pandas as pd
 from bokeh.models import \
     ColumnDataSource, \
     HoverTool, \
-    Div, \
     Range1d, \
     FuncTickFormatter, \
     LinearColorMapper, \
@@ -11,12 +10,9 @@ from bokeh.models import \
     BasicTicker, \
     PrintfTickFormatter, \
     DataRange1d, \
-    Plot, \
     Quad
 from bokeh.plotting import figure
 import numpy as np
-import siman.qsim as qsim
-from bs4 import BeautifulSoup
 import re
 
 DEF_PALETTE = palettes.Magma256
@@ -241,96 +237,3 @@ def get_heatmap(
 
     return hm
 
-
-# ---------------------------------------------------------------------
-# --- Question bank related
-# ---------------------------------------------------------------------
-
-COMP_TBL_FIELDS = ['question X', 'question Y', 'similarity']
-SIM_MARKER = '___SIM___'
-
-
-def create_comp_df(qx, qy, displayed_cols, col2doc_sim=None):
-    def _create_series(q):
-        if q is None:
-            q = pd.Series()
-
-        q = pd.Series([q[c] if c in q else 'none' for c in displayed_cols], index=displayed_cols)
-
-        return q
-
-    qx = _create_series(qx)
-    qy = _create_series(qy)
-
-    if col2doc_sim is None:
-        col2doc_sim = dict((c, qsim.get_cos_doc_sim) for c in displayed_cols)
-
-    sim = pd.Series(['']*len(qx), index=qx.index)
-
-    for c in col2doc_sim:
-        sim.loc[c] = '{}{}'.format(SIM_MARKER, col2doc_sim[c](str(qx.loc[c]), str(qy.loc[c])))
-
-    df = pd.concat([qx, qy, sim], axis=1, ignore_index=True)
-    df.columns = COMP_TBL_FIELDS
-
-    return df
-
-
-def get_comp_div(comp_df, palette=DEF_PALETTE, width=DEF_WIDTH):
-    if comp_df is None:
-        return Div(text='')
-
-    pd.set_option('display.max_colwidth', -1)
-
-    FONT_COLOR_PALETTE = palettes.Greys256
-
-    soup = BeautifulSoup(comp_df.to_html(), 'html5lib')
-    for td in soup.find_all('td', text=re.compile('{}.*'.format(SIM_MARKER))):
-        sim = float(td.text.replace(SIM_MARKER, ''))
-        bg_color = palette[int(sim*(len(palette) - 1))]
-        color = FONT_COLOR_PALETTE[int((1 - sim) * (len(FONT_COLOR_PALETTE) - 1))]
-        td.attrs['style'] = 'background-color: {}; color: {}'.format(bg_color, color)
-        td.string = '{:0.3f}'.format(sim)
-
-    comp_div = Div(text=str(soup), width=width)
-
-    return comp_div
-
-
-def get_sim_heatmap(df, sim, sample_size=30, cs_only=False, **kwargs):
-    sdf = df.sample(sample_size)
-    sim_matrix = sim.get_similarity_matrix(sdf, cs_only=cs_only)
-
-    hm_df = get_heatmap_df(sdf, sim_matrix)
-
-    title = 'Similarity scores heatmap'
-    if cs_only:
-        title += ' (CS only)'
-
-    hm = get_heatmap(
-        hm_df,
-        'uuid_x',
-        'uuid_y',
-        title=title,
-        **kwargs
-    )
-
-    return hm
-
-
-def get_sim_hist(df, sim, sample_size=500, cs_only=False, bins=15, **kwargs):
-    if sample_size is not None:
-        sdf = df.sample(sample_size)
-    sim_matrix = sim.get_similarity_matrix(sdf, cs_only=cs_only)
-
-    title = 'Similarity scores prob. density'
-    if cs_only:
-        title += ' (CS only)'
-
-    return get_hist(
-        sim_matrix.flatten(),
-        bins=bins,
-        title=title,
-        plot_height=300,
-        **kwargs
-    )

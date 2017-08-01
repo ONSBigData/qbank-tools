@@ -1,6 +1,7 @@
 import logging
 import helpers.log_helper as lg
 import siman.qsim as qsim
+import pandas as pd
 
 
 class BaseSim:
@@ -12,8 +13,17 @@ class BaseSim:
 
         self._cols = cols
 
+    def _get_text_sim(self, x, y):
+        raise NotImplementedError
+
     def _get_similarity_matrix(self, df):
         raise NotImplementedError
+
+    def get_text_sim(self, x, y):
+        if pd.isnull(x) or pd.isnull(y) or x == '' or y == '':
+            return None
+
+        self._get_text_sim(x, y)
 
     def get_similarity_matrix(self, df, cs_only=False):
         sim_matrix = self._get_similarity_matrix(df)

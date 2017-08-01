@@ -17,3 +17,4 @@ nltk
 bokeh
 flask
 gensim
+pathos
