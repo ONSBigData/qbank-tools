@@ -1,19 +1,10 @@
 import bokeh.palettes as palettes
 from bokeh.models import \
     ColumnDataSource, \
-    HoverTool, \
     Div, \
-    Range1d, \
-    FuncTickFormatter, \
-    LinearColorMapper, \
-    ColorBar, \
-    BasicTicker, \
-    PrintfTickFormatter, \
     CustomJS
 from bokeh.models.widgets import DataTable, TableColumn, HTMLTemplateFormatter
-from bokeh.plotting import figure
-from bs4 import BeautifulSoup
-
+import siman.simeval as simeval
 import helpers.log_helper as lg
 import helpers.bokeh_helper as bh
 from dashboard.model import Model
@@ -111,7 +102,7 @@ class Presentation:
     @classmethod
     def get_comp_div(cls, payload):
         comp_df = Model.get_comp_df(payload)
-        comp_div = bh.get_comp_div(comp_df, palette=PALETTE, width=PAGE_WIDTH)
+        comp_div = simeval.get_comp_div(comp_df, palette=PALETTE, width=PAGE_WIDTH)
 
         return comp_div
 

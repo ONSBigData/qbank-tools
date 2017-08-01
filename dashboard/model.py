@@ -1,19 +1,20 @@
 from os.path import dirname, join
 import helpers.bokeh_helper as bh
-import siman.qsim as qsim
+import siman.simeval as simeval
 from dashboard.settings import *
 from helpers.common import *
 from helpers.cache import Cache
+from siman.sims.tfidf_cos import TfidfCosSim
+from siman.sims.exact import ExactSim
 
 class Model:
+    sim = TfidfCosSim()
     base_df = None
     cache = Cache()
 
     @classmethod
     def _compute_sim_matrix(cls, df, cs_only):
-        # from siman.sims.avg_wv import AvgWvSim
-        from siman.sims.tfidf_cos import TfidfCosSim
-        return TfidfCosSim().get_similarity_matrix(df, cs_only)
+        return cls.sim.get_similarity_matrix(df, cs_only)
 
     # --- caching -----------------------------------------------------------
 
@@ -56,7 +57,8 @@ class Model:
     @classmethod
     def _get_res_sim_matrix(cls, payload):
         res_df = cls.get_res_df(payload)
-        return cls._compute_sim_matrix(res_df)
+        cs_only = payload[CS_ONLY] if CS_ONLY in payload else False
+        return cls._compute_sim_matrix(res_df, cs_only)
 
     @classmethod
     def _get_res_df(cls, payload):
@@ -137,10 +139,11 @@ class Model:
         qx['uuid'] = qx.name
         qy['uuid'] = qy.name
 
-        col2doc_sim = [(c, qsim.get_cos_doc_sim) for c in ANALYSED_COLS + ['survey_name']]
-        col2doc_sim.extend([(c, qsim.get_exact_doc_sim) for c in ['survey_id', 'form_type', 'tr_code']])
+        col2doc_sim = [(c, cls.sim.get_text_sim) for c in ANALYSED_COLS + ['survey_name']]
+        exact_sim = ExactSim()
+        col2doc_sim.extend([(c, exact_sim.get_text_sim) for c in ['survey_id', 'form_type', 'tr_code']])
 
-        df = bh.create_comp_df(qx, qy, DISPLAYED_COLS, dict(col2doc_sim))
+        df = simeval.create_comp_df(qx, qy, DISPLAYED_COLS, dict(col2doc_sim), inc_sim_marker=True)
 
         return df
 

@@ -30,5 +30,5 @@ class TfidfCosSim(ExactSim):
 
 if __name__ == '__main__':
     df = load_clean_df().iloc[:5]
-    sm = TfidfCosSim(debug=True)._get_similarity_matrix(df)
+    sm = TfidfCosSim(debug=True).get_similarity_matrix(df)
     print(sm)
