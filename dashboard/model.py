@@ -1,14 +1,16 @@
 from os.path import dirname, join
 
 import numpy as np
+import helpers.bokeh_helper as bh
 
 from dashboard.settings import *
 from helpers.common import *
-from siman.simple_cos_sim import SimpleCosSim
+from siman.simple_cos import SimpleCosSim
 import siman.qsim as qsim
 
 import hashlib
 import queue
+
 
 
 class Cache:
@@ -46,7 +48,8 @@ class Model:
 
     @classmethod
     def _compute_sim_matrix(cls, df):
-        return SimpleCosSim(df, ANALYSED_COLS).get_similarity_matrix()
+        from siman.avg_wv import AvgWvSim
+        return AvgWvSim(df).get_similarity_matrix()
 
     # --- caching -----------------------------------------------------------
 
@@ -134,23 +137,12 @@ class Model:
 
         sim_matrix = cls._compute_sim_matrix(df)
 
-        vdf = pd.DataFrame(sim_matrix.flatten(), columns=['similarity'])
-
-        xdf = df.reset_index()
-        xdf = pd.concat([xdf] * len(df))
-        xdf.index = range(len(xdf))
-
-        ydf = df.reset_index()
-        ydf = ydf.loc[np.repeat(ydf.index.values, len(df))]
-        ydf.index = range(len(ydf))
-
-        df = pd.concat([xdf, ydf, vdf], axis=1, ignore_index=True)
-        df.columns = [c + '_x' for c in xdf.columns] + [c + '_y' for c in xdf.columns] + ['similarity']
+        hm_df = bh.get_heatmap_df(df, sim_matrix, 'similarity')
 
         if cs_only:
-            df['similarity'] = df.apply(lambda row: row['similarity'] if row['survey_id_x'] != row['survey_id_y'] else 0, axis=1)
+            hm_df['similarity'] = hm_df.apply(lambda row: row['similarity'] if row['survey_id_x'] != row['survey_id_y'] else 0, axis=1)
 
-        return df
+        return hm_df
 
     @classmethod
     def _get_comp_df(cls, payload):
@@ -181,27 +173,13 @@ class Model:
 
     @classmethod
     def _create_comp_df(cls, qx, qy):
-        def _create_series(q):
-            if q is None:
-                q = pd.Series()
+        qx['uuid'] = qx.name
+        qy['uuid'] = qy.name
 
-            q['uuid'] = q.name
+        col2doc_sim = [(c, qsim.get_cos_doc_sim) for c in ANALYSED_COLS + ['survey_name']]
+        col2doc_sim.extend([(c, qsim.get_exact_doc_sim) for c in ['survey_id', 'form_type', 'tr_code']])
 
-            q = pd.Series([q[c] if c in q else 'none' for c in DISPLAYED_COLS], index=DISPLAYED_COLS)
-
-            return q
-
-        qx = _create_series(qx)
-        qy = _create_series(qy)
-
-        sim = pd.Series(['']*len(qx), index=qx.index)
-        for i in ANALYSED_COLS + ['survey_name']:
-            sim.loc[i] = qsim.get_cos_doc_sim(str(qx.loc[i]), str(qy.loc[i]))
-        for i in ['survey_id', 'form_type', 'tr_code']:
-            sim.loc[i] = qsim.get_exact_doc_sim(str(qx.loc[i]), str(qy.loc[i]))
-
-        df = pd.concat([qx, qy, sim], axis=1, ignore_index=True)
-        df.columns = COMP_TBL_FIELDS
+        df = bh.create_comp_df(qx, qy, DISPLAYED_COLS, dict(col2doc_sim))
 
         return df
 

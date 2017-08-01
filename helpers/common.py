@@ -3,6 +3,7 @@ import pandas as pd
 import collections
 import helpers.general_helper as gh
 import re
+import pickle
 
 DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../../data'
 CHECKPT_DIR = DATA_DIR + '/checkpoints'
@@ -14,6 +15,20 @@ SCRAPE_STATUS_CSV_FNAME = 'scraped-status.csv'
 CLEAN_FULL_FPATH = DATA_DIR + '/clean-full.csv'
 CLEAN_LIGHT_FPATH = DATA_DIR + '/clean-light.csv'
 PROBLEM_REPORTS_DIR = DATA_DIR + '/problem-reports'
+
+
+def get_pickle_obj_fpath(name):
+    return '{}/{}.pkl'.format(CHECKPT_DIR, name)
+
+
+def save_obj(obj, name):
+    with open(get_pickle_obj_fpath(name), 'wb') as f:
+        pickle.dump(obj, f, pickle.HIGHEST_PROTOCOL)
+
+
+def load_obj(name):
+    with open(get_pickle_obj_fpath(name), 'rb') as f:
+        return pickle.load(f)
 
 
 def get_survey_name_map():

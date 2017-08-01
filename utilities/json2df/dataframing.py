@@ -5,6 +5,7 @@ import io
 
 MINOR_SEP = ' | '
 MAJOR_SEP = ' ||| '
+NOTES_SEP = '*'*10
 
 
 def path2str(path):
@@ -18,7 +19,7 @@ def get_note_text(note_id, note_nodes_dict):
     note_attrs = note_nodes_dict[note_id]
 
     stream = io.StringIO()
-    stream.write('NOTE {} {}\n'.format(note_id, '*'*10))
+    stream.write('NOTE {} {}\n'.format(note_id, NOTES_SEP))
 
     for attr in note_attrs:
         path = [p.lower() for p in attr[PATH] if not isinstance(p, int)]  # filter out array indices from path - they're not relevant

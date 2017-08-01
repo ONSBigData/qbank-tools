@@ -13,6 +13,7 @@ import helpers.log_helper as lg
 import siman.qsim as qsim
 from helpers.common import *
 
+
 class SimpleCosSim:
     def __init__(self, df, cols=None, debug=False):
         self._debug = debug
