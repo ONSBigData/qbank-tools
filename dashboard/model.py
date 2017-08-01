@@ -1,15 +1,11 @@
-from os.path import dirname, join
-
-import numpy as np
-import helpers.bokeh_helper as bh
-
-from dashboard.settings import *
-from helpers.common import *
-from siman.simple_cos import SimpleCosSim
-import siman.qsim as qsim
-
 import hashlib
 import queue
+from os.path import dirname, join
+
+import helpers.bokeh_helper as bh
+import siman.qsim as qsim
+from dashboard.settings import *
+from helpers.common import *
 
 
 
@@ -48,7 +44,7 @@ class Model:
 
     @classmethod
     def _compute_sim_matrix(cls, df):
-        from siman.avg_wv import AvgWvSim
+        from siman.sims.avg_wv import AvgWvSim
         return AvgWvSim(df).get_similarity_matrix()
 
     # --- caching -----------------------------------------------------------

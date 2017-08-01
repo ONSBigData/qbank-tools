@@ -1,8 +1,4 @@
-from utilities.dl_nltk import dl_nltk
-dl_nltk()
-
 from nltk.corpus import stopwords
-
 from sklearn.feature_extraction.text import TfidfVectorizer
 from pyjarowinkler import distance as pyjarodist
 import pandas as pd
@@ -13,7 +9,6 @@ from gensim.models import Phrases
 
 
 def get_stop_words():
-    dl_nltk()
     sws = set(stopwords.words('english'))
     for x in ['survey', 'section', 'business', 'period', 'total', 'service', 'services']:
         sws.add(x)

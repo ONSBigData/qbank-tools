@@ -1,46 +1,26 @@
-import logging
-import re
-
-import nltk
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-import helpers.log_helper as lg
 import siman.qsim as qsim
 from helpers.common import *
-
-import utilities.json2df.dataframing as dataframing
-import nltk
-import re
-from nltk.corpus import stopwords
-from gensim.models import word2vec
-from gensim.models import Phrases
+from siman.sims.base_sim import BaseSim
 
 
-# COLS = ['all_text', 'all_context', 'all_inclusions', 'all_exclusions', 'notes']
-COLS = ['suff_qtext', 'type']
+class AvgWvSim(BaseSim):
+    COLS = ['suff_qtext', 'type']
 
+    def __init__(self, cols=COLS, debug=False, wv_dict_name='wv.dict'):
+        super().__init__(cols, debug)
 
-class AvgWvSim:
-    def __init__(self, df, wv_dict_name='wv.dict', cols=COLS, debug=False):
-        self._debug = debug
-        self._lg = lg.get_logger(str(self.__class__.__name__))
-        if not debug:
-            self._lg.setLevel(logging.WARNING)
-
-        self._df = df
-        self._cols = cols
         self._wv_dict = load_obj(wv_dict_name)
 
-
-    def preprocess(self):
+    def preprocess(self, df):
         items = []
 
         sws = qsim.get_stop_words()
 
-        cols = self._cols if self._cols is not None else list(self._df.columns)
-        for _, row in self._df.iterrows():
+        cols = self._cols if self._cols is not None else list(df.columns)
+        for _, row in df.iterrows():
             text = ' '.join(str(x) for x in row[cols] if pd.notnull(x))
             sents = qsim.text2sents(text)
             words = [w for s in sents for w in qsim.sent2words(s)]
@@ -53,9 +33,8 @@ class AvgWvSim:
 
         return np.array(items)
 
-
-    def get_similarity_matrix(self):
-        items = self.preprocess()
+    def get_similarity_matrix(self, df):
+        items = self.preprocess(df)
 
         # N = # of items
         # V = # of vocab words
@@ -87,5 +66,5 @@ class AvgWvSim:
 
 if __name__ == '__main__':
     df = load_clean_df().iloc[:5]
-    sm = AvgWvSim(df, debug=True).get_similarity_matrix()
+    sm = AvgWvSim(debug=True).get_similarity_matrix(df)
     print(sm)

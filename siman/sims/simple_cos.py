@@ -1,37 +1,22 @@
-from utilities.dl_nltk import dl_nltk
-dl_nltk()
-
-import logging
-import re
-
 import nltk
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-
-import helpers.log_helper as lg
 import siman.qsim as qsim
 from helpers.common import *
+from siman.sims.base_sim import BaseSim
 
 
-class SimpleCosSim:
-    def __init__(self, df, cols=None, debug=False):
-        self._debug = debug
-        self._lg = lg.get_logger(str(self.__class__.__name__))
-        if not debug:
-            self._lg.setLevel(logging.WARNING)
+class SimpleCosSim(BaseSim):
+    def __init__(self, cols=None, debug=False):
+        super().__init__(cols, debug)
 
-        self._df = df
-        self._cols = cols
-
-    def preprocess(self):
-        dl_nltk()
-
+    def preprocess(self, df):
         self._lg.debug('Processing...')
 
         items = []
-        cols = self._cols if self._cols is not None else list(self._df.columns)
-        for _, row in self._df.iterrows():
+        cols = self._cols if self._cols is not None else list(df.columns)
+        for _, row in df.iterrows():
             item = ' ||||| '.join(str(x) for x in row[cols])
             items.append(item)
         array = np.array(items)
@@ -50,9 +35,6 @@ class SimpleCosSim:
 
             words = [w for w in words if w not in sws]
 
-            # one letter words
-            # words = [w for w in words if len(w) > 1]
-
             words = [stemmer.stem(t) for t in words]
 
             proc_item = ' '.join(words)
@@ -63,8 +45,8 @@ class SimpleCosSim:
 
         return np.array(proc_items)
 
-    def get_similarity_matrix(self):
-        proc_array = self.preprocess()
+    def get_similarity_matrix(self, df):
+        proc_array = self.preprocess(df)
 
         tfidf_vectorizer = TfidfVectorizer(lowercase=True)
         tfidf_matrix = tfidf_vectorizer.fit_transform(proc_array)
@@ -74,5 +56,5 @@ class SimpleCosSim:
 
 if __name__ == '__main__':
     df = load_clean_df().iloc[:5]
-    sm = SimpleCosSim(df, debug=True).get_similarity_matrix(df['text'])
+    sm = SimpleCosSim(debug=True).get_similarity_matrix(df)
     print(sm)
