@@ -6,6 +6,7 @@ import re
 import utilities.json2df.dataframing as dataframing
 import nltk
 from gensim.models import Phrases
+import numpy as np
 
 
 def get_stop_words():
@@ -84,3 +85,13 @@ def get_jaro_doc_sim(x, y):
         return 0
 
     return pyjarodist.get_jaro_distance(x, y, winkler=True, scaling=0.1)
+
+
+def get_cross_survey_matrix(df):
+    sur_ids = np.array(df['survey_id'])
+    n = len(df)
+
+    S = np.repeat(sur_ids, n).reshape(n, n)
+    cross_survey_matrix = ~(S == S.T)
+
+    return cross_survey_matrix

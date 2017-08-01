@@ -1,51 +1,19 @@
-import hashlib
-import queue
 from os.path import dirname, join
-
 import helpers.bokeh_helper as bh
 import siman.qsim as qsim
 from dashboard.settings import *
 from helpers.common import *
-
-
-
-class Cache:
-    MAX_ITEMS = 1000
-
-    def __init__(self):
-        self.cache = {}
-        self.keys = queue.Queue()
-
-    def _hash_key(self, key):
-        return hashlib.md5(key.encode()).hexdigest()
-
-    def store(self, key, item):
-        key = self._hash_key(key)
-
-        self.keys.put(key)
-        if self.keys.qsize() > self.MAX_ITEMS:
-            key_to_rem = self.keys.get()
-            del self.cache[key_to_rem]
-
-        self.cache[key] = item
-
-    def retrieve(self, key):
-        key = self._hash_key(key)
-
-        if key in self.cache:
-            return self.cache[key]
-
-        return None
-
+from helpers.cache import Cache
 
 class Model:
     base_df = None
     cache = Cache()
 
     @classmethod
-    def _compute_sim_matrix(cls, df):
-        from siman.sims.avg_wv import AvgWvSim
-        return AvgWvSim(df).get_similarity_matrix()
+    def _compute_sim_matrix(cls, df, cs_only):
+        # from siman.sims.avg_wv import AvgWvSim
+        from siman.sims.tfidf_cos import TfidfCosSim
+        return TfidfCosSim().get_similarity_matrix(df, cs_only)
 
     # --- caching -----------------------------------------------------------
 
@@ -131,12 +99,9 @@ class Model:
         if len(df) > MAX_HEATMAP_ITEMS:
             df = df.sample(MAX_HEATMAP_ITEMS)
 
-        sim_matrix = cls._compute_sim_matrix(df)
+        sim_matrix = cls._compute_sim_matrix(df, cs_only)
 
         hm_df = bh.get_heatmap_df(df, sim_matrix, 'similarity')
-
-        if cs_only:
-            hm_df['similarity'] = hm_df.apply(lambda row: row['similarity'] if row['survey_id_x'] != row['survey_id_y'] else 0, axis=1)
 
         return hm_df
 

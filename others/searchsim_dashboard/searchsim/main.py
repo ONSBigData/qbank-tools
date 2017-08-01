@@ -121,7 +121,7 @@ class Data:
             cls.sim_matrix = None
             return
 
-        cls.sim_matrix = SimpleCosSim(cls.res_df, ANALYSED_COLS).get_similarity_matrix()
+        cls.sim_matrix = SimpleCosSim(cls.res_df, ANALYSED_COLS)._get_similarity_matrix()
 
     @classmethod
     def init(cls):

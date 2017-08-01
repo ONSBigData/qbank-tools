@@ -7,7 +7,7 @@ from helpers.common import *
 from siman.sims.base_sim import BaseSim
 
 
-class SimpleCosSim(BaseSim):
+class TfidfCosSim(BaseSim):
     def __init__(self, cols=None, debug=False):
         super().__init__(cols, debug)
 
@@ -45,7 +45,7 @@ class SimpleCosSim(BaseSim):
 
         return np.array(proc_items)
 
-    def get_similarity_matrix(self, df):
+    def _get_similarity_matrix(self, df):
         proc_array = self.preprocess(df)
 
         tfidf_vectorizer = TfidfVectorizer(lowercase=True)
@@ -56,5 +56,5 @@ class SimpleCosSim(BaseSim):
 
 if __name__ == '__main__':
     df = load_clean_df().iloc[:5]
-    sm = SimpleCosSim(debug=True).get_similarity_matrix(df)
+    sm = TfidfCosSim(debug=True)._get_similarity_matrix(df)
     print(sm)

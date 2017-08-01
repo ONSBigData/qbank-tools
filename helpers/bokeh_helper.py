@@ -10,8 +10,9 @@ from bokeh.models import \
     ColorBar, \
     BasicTicker, \
     PrintfTickFormatter, \
-    CustomJS
-from bokeh.models.widgets import DataTable, TableColumn, HTMLTemplateFormatter
+    DataRange1d, \
+    Plot, \
+    Quad
 from bokeh.plotting import figure
 import numpy as np
 import siman.qsim as qsim
@@ -20,6 +21,11 @@ import re
 
 DEF_PALETTE = palettes.Magma256
 DEF_WIDTH = 600
+TOOLTIP_BASIC = 'basic'
+TOOLTIP_ALL = 'all'
+
+DEF_TOOLS = ['save', 'reset', 'box_zoom']
+DEF_TOOL_LOC = 'right'
 
 # ---------------------------------------------------------------------
 # --- General
@@ -52,15 +58,22 @@ def get_bar_chart(
         title=None,
         js_on_event=None):
 
-    if tooltip_fields is None:
-        tooltip_fields = get_tooltip_fields(df.columns)
+    if tooltip_fields is not None:
+        if _is_non_empty_list_of_strings(tooltip_fields):  # columns
+            tooltip_fields = get_tooltip_fields(tooltip_fields)
 
-    hover = HoverTool(tooltips=format_tooltip_fields(tooltip_fields))
+        if tooltip_fields is TOOLTIP_ALL:
+            tooltip_fields = get_tooltip_fields(df.columns)
+
+        if tooltip_fields is TOOLTIP_BASIC:
+            tooltip_fields = get_tooltip_fields([x_field, y_field])
+
+        hover = HoverTool(tooltips=format_tooltip_fields(tooltip_fields))
 
     bc = figure(
         plot_width=width,
-        toolbar_location=None,
-        tools=[hover],
+        toolbar_location=DEF_TOOL_LOC,
+        tools=DEF_TOOLS + [hover],
         title=title,
         y_range=Range1d(0, 1)
     )
@@ -93,6 +106,50 @@ def get_bar_chart(
     return bc
 
 
+def get_hist(
+        values,
+        bins=15,
+        width=DEF_WIDTH,
+        title=None,
+        js_on_event=None,
+        **kwargs):
+
+    hist_probs, edges = np.histogram(values, density=True, bins=bins)
+    hist_counts, edges = np.histogram(values, density=False, bins=bins)
+
+    source = ColumnDataSource(dict(
+            left=edges[:-1],
+            top=hist_probs,
+            right=edges[1:],
+            bottom=[0]*len(hist_probs),
+            count=hist_counts
+        )
+    )
+
+    hover = HoverTool(tooltips=[('Count', '@count')])
+
+    xdr = DataRange1d()
+    ydr = DataRange1d()
+
+    hist = figure(
+        plot_width=width,
+        toolbar_location=DEF_TOOL_LOC,
+        tools=DEF_TOOLS + [hover],
+        title=title,
+        x_range=xdr,
+        y_range=ydr,
+        **kwargs
+    )
+
+    bars = Quad(top='top', bottom='bottom', left='left', right='right', fill_color="#036564", line_color="#033649")
+    hist.add_glyph(source, bars)
+
+    if js_on_event is not None:
+        hist.js_on_event(js_on_event[0], js_on_event[1])
+
+    return hist
+
+
 def get_heatmap_df(base_df, matrix, value_name='value'):
     vdf = pd.DataFrame(matrix.flatten(), columns=[value_name])
 
@@ -110,24 +167,27 @@ def get_heatmap_df(base_df, matrix, value_name='value'):
     return hm_df
 
 
+def _is_non_empty_list_of_strings(arg):
+    return isinstance(arg, list) and len(arg) > 0 and type(arg[0]) == type('')
+
+
 def get_heatmap(
         hm_df,
         x_field,
         y_field,
-        value_field,
+        value_field='value',
         palette=DEF_PALETTE,
         title=None,
         width=DEF_WIDTH,
         tooltip_fields=None,
         js_on_event=None):
 
-    tools = "hover"
     x_range = list(hm_df[x_field].unique())
     y_range = list(hm_df[y_field].unique())
 
     hm = figure(
-        tools=tools,
-        toolbar_location=None,
+        tools=DEF_TOOLS + ['hover'],
+        toolbar_location='above',
         x_range=x_range,
         y_range=y_range,
         plot_width=width,
@@ -160,12 +220,21 @@ def get_heatmap(
     )
     hm.add_layout(color_bar, 'right')
 
-    if tooltip_fields is None:
-        cols = list(hm_df.columns)
-        cols.sort(key=lambda x: ([value_field, x_field, y_field] + cols).index(x))
-        tooltip_fields = get_tooltip_fields(cols)
+    if tooltip_fields is not None:
+        if _is_non_empty_list_of_strings(tooltip_fields):  # columns
+            cols = [c for c in hm_df.columns if any(re.match('{}_(x|y)'.format(x), c) is not None for x in tooltip_fields)]
+            tooltip_fields = get_tooltip_fields(cols)
 
-    hm.select_one(HoverTool).tooltips = format_tooltip_fields(tooltip_fields)
+        if tooltip_fields == TOOLTIP_BASIC:
+            tooltip_fields = get_tooltip_fields([value_field, x_field, y_field])
+
+        if tooltip_fields == TOOLTIP_ALL:
+            cols = list(hm_df.columns)
+            cols_cp = list(cols)
+            cols.sort(key=lambda x: ([value_field, x_field, y_field] + cols_cp).index(x))
+            tooltip_fields = get_tooltip_fields(cols)
+
+        hm.select_one(HoverTool).tooltips = format_tooltip_fields(tooltip_fields)
 
     if js_on_event is not None:
         hm.js_on_event(js_on_event[0], js_on_event[1])
@@ -226,3 +295,42 @@ def get_comp_div(comp_df, palette=DEF_PALETTE, width=DEF_WIDTH):
     comp_div = Div(text=str(soup), width=width)
 
     return comp_div
+
+
+def get_sim_heatmap(df, sim, sample_size=30, cs_only=False, **kwargs):
+    sdf = df.sample(sample_size)
+    sim_matrix = sim.get_similarity_matrix(sdf, cs_only=cs_only)
+
+    hm_df = get_heatmap_df(sdf, sim_matrix)
+
+    title = 'Similarity scores heatmap'
+    if cs_only:
+        title += ' (CS only)'
+
+    hm = get_heatmap(
+        hm_df,
+        'uuid_x',
+        'uuid_y',
+        title=title,
+        **kwargs
+    )
+
+    return hm
+
+
+def get_sim_hist(df, sim, sample_size=500, cs_only=False, bins=15, **kwargs):
+    if sample_size is not None:
+        sdf = df.sample(sample_size)
+    sim_matrix = sim.get_similarity_matrix(sdf, cs_only=cs_only)
+
+    title = 'Similarity scores prob. density'
+    if cs_only:
+        title += ' (CS only)'
+
+    return get_hist(
+        sim_matrix.flatten(),
+        bins=bins,
+        title=title,
+        plot_height=300,
+        **kwargs
+    )

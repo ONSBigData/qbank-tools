@@ -111,26 +111,7 @@ class Presentation:
     @classmethod
     def get_comp_div(cls, payload):
         comp_df = Model.get_comp_df(payload)
-
         comp_div = bh.get_comp_div(comp_df, palette=PALETTE, width=PAGE_WIDTH)
-
-        # if comp_df is None:
-        #     return Div(text='')
-        #
-        # pd.set_option('display.max_colwidth', -1)
-        #
-        # FONT_COLOR_PALETTE = palettes.Greys256
-        #
-        # soup = BeautifulSoup(comp_df.to_html(), 'html5lib')
-        # for tr in soup.find_all('tr')[1:]:
-        #     td = tr.find_all('td')[-1]
-        #     if td.text != '':
-        #         sim = float(td.text)
-        #         bg_color = PALETTE[int(sim*(len(PALETTE) - 1))]
-        #         color = FONT_COLOR_PALETTE[int((1 - sim) * (len(FONT_COLOR_PALETTE) - 1))]
-        #         td.attrs['style'] = 'background-color: {}; color: {}'.format(bg_color, color)
-        #
-        # comp_div = Div(text=str(soup), width=PAGE_WIDTH)
 
         return comp_div
 

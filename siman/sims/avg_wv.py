@@ -33,7 +33,7 @@ class AvgWvSim(BaseSim):
 
         return np.array(items)
 
-    def get_similarity_matrix(self, df):
+    def _get_similarity_matrix(self, df):
         items = self.preprocess(df)
 
         # N = # of items
