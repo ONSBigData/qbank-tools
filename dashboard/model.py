@@ -142,7 +142,7 @@ class Model:
         exact_sim = ExactSim()
         col2doc_sim.extend([(c, exact_sim.get_text_sim) for c in ['survey_id', 'form_type', 'tr_code']])
 
-        df = simeval.create_comp_df(qx, qy, DISPLAYED_COLS, dict(col2doc_sim), inc_sim_marker=True)
+        df = simeval.create_comp_df(qx, qy, DISPLAYED_COLS, dict(col2doc_sim))
 
         return df
 

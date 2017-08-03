@@ -8,6 +8,7 @@ from bokeh.application import Application
 from tornado.ioloop import IOLoop
 
 from helpers.common import *
+from dashboard.settings import *
 import helpers.bokeh_helper as bh
 
 import siman.simeval as simeval
@@ -164,11 +165,12 @@ def run_app(show=True):
 
     bokeh_app = Application(FunctionHandler(modify_doc))
 
-    server = Server({'/': bokeh_app}, io_loop=io_loop, allow_websocket_origin=["*"])
+    server = Server({'/': bokeh_app}, io_loop=io_loop, allow_websocket_origin=["*"], port=SIM_EVAL_PORT, host='*', address='0.0.0.0')
     server.start()
 
+    print('Starting Bokeh application on http://localhost:{}/'.format(SIM_EVAL_PORT))
+
     if show:
-        print('Opening Bokeh application on http://localhost:5006/')
         io_loop.add_callback(server.show, "/")
     io_loop.start()
 

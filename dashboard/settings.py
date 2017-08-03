@@ -15,3 +15,5 @@ SELECTED_HM_X = 'selected_hm_x'
 SELECTED_HM_Y = 'selected_hm_y'
 CS_ONLY = 'cs_only'
 SIM = 'sim'
+
+SIM_EVAL_PORT = 5006
