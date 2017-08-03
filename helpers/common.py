@@ -6,7 +6,7 @@ import re
 import pickle
 
 DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../../data'
-BUNDLED_DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../bundled_data'
+BUNDLED_DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../dashboard/bundled_data'
 CHECKPT_DIR = DATA_DIR + '/checkpoints'
 
 JSON_DIR = DATA_DIR + '/jsons'
