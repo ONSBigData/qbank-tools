@@ -1,8 +1,5 @@
 import bokeh.palettes as palettes
-from bokeh.models import \
-    ColumnDataSource, \
-    Div, \
-    CustomJS
+from bokeh.models import ColumnDataSource, Div, CustomJS
 from bokeh.models.widgets import DataTable, TableColumn, HTMLTemplateFormatter
 import siman.simeval as simeval
 import helpers.log_helper as lg
@@ -11,7 +8,7 @@ from dashboard.model import Model
 from dashboard.settings import *
 from helpers.common import *
 
-PAGE_WIDTH = 1800
+PAGE_WIDTH = 1300
 NARROW_COL_W = 100
 WIDE_COL_W = 600
 COL_WIDTHS = collections.defaultdict(lambda: NARROW_COL_W)
@@ -24,6 +21,7 @@ COL_WIDTHS['uuid'] = 200
 PALETTE = palettes.Magma256
 
 LOG = lg.get_logger('dashboard')
+
 
 class Presentation:
     @classmethod

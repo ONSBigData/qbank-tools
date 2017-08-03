@@ -12,6 +12,7 @@ from bokeh.models import \
     DataRange1d, \
     Quad
 from bokeh.plotting import figure
+from bokeh.embed import components
 import numpy as np
 import re
 
@@ -26,6 +27,12 @@ DEF_TOOL_LOC = 'right'
 # ---------------------------------------------------------------------
 # --- General
 # ---------------------------------------------------------------------
+
+
+def get_code(obj):
+    js, div = components(obj)
+    return js + ' ' + div
+
 
 def format_tooltip_fields(tooltip_fields, css_class=None):
     style = 'style="white-space: pre-wrap; width:250px"' if css_class is None else 'class="{}"'.format(css_class)
@@ -219,6 +226,7 @@ def get_heatmap(
     if tooltip_fields is not None:
         if _is_non_empty_list_of_strings(tooltip_fields):  # columns
             cols = [c for c in hm_df.columns if any(re.match('{}_(x|y)'.format(x), c) is not None for x in tooltip_fields)]
+            cols = [value_field] + cols
             tooltip_fields = get_tooltip_fields(cols)
 
         if tooltip_fields == TOOLTIP_BASIC:

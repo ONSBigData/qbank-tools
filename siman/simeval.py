@@ -97,6 +97,8 @@ def get_sample_comp_df(sim, q_pair, displayed_cols=None, sim_cols=None, inc_sim_
         inc_sim_marker=inc_sim_marker
     )
 
+    comp_df.meta = q_pair
+
     return comp_df
 
 
@@ -116,7 +118,13 @@ def get_comp_div(comp_df, palette=bh.DEF_PALETTE, width=bh.DEF_WIDTH):
         td.attrs['style'] = 'background-color: {}; color: {}'.format(bg_color, color)
         td.string = '{:0.3f}'.format(sim)
 
-    comp_div = Div(text=str(soup), width=width)
+    html = str(soup)
+
+    if hasattr(comp_df, 'meta'):
+        similarity = comp_df.meta['similarity']
+        html = '<h2>Similarity: {:0.3f}</h2>'.format(similarity) + html
+
+    comp_div = Div(text=html, width=width)
 
     return comp_div
 
@@ -175,7 +183,7 @@ def get_sim_heatmap(df, sim, sample_size=30, cs_only=False, **kwargs):
 
     hm_df = bh.get_heatmap_df(sdf, sim_matrix)
 
-    title = 'Similarity scores heatmap'
+    title = '{} scores heatmap'.format(sim.__class__.__name__)
     if cs_only:
         title += ' (CS only)'
 
@@ -199,7 +207,7 @@ def get_sim_hist(df, sim, sample_size=500, cs_only=False, bins=15, **kwargs):
         sdf = sdf.sample(sample_size)
     sim_matrix = sim.get_similarity_matrix(sdf, cs_only=cs_only)
 
-    title = 'Similarity scores prob. density'
+    title = '{} scores prob. density'.format(sim.__class__.__name__)
     if cs_only:
         title += ' (CS only)'
 

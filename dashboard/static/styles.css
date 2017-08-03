@@ -1,5 +1,6 @@
 body {
     padding: 20px;
+    background: #E3E3E3;
 }
 
 .tooltip-parent {
@@ -37,7 +38,6 @@ div.bk-slick-cell {
 }
 
 table.dataframe {
-    width: 1800px;
     text-align: left;
 }
 

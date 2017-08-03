@@ -1,16 +1,27 @@
 from flask import Flask, render_template, request
-from bokeh.embed import components
 
 from dashboard.model import Model
 from dashboard.presentation import Presentation
-
+from dashboard.sim_eval_app import run_app
 from dashboard.settings import *
 
-app = Flask(__name__)
+from bokeh.embed import autoload_server
 
+import atexit
+import threading
+
+import helpers.bokeh_helper as bh
+
+flask_app = Flask(__name__)
 Model.init()
+bokeh_thread = None
 
-@app.after_request
+@atexit.register
+def kill_server():
+    bokeh_thread.stop()
+
+
+@flask_app.after_request
 def add_header(r):  #this is just to prevent caching of JS code
     r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
     r.headers["Pragma"] = "no-cache"
@@ -19,7 +30,10 @@ def add_header(r):  #this is just to prevent caching of JS code
     return r
 
 
-@app.route('/component')
+# --- flask routes -----------------------------------------------------------
+
+
+@flask_app.route('/component')
 def nresults_div():
     id = request.args.get('id')
     payload = request.args.to_dict()
@@ -44,19 +58,34 @@ def nresults_div():
     if id == 'comp-div':
         comp = Presentation.get_comp_div(payload)
 
-    def get_code(obj):
-        script, div = components(obj)
-
-        return script + ' ' + div
-
-    return get_code(comp)
+    return bh.get_code(comp)
 
 
-@app.route('/')
+@flask_app.route('/qcompare')
+def qcompare():
+    payload = request.args.to_dict()
+
+    comp_div = Presentation.get_comp_div(payload)
+
+    return render_template('frame.html', content=bh.get_code(comp_div))
+
+
+@flask_app.route('/simeval')
+def simeval():
+    script = autoload_server(model=None, url="http://localhost:5006/")
+    return render_template('frame.html', content=script)
+
+
+@flask_app.route('/')
+@flask_app.route('/qexplore')
 def index():
-    return render_template("index.html")
-
+    html = render_template('qexplore.html')
+    return render_template('frame.html', content=html)
 
 if __name__ == '__main__':
-    app.run(port=5000)  # With debug=True, Flask server will auto-reload when there are code changes
+    bokeh_thread = threading.Thread(target=run_app, kwargs={'show': False})
+    bokeh_thread.start()
+
+    print('Opening Flask application on http://localhost:5000/')
+    flask_app.run(port=5000)  # With debug=True, Flask server will auto-reload when there are code changes
 

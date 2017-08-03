@@ -23,6 +23,15 @@ function update_plot(id) {
     });
 }
 
+function open_qcomparison(uuid_x, uuid_y) {
+    params = {};
+    params[COMPARED_BASE] = COMPARED_BASE_HM;
+    params[SELECTED_HM_X] = uuid_x;
+    params[SELECTED_HM_Y] = uuid_y;
+
+    window.open("/qcompare?" + jQuery.param(params));
+}
+
 function search_for_kw(kw) {
     _data[KW] = kw
     delete _data[SELECTED_RES_INDEX]

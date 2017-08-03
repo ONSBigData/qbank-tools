@@ -124,13 +124,11 @@ class Model:
             return cls._create_comp_df(qx, qy)
 
         if payload[COMPARED_BASE] == COMPARED_BASE_HM:
-            res_df = cls.get_res_df(payload)
-
             uuid_x = payload[SELECTED_HM_X]
             uuid_y = payload[SELECTED_HM_Y]
 
-            qx = res_df.loc[uuid_x]
-            qy = res_df.loc[uuid_y]
+            qx = cls.base_df.loc[uuid_x]
+            qy = cls.base_df.loc[uuid_y]
 
             return cls._create_comp_df(qx, qy)
 
