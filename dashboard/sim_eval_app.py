@@ -18,7 +18,6 @@ import siman.all_sims as all_sims
 
 # --- constants -----------------------------------------------------------
 
-PAGE_WIDTH = 1500
 WIDGET_BOX_WIDTH = 250
 CHARTS_WIDTH = PAGE_WIDTH - WIDGET_BOX_WIDTH
 DIV_WIDTH = CHARTS_WIDTH // 2 - 20
@@ -51,6 +50,12 @@ INIT_HM_SAMPLE_SIZE = 30
 INIT_HIST_SAMPLE_SIZE = 100
 INIT_SIM = TfidfCosSim
 INIT_COLS = ['suff_qtext', 'type']
+INIT_SPECTRUM_START = 0
+INIT_SPECTRUM_END = 1
+INIT_SPECTRUM_BUCKETS = 5
+INIT_QUESTIONS_PER_BUCKET = 2
+INIT_SPECTRUM_SAMPLE_SIZE = 250
+
 
 
 class SimEvalApp:
@@ -62,13 +67,20 @@ class SimEvalApp:
         sim_class = all_sims.get_sim_class_by_name(self.sim_ctrl.value)
         self.sim = sim_class(self.cols)
 
+        self.spectrum_start = self.spectrum_start_ctrl.value
+        self.spectrum_end = self.spectrum_end_ctrl.value
+        self.spectrum_buckets = self.spectrum_buckets_ctrl.value
+        self.spectrum_bucket_size = self.spectrum_bucket_size_ctrl.value
+        self.spectrum_cs_only = 0 in self.spectrum_cs_only_ctrl.active
+        self.spectrum_sample = self.spectrum_spectrum_sample_size_ctrl.value
+
         # --- Heatmaps -----------------------------------------------------------
 
         def create_hm(cs_only):
             return simeval.get_sim_heatmap(
                 self.df,
                 self.sim,
-                tooltip_fields=self.cols + ['survey_name'],
+                tooltip_fields=self.cols + ['survey_name', 'uuid'],
                 cs_only=cs_only,
                 sample_size=self.hm_sample_size,
                 width=DIV_WIDTH,
@@ -94,7 +106,18 @@ class SimEvalApp:
 
         # --- Comp divs -----------------------------------------------------------
 
-        comp_divs = simeval.get_comp_divs(self.df, self.sim, sim_cols=self.cols)
+        comp_divs = simeval.get_comp_divs(
+            self.df,
+            self.sim,
+            sim_cols=self.cols,
+            width=CHARTS_WIDTH,
+            start=self.spectrum_start,
+            end=self.spectrum_end,
+            buckets=self.spectrum_buckets,
+            bucket_size=self.spectrum_bucket_size,
+            cs_only=self.spectrum_cs_only,
+            sample=self.spectrum_sample
+        )
         texts = [comp_div.text for comp_div in comp_divs]
         self.comp_div.text = '<br>'.join(texts)
 
@@ -110,7 +133,7 @@ class SimEvalApp:
         # divs holding the charts
         self.hm_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
         self.hist_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
-        self.comp_div = Div(text='', width=PAGE_WIDTH)
+        self.comp_div = Div(text='', width=CHARTS_WIDTH)
 
         # controls
         self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=INIT_HM_SAMPLE_SIZE, start=10, end=100, step=5)
@@ -118,6 +141,13 @@ class SimEvalApp:
         self.sim_ctrl = Select(title="Similarity metric", options=[all_sims.get_sim_name(s) for s in all_sims.SIMS], value=all_sims.get_sim_name(INIT_SIM))
         self.analysed_cols_ctrl = CheckboxGroup(labels=COL_OPTIONS, active=[COL_OPTIONS.index(c) for c in INIT_COLS])
         self.sim_params = CheckboxGroup(labels=SIM_PARAMS, active=list(range(len(SIM_PARAMS))))
+
+        self.spectrum_start_ctrl = Slider(title="Similarity from", value=INIT_SPECTRUM_START, start=0, end=1, step=0.01)
+        self.spectrum_end_ctrl = Slider(title="Similarity to", value=INIT_SPECTRUM_END, start=0, end=1, step=0.01)
+        self.spectrum_buckets_ctrl = Slider(title="Number of buckets", value=INIT_SPECTRUM_BUCKETS, start=1, end=20, step=1)
+        self.spectrum_bucket_size_ctrl = Slider(title="Questions per bucket", value=INIT_QUESTIONS_PER_BUCKET, start=1, end=10, step=1)
+        self.spectrum_cs_only_ctrl = CheckboxGroup(labels=['Cross survey only'], active=[])
+        self.spectrum_spectrum_sample_size_ctrl = Slider(title="Sample size", value=INIT_SPECTRUM_SAMPLE_SIZE, start=50, end=5000, step=50)
 
         self.submit_btn = Button(label="Submit", button_type="success")
         self.submit_btn.on_click(self.update)
@@ -129,24 +159,51 @@ class SimEvalApp:
 
         inputs = widgetbox(
             [
-                self.hm_sample_size_ctrl,
-                self.sim_ctrl,
-                Div(text='Analysed columns:'), self.analysed_cols_ctrl,
-                Div(text='Similarity method params:<br><i>(Not all work for all methods)</i>'), self.sim_params,
                 self.submit_btn,
+                Div(text='<hr>'),
+
+                Div(text='<b>Similarity method</b>:<br><i>(Not all params work for all methods)</i>'),
+                self.sim_ctrl,
+                self.sim_params,
+                Div(text='Analysed columns:'),
+                self.analysed_cols_ctrl,
+                Div(text='<hr>'),
+
+                Div(text='<b>Heatmap</b>:'),
+                self.hm_sample_size_ctrl,
+                Div(text='<hr>'),
+
+                Div(text='<b>Histogram</b>:'),
+                self.hist_sample_size_ctrl,
+                Div(text='<hr>'),
+
+                Div(text='<b>Example questions pairs</b>:'),
+                self.spectrum_start_ctrl,
+                self.spectrum_end_ctrl,
+                self.spectrum_buckets_ctrl,
+                self.spectrum_bucket_size_ctrl,
+                self.spectrum_cs_only_ctrl,
+                self.spectrum_spectrum_sample_size_ctrl,
+                Div(text='<hr>'),
+
 
             ],
             sizing_mode=sizing_mode, responsive=True, width=WIDGET_BOX_WIDTH
         )
 
         charts = layout([
+            [Div(text='<h2>Heatmap of similarities on sample</h2>', width=CHARTS_WIDTH)],
             self.hm_divs,
-            self.hist_divs
+
+            [Div(text='<h2>Histogram of similarity scores</h2>', width=CHARTS_WIDTH)],
+            self.hist_divs,
+
+            [Div(text='<h2>Example question pairs</h2>', width=CHARTS_WIDTH)],
+            [self.comp_div],
         ])
 
         l = layout([
             [inputs, charts],
-            [self.comp_div],
             [Div(height=200)]  # some empty space
         ], sizing_mode=sizing_mode)
 

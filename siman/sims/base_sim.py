@@ -23,7 +23,11 @@ class BaseSim:
         if pd.isnull(x) or pd.isnull(y) or x == '' or y == '':
             return None
 
-        return self._get_text_sim(x, y)
+        try:
+            return self._get_text_sim(x, y)
+        except:
+            return None
+
 
     def get_similarity_matrix(self, df, cs_only=False):
         sim_matrix = self._get_similarity_matrix(df)

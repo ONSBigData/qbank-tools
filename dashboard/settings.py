@@ -5,6 +5,8 @@ ANALYSED_COLS = ['suff_qtext', 'type', 'close_seg_text', 'all_inclusions', 'all_
 DISPLAYED_COLS = ['uuid', 'survey_id', 'survey_name', 'form_type', 'tr_code', 'suff_qtext']
 DISPLAYED_COLS += [c for c in ANALYSED_COLS if c not in DISPLAYED_COLS]
 
+PAGE_WIDTH = 1550
+
 KW = 'kw'
 SELECTED_RES_INDEX = 'selected_res_index'
 COMPARED_BASE = 'compared_base'

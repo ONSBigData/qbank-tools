@@ -66,7 +66,9 @@ def get_sample_comp_questions_spectrum(
         buckets=5,
         sample=250,
         bucket_size=3):
-    sdf = df.sample(sample)
+    sdf = df.copy()
+    if sample < len(sdf):
+        sdf = df.sample(sample)
     sim_matrix = sim.get_similarity_matrix(sdf)
 
     edges = np.linspace(start, end, buckets + 1)
@@ -122,7 +124,7 @@ def get_comp_div(comp_df, palette=bh.DEF_PALETTE, width=bh.DEF_WIDTH):
 
     if hasattr(comp_df, 'meta'):
         similarity = comp_df.meta['similarity']
-        html = '<h2>Similarity: {:0.3f}</h2>'.format(similarity) + html
+        html = '<h3>Similarity: {:0.3f}</h3>'.format(similarity) + html
 
     comp_div = Div(text=html, width=width)
 
@@ -160,14 +162,14 @@ def create_comp_df(qx, qy, displayed_cols=None, col2doc_sim=None, def_sim=TfidfC
     return df
 
 
-def get_comp_divs(df, sim, displayed_cols=DEF_DISPLAYED_COLS, sim_cols=None, **spectrum_kwargs):
+def get_comp_divs(df, sim, displayed_cols=DEF_DISPLAYED_COLS, sim_cols=None, width=bh.DEF_WIDTH, **spectrum_kwargs):
     q_pairs = get_sample_comp_questions_spectrum(df, sim, **spectrum_kwargs)
 
     comp_divs = []
 
     for q_pair in q_pairs:
         comp_df = get_sample_comp_df(sim, q_pair, displayed_cols=displayed_cols, sim_cols=sim_cols, inc_sim_marker=True)
-        comp_div = get_comp_div(comp_df)
+        comp_div = get_comp_div(comp_df, width=width)
         comp_divs.append(comp_div)
 
     return comp_divs

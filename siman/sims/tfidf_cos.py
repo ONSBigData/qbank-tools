@@ -13,11 +13,8 @@ class TfidfCosSim(ExactSim):
         y = self._preprocess_text(y)
 
         vect = TfidfVectorizer(lowercase=self._lower)
-        try:
-            tfidf = vect.fit_transform([x, y])
-            return (tfidf * tfidf.T).A[0, 1]
-        except:
-            return None
+        tfidf = vect.fit_transform([x, y])
+        return (tfidf * tfidf.T).A[0, 1]
 
     def _get_similarity_matrix(self, df):
         proc_array = self._preprocess_df(df)

@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request
-from urllib.parse import urlparse
 
 from dashboard.model import Model
 from dashboard.presentation import Presentation
@@ -76,26 +75,13 @@ def qcompare():
     qy = Model.base_df.loc[uuid_y]
 
     comp_df = simeval.create_comp_df(qx, qy, def_sim=sim_class())
-    comp_div = simeval.get_comp_div(comp_df)
+    comp_div = simeval.get_comp_div(comp_df, width=PAGE_WIDTH)
 
     return render_template('frame.html', content=bh.get_code(comp_div))
 
 
-def get_base_bokeh_url(request_url):
-    up = urlparse(request_url)
-    scheme = up.scheme
-    host = up.netloc
-    port = up.port
-    if port:
-        host = host[:-(len(str(port)) + 1)]
-    return '{scheme}://{host}:5006/'.format(scheme=scheme, host=host)
-
-
 @flask_app.route('/simeval')
 def simevalroute():
-    # url = get_base_bokeh_url(request.url)
-    # script = autoload_server(model=None, url=url)
-    # return render_template('frame.html', content=script)
     script = autoload_server(model=None, url="http://localhost:5006/")
     return render_template('frame.html', content=script)
 

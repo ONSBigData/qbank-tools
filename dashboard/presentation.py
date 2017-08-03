@@ -8,7 +8,6 @@ from dashboard.model import Model
 from dashboard.settings import *
 from helpers.common import *
 
-PAGE_WIDTH = 1300
 NARROW_COL_W = 100
 WIDE_COL_W = 600
 COL_WIDTHS = collections.defaultdict(lambda: NARROW_COL_W)
