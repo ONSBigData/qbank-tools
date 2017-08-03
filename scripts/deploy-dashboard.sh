@@ -2,7 +2,7 @@ cp -r ../code/dashboard .
 cp -r ../code/helpers .
 cp -r ../code/siman .
 cp -r ../code/utilities .
-cp -r ../code/nltk_data .
+cp -r ../code/bundled_data .
 cp -r ../code/Procfile .
 cp -r ../code/conda-requirements.txt .
 

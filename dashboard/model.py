@@ -1,5 +1,6 @@
 from os.path import dirname, join
 import helpers.bokeh_helper as bh
+import helpers.path_helper as path_helper
 import siman.simeval as simeval
 from dashboard.settings import *
 from helpers.common import *
@@ -150,5 +151,5 @@ class Model:
         try:
             cls.base_df = load_clean_df()
         except:
-            fpath = join(dirname(__file__), 'clean-light.csv')
+            fpath = BUNDLED_DATA_DIR + '/clean-light.csv'
             cls.base_df = load_clean_df(fpath=fpath)

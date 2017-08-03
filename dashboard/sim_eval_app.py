@@ -1,5 +1,3 @@
-from os.path import dirname, join
-
 from bokeh.models import Div, Slider, Select, CheckboxGroup, CustomJS
 from bokeh.models.widgets import Button
 from bokeh.layouts import layout, widgetbox
@@ -14,9 +12,7 @@ import helpers.bokeh_helper as bh
 
 import siman.simeval as simeval
 from siman.sims.tfidf_cos import TfidfCosSim
-from siman.sims.exact import ExactSim
-from siman.sims.avg_wv import AvgWvSim
-from siman.sims.jaro import JaroSim
+import siman.all_sims as all_sims
 
 
 # --- constants -----------------------------------------------------------
@@ -39,7 +35,6 @@ COL_OPTIONS = [
     'tr_code',
     'notes'
 ]
-SIMS = [TfidfCosSim, ExactSim, AvgWvSim, JaroSim]
 SIM_PARAM_REM_STOP = 'remove stopwords'
 SIM_PARAM_STEM = 'stemming'
 SIM_PARAM_ONLY_ALPHA_NUM = 'only alphanum. chars'
@@ -58,15 +53,12 @@ INIT_COLS = ['suff_qtext', 'type']
 
 
 class SimEvalApp:
-    def get_sim_name(self, sim):
-        return sim.__name__
-
     def update(self):
         # update parameters
         self.hm_sample_size = self.hm_sample_size_ctrl.value
         self.hist_sample_size = self.hist_sample_size_ctrl.value
         self.cols = [COL_OPTIONS[i] for i in self.analysed_cols_ctrl.active]
-        sim_class = [s for s in SIMS if self.get_sim_name(s) == self.sim_ctrl.value][0]
+        sim_class = all_sims.get_sim_class_by_name(self.sim_ctrl.value)
         self.sim = sim_class(self.cols)
 
         # --- Heatmaps -----------------------------------------------------------
@@ -122,7 +114,7 @@ class SimEvalApp:
         # controls
         self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=INIT_HM_SAMPLE_SIZE, start=10, end=100, step=5)
         self.hist_sample_size_ctrl = Slider(title="Histogram sample size", value=INIT_HIST_SAMPLE_SIZE, start=10, end=1000, step=10)
-        self.sim_ctrl = Select(title="Similarity metric", options=[self.get_sim_name(s) for s in SIMS], value=self.get_sim_name(INIT_SIM))
+        self.sim_ctrl = Select(title="Similarity metric", options=[all_sims.get_sim_name(s) for s in all_sims.SIMS], value=all_sims.get_sim_name(INIT_SIM))
         self.analysed_cols_ctrl = CheckboxGroup(labels=COL_OPTIONS, active=[COL_OPTIONS.index(c) for c in INIT_COLS])
         self.sim_params = CheckboxGroup(labels=SIM_PARAMS, active=list(range(len(SIM_PARAMS))))
 

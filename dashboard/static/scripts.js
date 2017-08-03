@@ -7,6 +7,7 @@ var SELECTED_BAR_INDEX = 'selected_bar_index'
 var SELECTED_HM_X = 'selected_hm_x'
 var SELECTED_HM_Y = 'selected_hm_y'
 var CS_ONLY = 'cs_only'
+var SIM = 'sim'
 
 var _data = {}
 
@@ -24,10 +25,13 @@ function update_plot(id) {
 }
 
 function open_qcomparison(uuid_x, uuid_y) {
+    select_id = $('label:contains("Similarity metric")').attr('for')
+    sim = $('#' + select_id).val()
+
     params = {};
-    params[COMPARED_BASE] = COMPARED_BASE_HM;
     params[SELECTED_HM_X] = uuid_x;
     params[SELECTED_HM_Y] = uuid_y;
+    params[SIM] = sim;
 
     window.open("/qcompare?" + jQuery.param(params));
 }

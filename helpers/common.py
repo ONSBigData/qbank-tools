@@ -6,6 +6,7 @@ import re
 import pickle
 
 DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../../data'
+BUNDLED_DATA_DIR = os.path.realpath(os.path.dirname(__file__)) + '/../bundled_data'
 CHECKPT_DIR = DATA_DIR + '/checkpoints'
 
 JSON_DIR = DATA_DIR + '/jsons'
@@ -18,7 +19,12 @@ PROBLEM_REPORTS_DIR = DATA_DIR + '/problem-reports'
 
 
 def get_pickle_obj_fpath(name):
-    return '{}/{}.pkl'.format(CHECKPT_DIR, name)
+    path = '{}/{}.pkl'.format(CHECKPT_DIR, name)
+
+    if os.path.exists(path):
+        return path
+
+    return '{}/{}.pkl'.format(BUNDLED_DATA_DIR, name)
 
 
 def save_obj(obj, name):

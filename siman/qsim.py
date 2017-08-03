@@ -1,3 +1,6 @@
+from utilities.dl_nltk import dl_nltk
+dl_nltk()
+
 from nltk.corpus import stopwords
 import pandas as pd
 import re

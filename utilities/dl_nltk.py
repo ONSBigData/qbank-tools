@@ -1,8 +1,8 @@
 import nltk
-import helpers.path_helper as ph
 from nltk.downloader import Downloader
+from helpers.common import *
 
-nltk.data.path.append(ph.from_root('nltk_data/'))
+nltk.data.path.append(BUNDLED_DATA_DIR + '/nltk_data/')
 
 
 def dl_nltk():

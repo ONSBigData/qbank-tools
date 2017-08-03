@@ -3,11 +3,12 @@ from bokeh.models import Div
 import numpy as np
 import helpers.bokeh_helper as bh
 from bs4 import BeautifulSoup
-from siman.sims.tfidf_cos import TfidfCosSim
 import random
 import siman.qsim as qsim
 import pandas as pd
 import re
+from siman.sims.tfidf_cos import TfidfCosSim
+
 
 COMP_TBL_FIELDS = ['question X', 'question Y', 'similarity']
 SIM_MARKER = '___SIM___'
@@ -93,8 +94,7 @@ def get_sample_comp_df(sim, q_pair, displayed_cols=None, sim_cols=None, inc_sim_
     comp_df = create_comp_df(
         qx, qy,
         displayed_cols=displayed_cols,
-        col2doc_sim=dict(col2doc_sim),
-        inc_sim_marker=inc_sim_marker
+        col2doc_sim=dict(col2doc_sim)
     )
 
     comp_df.meta = q_pair
@@ -129,7 +129,7 @@ def get_comp_div(comp_df, palette=bh.DEF_PALETTE, width=bh.DEF_WIDTH):
     return comp_div
 
 
-def create_comp_df(qx, qy, displayed_cols=None, col2doc_sim=None, inc_sim_marker=False):
+def create_comp_df(qx, qy, displayed_cols=None, col2doc_sim=None, def_sim=TfidfCosSim()):
     def _create_series(q):
         if q is None:
             q = pd.Series()
@@ -145,8 +145,7 @@ def create_comp_df(qx, qy, displayed_cols=None, col2doc_sim=None, inc_sim_marker
     qy = _create_series(qy)
 
     if col2doc_sim is None:
-        sim = TfidfCosSim()
-        col2doc_sim = dict((c, sim.get_text_sim) for c in displayed_cols)
+        col2doc_sim = dict((c, def_sim.get_text_sim) for c in displayed_cols)
 
     sim_col = pd.Series([''] * len(qx), index=qx.index)
 

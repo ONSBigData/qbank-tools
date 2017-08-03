@@ -1,0 +1,24 @@
+<p>
+Comparing {} vs {}. Similarity scores for fields are for TF-IDF cosine similarity
+</p>
+
+<form action="javascript:search_for_kw($('#kw').val())">
+    <label>Search</label>
+    <input id="kw" name="kw" type="text" value="{{ search_kw }}"/>
+    <input type="submit">
+</form>
+<label><input type='checkbox' id="cs-only" onclick='toggle_cs_only(this)'>Only cross-survey similarities</label>
+
+<div class="row">
+    <div class="col-md-12" id="nresults-div"></div>
+</div>
+<div class="row">
+    <div class="col-md-12" id="res-table"></div>
+</div>
+<div class="row">
+    <div class="col-md-6" id="bar-chart"></div>
+    <div class="col-md-6" id="heatmap"></div>
+</div>
+<div class="row">
+    <div class="col-md-12" id="comp-div"></div>
+</div>
