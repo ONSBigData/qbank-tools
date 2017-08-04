@@ -10,7 +10,6 @@ from tornado.ioloop import IOLoop
 from helpers.common import *
 from dashboard.settings import *
 import helpers.bokeh_helper as bh
-import helpers.log_helper as lg
 
 import siman.simeval as simeval
 from siman.sims.tfidf_cos import TfidfCosSim
@@ -297,12 +296,13 @@ class SimEvalApp:
 io_loop = None
 
 
-def stop_app():
-    io_loop.stop()
-
-
 def run_app(io_loop=None):
-    lg.qbank.info('Attempting to start Bokeh App')
+    import sys
+    def _print(s):
+        print(s)
+        sys.stdout.flush()
+
+    _print('going to run app')
 
     def modify_doc(doc):
         app = SimEvalApp()
@@ -314,12 +314,16 @@ def run_app(io_loop=None):
 
     _io_loop = io_loop if io_loop is not None else IOLoop.current()
 
+    _print('got IO loop')
+
     bokeh_app = Application(FunctionHandler(modify_doc))
+
+    _print('created bokeh app')
 
     server = Server({'/': bokeh_app}, io_loop=_io_loop, allow_websocket_origin=["*"], port=SIM_EVAL_PORT, host='*', address='localhost')
     server.start()
 
-    lg.qbank.info('Starting Bokeh application on http://localhost:{}/'.format(SIM_EVAL_PORT))
+    _print('Starting Bokeh application on http://localhost:{}/'.format(SIM_EVAL_PORT))
 
     if io_loop is None:
         _io_loop.add_callback(server.show, "/")

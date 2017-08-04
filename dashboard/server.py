@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 
 from dashboard.model import Model
 from dashboard.presentation import Presentation
-from dashboard.sim_eval_app import run_app, stop_app
+from dashboard.sim_eval_app import run_app
 from dashboard.settings import *
 
 from bokeh.embed import autoload_server
@@ -20,9 +20,9 @@ flask_app = Flask(__name__)
 Model.init()
 bokeh_thread = None
 
-@atexit.register
-def kill_server():
-    stop_app()
+# @atexit.register
+# def kill_server():
+#     stop_app()
 
 
 @flask_app.after_request
@@ -83,19 +83,6 @@ def qcompare():
 
 @flask_app.route('/simeval')
 def simevalroute():
-    # def get_base_bokeh_url(request_url):
-    #     from urllib.parse import urlparse
-    #     up = urlparse(request_url)
-    #     scheme = up.scheme
-    #     host = up.netloc
-    #     port = up.port
-    #     if port:
-    #         host = host[:-(len(str(port)) + 1)]
-    #     return '{scheme}://{host}:5006/'.format(scheme=scheme, host=host)
-    #
-    # url = get_base_bokeh_url(request.url)
-    # script = autoload_server(model=None, url=url)
-    # return render_template('frame.html', content=script)
     script = autoload_server(model=None, url="http://localhost:5006/")
     return render_template('frame.html', content=script)
 
@@ -106,21 +93,26 @@ def index():
     html = render_template('qexplore.html')
     return render_template('frame.html', content=html)
 
-if __name__ == '__main__':
-    import tornado.wsgi
-    import tornado.httpserver
-    import tornado.ioloop
-    import tornado.options
-    import tornado.autoreload
+import tornado.wsgi
+import tornado.httpserver
+import tornado.ioloop
+import tornado.options
+import tornado.autoreload
 
-    http_server = tornado.httpserver.HTTPServer(
-        tornado.wsgi.WSGIContainer(flask_app)
-    )
-    http_server.listen(5000)
+import sys
+def _print(s):
+    print(s)
+    sys.stdout.flush()
 
-    io_loop = tornado.ioloop.IOLoop.instance()
-    tornado.autoreload.start(io_loop)
+_print('getting IO loop instance')
+io_loop = tornado.ioloop.IOLoop.instance()
 
-    run_app(io_loop=io_loop)
-    io_loop.start()
+_print('gonna autoreload')
+tornado.autoreload.start(io_loop)
+
+_print('gonna run app')
+
+run_app(io_loop=io_loop)
+_print('gonna start loop')
+io_loop.start()
 
