@@ -5,7 +5,8 @@ from bokeh.layouts import layout, widgetbox
 from bokeh.server.server import Server
 from bokeh.application.handlers import FunctionHandler
 from bokeh.application import Application
-import tornado.ioloop
+from tornado.ioloop import IOLoop
+import tornado.autoreload
 
 from helpers.common import *
 from dashboard.settings import *
@@ -293,7 +294,8 @@ class SimEvalApp:
         return l
 
 
-def run_app(show=True):
+
+def run_app(io_loop=None):
     import sys
     def _print(s):
         print(s)
@@ -305,11 +307,11 @@ def run_app(show=True):
         app = SimEvalApp()
 
         l = app.get_layout()
-        # l = layout([[Div(text='fdsfds')]])
         doc.add_root(l)
         doc.title = 'Similarity evaluation dashboard'
 
-    io_loop = tornado.ioloop.IOLoop.instance()
+    _io_loop = io_loop if io_loop is not None else IOLoop.instance()
+    tornado.autoreload.start(_io_loop)
 
     _print('got IO loop')
 
@@ -317,15 +319,14 @@ def run_app(show=True):
 
     _print('got app')
 
-    server = Server({'/': bokeh_app}, io_loop=io_loop, allow_websocket_origin=["*"], port=SIM_EVAL_PORT, host='*', address='localhost')
+    server = Server({'/': bokeh_app}, io_loop=_io_loop, allow_websocket_origin=["*"], port=SIM_EVAL_PORT, host='*', address='localhost')
     server.start()
 
     _print('Starting Bokeh application on http://localhost:{}/'.format(SIM_EVAL_PORT))
 
-    if show:
-        io_loop.add_callback(server.show, "/")
-
-    io_loop.start()
+    if io_loop is None:
+        _io_loop.add_callback(server.show, "/")
+        _io_loop.start()
 
 
 if __name__ == '__main__':
