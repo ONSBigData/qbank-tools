@@ -71,8 +71,8 @@ def qcompare():
     sim_class_name = request.args.get(SIM)
     sim_class = all_sims.get_sim_class_by_name(sim_class_name)
 
-    qx = Model.base_df.loc[uuid_x]
-    qy = Model.base_df.loc[uuid_y]
+    qx = Model.base_df.loc[uuid_x].copy()
+    qy = Model.base_df.loc[uuid_y].copy()
 
     comp_df = simeval.create_comp_df(qx, qy, def_sim=sim_class())
     comp_div = simeval.get_comp_div(comp_df, width=PAGE_WIDTH)

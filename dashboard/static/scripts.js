@@ -24,6 +24,18 @@ function update_plot(id) {
     });
 }
 
+function open_qcomparison_from_bar() {
+    select_id = $('label:contains("Similarity metric")').attr('for')
+    sim = $('#' + select_id).val()
+
+    params = {};
+    params[SELECTED_HM_X] = uuid_x;
+    params[SELECTED_HM_Y] = uuid_y;
+    params[SIM] = sim;
+
+    window.open("/qcompare?" + jQuery.param(params));
+}
+
 function open_qcomparison(uuid_x, uuid_y) {
     select_id = $('label:contains("Similarity metric")').attr('for')
     sim = $('#' + select_id).val()

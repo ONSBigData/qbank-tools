@@ -1,5 +1,5 @@
 import bokeh.palettes as palettes
-from bokeh.models import Div
+from bokeh.models import Div, LinearColorMapper
 import numpy as np
 import helpers.bokeh_helper as bh
 from bs4 import BeautifulSoup
@@ -43,8 +43,8 @@ def get_sample_comp_questions(
 
     q_pairs = []
     for candidate in candidates:
-        qx = sample_df.iloc[candidate[0]]
-        qy = sample_df.iloc[candidate[1]]
+        qx = sample_df.iloc[candidate[0]].copy()
+        qy = sample_df.iloc[candidate[1]].copy()
         qx.loc['uuid'] = qx.name
         qy.loc['uuid'] = qy.name
 
@@ -82,7 +82,7 @@ def get_sample_comp_questions_spectrum(
     return q_pairs
 
 
-def get_sample_comp_df(sim, q_pair, displayed_cols=None, sim_cols=None, inc_sim_marker=False):
+def get_sample_comp_df(sim, q_pair, displayed_cols=None, sim_cols=None):
     qx, qy = q_pair['qx'], q_pair['qy']
 
     if displayed_cols is None:
@@ -133,15 +133,14 @@ def get_comp_div(comp_df, palette=bh.DEF_PALETTE, width=bh.DEF_WIDTH):
 
 def create_comp_df(qx, qy, displayed_cols=None, col2doc_sim=None, def_sim=TfidfCosSim()):
     def _create_series(q):
-        if q is None:
-            q = pd.Series()
+        q['uuid'] = q.name
 
         q = pd.Series([q[c] if c in q else 'none' for c in displayed_cols], index=displayed_cols)
 
         return q
 
     if displayed_cols is None:
-        displayed_cols = qx.index
+        displayed_cols = ['uuid'] + list(qx.index)
 
     qx = _create_series(qx)
     qy = _create_series(qy)
@@ -168,25 +167,27 @@ def get_comp_divs(df, sim, displayed_cols=DEF_DISPLAYED_COLS, sim_cols=None, wid
     comp_divs = []
 
     for q_pair in q_pairs:
-        comp_df = get_sample_comp_df(sim, q_pair, displayed_cols=displayed_cols, sim_cols=sim_cols, inc_sim_marker=True)
+        comp_df = get_sample_comp_df(sim, q_pair, displayed_cols=displayed_cols, sim_cols=sim_cols)
         comp_div = get_comp_div(comp_df, width=width)
         comp_divs.append(comp_div)
 
     return comp_divs
 
 
-# --- Heatmap -----------------------------------------------------------
+# --- Heatmap of similarities -----------------------------------------------------------
 
 
 def get_sim_heatmap(df, sim, sample_size=30, cs_only=False, **kwargs):
-    sdf = df.sample(sample_size)
+    sdf = df.copy()
+    if sample_size < len(sdf):
+        sdf = df.sample(sample_size)
     sim_matrix = sim.get_similarity_matrix(sdf, cs_only=cs_only)
 
     hm_df = bh.get_heatmap_df(sdf, sim_matrix)
 
     title = '{} scores heatmap'.format(sim.__class__.__name__)
     if cs_only:
-        title += ' (CS only)'
+        title += ' (0 for non-CS pairs)'
 
     hm = bh.get_heatmap(
         hm_df,
@@ -199,13 +200,73 @@ def get_sim_heatmap(df, sim, sample_size=30, cs_only=False, **kwargs):
     return hm
 
 
-# --- Histogram -----------------------------------------------------------
+# --- Bar chart of most similar -----------------------------------------------------------
+
+
+def get_sim_bar_chart_df(df, sim, bars=10, sample_size=50, cs_only=False):
+    sdf = df.copy()
+    if sample_size < len(sdf):
+        sdf = df.sample(sample_size)
+
+    sim_matrix = sim.get_similarity_matrix(sdf, cs_only=cs_only)
+    n = sim_matrix.shape[0]
+
+    top_indices = [(i // n, i % n) for i in sim_matrix.argsort(axis=None)][::-1]
+
+    sdf = sdf.reset_index()
+
+    rows = []
+    for ti in top_indices[:bars]:
+        row = pd.Series()
+
+        def _get_q(index, xy):
+            q = sdf.iloc[index]
+            q.index = ['{}_{}'.format(i, xy) for i in q.index]
+            return q
+
+        row = row.append(_get_q(ti[0], 'x'))
+        row = row.append(_get_q(ti[1], 'y'))
+        row['similarity'] = sim_matrix[ti[0], ti[1]]
+        rows.append(row)
+
+    bc_df = pd.DataFrame(rows)
+    if cs_only:
+        bc_df = bc_df[bc_df.apply(lambda row: row['survey_id_x'] != row['survey_id_y'], axis=1)]
+
+    return bc_df
+
+
+def get_sim_bar_chart(df, sim, bars=10, sample_size=50, cs_only=False, palette=bh.DEF_PALETTE, **kwargs):
+    mapper = LinearColorMapper(palette=palette, low=0, high=1)
+
+    bc_df = get_sim_bar_chart_df(df, sim, bars, sample_size, cs_only)
+    if len(bc_df) > 0:
+        bc_df['q_pair'] = bc_df.apply(lambda row: '{} - {}'.format(row['uuid_x'], row['uuid_y']), axis=1)
+
+    title = 'Top question pairs by {} scores on sample '.format(sim.__class__.__name__)
+    if cs_only:
+        title += ' (CS only)'
+
+    bc = bh.get_bar_chart(
+        bc_df,
+        'q_pair',
+        'similarity',
+        title=title,
+        color={'field': 'similarity', 'transform': mapper},
+        **kwargs
+    )
+
+    return bc
+
+
+# --- Histogram of similarities -----------------------------------------------------------
 
 
 def get_sim_hist(df, sim, sample_size=500, cs_only=False, bins=15, **kwargs):
     sdf = df
     if sample_size is not None:
-        sdf = sdf.sample(sample_size)
+        if sample_size < len(sdf):
+            sdf = df.sample(sample_size)
     sim_matrix = sim.get_similarity_matrix(sdf, cs_only=cs_only)
 
     title = '{} scores prob. density'.format(sim.__class__.__name__)
@@ -227,6 +288,9 @@ if __name__ == '__main__':
     df = load_clean_df()
     COLS = ['suff_qtext', 'type']
     sim = TfidfCosSim(cols=COLS)
-    q_pairs = get_sample_comp_questions_spectrum(df, sim)
-    comp_df = get_sample_comp_df(sim, q_pairs[0], sim_cols=COLS)
-    print(comp_df)
+    bc_df = get_sim_bar_chart_df(df, sim)
+    print(bc_df.columns)
+
+    # q_pairs = get_sample_comp_questions_spectrum(df, sim)
+    # comp_df = get_sample_comp_df(sim, q_pairs[0], sim_cols=COLS)
+    # print(comp_df)

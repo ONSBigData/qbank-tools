@@ -10,7 +10,8 @@ from bokeh.models import \
     BasicTicker, \
     PrintfTickFormatter, \
     DataRange1d, \
-    Quad
+    Quad, \
+    CustomJS
 from bokeh.plotting import figure
 from bokeh.embed import components
 import numpy as np
@@ -55,15 +56,20 @@ def get_bar_chart(
         df,
         x_field,
         y_field,
-        color_field=None,
+        color=None,
         tooltip_fields=None,
         width=DEF_WIDTH,
         title=None,
-        js_on_event=None):
+        js_on_event=None,
+        jscode_on_event=None,
+        x_rot=1):
 
+    tools = list(DEF_TOOLS)
     if tooltip_fields is not None:
         if _is_non_empty_list_of_strings(tooltip_fields):  # columns
-            tooltip_fields = get_tooltip_fields(tooltip_fields)
+            cols = [c for c in df.columns if any(re.match('{}_(x|y)'.format(x), c) is not None for x in tooltip_fields)]
+            cols += [c for c in df.columns if c in tooltip_fields]
+            tooltip_fields = get_tooltip_fields(cols)
 
         if tooltip_fields is TOOLTIP_ALL:
             tooltip_fields = get_tooltip_fields(df.columns)
@@ -72,11 +78,12 @@ def get_bar_chart(
             tooltip_fields = get_tooltip_fields([x_field, y_field])
 
         hover = HoverTool(tooltips=format_tooltip_fields(tooltip_fields))
+        tools.append(hover)
 
     bc = figure(
         plot_width=width,
         toolbar_location=DEF_TOOL_LOC,
-        tools=DEF_TOOLS + [hover],
+        tools=tools,
         title=title,
         y_range=Range1d(0, 1)
     )
@@ -91,20 +98,22 @@ def get_bar_chart(
         top=y_field,
         bottom=0,
         width=0.5,
-        fill_color=color_field,
+        fill_color=color,
         source=src
     )
 
     bc.xaxis[0].ticker.desired_num_ticks = len(df)
     bc.yaxis.axis_label = y_field
     bc.xaxis.axis_label = x_field
-    bc.xaxis.major_label_orientation = 1
+    bc.xaxis.major_label_orientation = x_rot
 
     labels = dict([(i, df.iloc[i][x_field]) for i in range(len(df))])
     bc.xaxis.formatter = FuncTickFormatter(code="""var labels = {}; return labels[tick]; """.format(labels))
 
     if js_on_event is not None:
-        bc.js_on_event(js_on_event[0], js_on_event[1])
+        custom_js = js_on_event[1]
+        custom_js.args['src'] = src
+        bc.js_on_event(js_on_event[0], custom_js)
 
     return bc
 

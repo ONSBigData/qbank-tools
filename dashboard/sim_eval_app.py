@@ -15,6 +15,7 @@ import siman.simeval as simeval
 from siman.sims.tfidf_cos import TfidfCosSim
 import siman.all_sims as all_sims
 import datetime
+import traceback
 
 # --- constants -----------------------------------------------------------
 
@@ -47,6 +48,8 @@ SIM_PARAMS = [
 ]
 
 INIT_HM_SAMPLE_SIZE = 30
+INIT_BC_SAMPLE_SIZE = 30
+INIT_NUM_BARS = 10
 INIT_HIST_SAMPLE_SIZE = 100
 INIT_SIM = TfidfCosSim
 INIT_COLS = ['suff_qtext', 'type']
@@ -58,8 +61,16 @@ INIT_SPECTRUM_SAMPLE_SIZE = 250
 INIT_SEARCH = ''
 
 
-
 class SimEvalApp:
+    def update_chart(self, holding_div, create_chart_code_method):
+        holding_div.text = 'Updating...'
+
+        try:
+            chart_code = create_chart_code_method()
+            holding_div.text = chart_code
+        except Exception as e:
+            holding_div.text = 'Exception occured: {}\n{}'.format(e, traceback.format_exc())
+
     def update(self):
         # update parameters
         self.search_text = self.search_text_ctrl.value
@@ -70,6 +81,8 @@ class SimEvalApp:
         self.cols = [COL_OPTIONS[i] for i in self.analysed_cols_ctrl.active]
         sim_class = all_sims.get_sim_class_by_name(self.sim_ctrl.value)
         self.sim = sim_class(self.cols)
+        self.bc_sample_size = self.bc_sample_size_ctrl.value
+        self.bc_bars = self.bc_bars_ctrl.value
 
         self.spectrum_start = self.spectrum_start_ctrl.value
         self.spectrum_end = self.spectrum_end_ctrl.value
@@ -78,9 +91,15 @@ class SimEvalApp:
         self.spectrum_cs_only = 0 in self.spectrum_cs_only_ctrl.active
         self.spectrum_sample = self.spectrum_spectrum_sample_size_ctrl.value
 
+        for div in self.hm_divs + self.bc_divs + self.hist_divs + [self.comp_div]:
+            div.text = 'Awaiting update...'
+
         # --- Heatmaps -----------------------------------------------------------
 
         def create_hm(cs_only):
+            if len(self.df) == 0:
+                return Div(text='No data')
+
             return simeval.get_sim_heatmap(
                 self.df,
                 self.sim,
@@ -90,13 +109,16 @@ class SimEvalApp:
                 width=DIV_WIDTH,
                 js_on_event=('tap', CustomJS(code="""open_qcomparison(cb_obj['x'], cb_obj['y'])"""))
             )
-        hms = [create_hm(cs_only) for cs_only in [True, False]]
-        for i in range(len(hms)):
-            self.hm_divs[i].text = bh.get_code(hms[i])
+
+        for i, cs_only in enumerate([True, False]):
+            self.update_chart(self.hm_divs[i], lambda: bh.get_code(create_hm(cs_only)))
 
         # --- Histograms -----------------------------------------------------------
 
         def create_hist(cs_only):
+            if len(self.df) == 0:
+                return Div(text='No data')
+
             return simeval.get_sim_hist(
                 self.df,
                 self.sim,
@@ -104,30 +126,60 @@ class SimEvalApp:
                 sample_size=self.hist_sample_size,
                 width=DIV_WIDTH
             )
-        hists = [create_hist(cs_only) for cs_only in [True, False]]
-        for i in range(len(hists)):
-            self.hist_divs[i].text = bh.get_code(hists[i])
+        for i, cs_only in enumerate([True, False]):
+            self.update_chart(self.hist_divs[i], lambda: bh.get_code(create_hist(cs_only)))
 
         # --- Bar chart -----------------------------------------------------------
 
+        def create_bar_chart(cs_only):
+            if len(self.df) == 0:
+                return Div(text='No data')
 
+            on_tap_code = """
+                var i = Math.round(cb_obj['x']);
+                var uuid_x = src.data['uuid_x'][i];
+                var uuid_y = src.data['uuid_y'][i];
+                console.log(uuid_x);
+                console.log(uuid_y);
+                open_qcomparison(uuid_x, uuid_y);
+            """
+
+            return simeval.get_sim_bar_chart(
+                self.df,
+                self.sim,
+                cs_only=cs_only,
+                sample_size=self.bc_sample_size,
+                bars=self.bc_bars,
+                width=DIV_WIDTH,
+                x_rot=1.5,
+                tooltip_fields=self.cols + ['survey_name', 'uuid', 'similarity'],
+                js_on_event=('tap', CustomJS(code=on_tap_code))
+            )
+        for i, cs_only in enumerate([True, False]):
+            self.update_chart(self.bc_divs[i], lambda: bh.get_code(create_bar_chart(cs_only)))
 
         # --- Comp divs -----------------------------------------------------------
 
-        comp_divs = simeval.get_comp_divs(
-            self.df,
-            self.sim,
-            sim_cols=self.cols,
-            width=CHARTS_WIDTH,
-            start=self.spectrum_start,
-            end=self.spectrum_end,
-            buckets=self.spectrum_buckets,
-            bucket_size=self.spectrum_bucket_size,
-            cs_only=self.spectrum_cs_only,
-            sample=self.spectrum_sample
-        )
-        texts = [comp_div.text for comp_div in comp_divs]
-        self.comp_div.text = '<br>'.join(texts)
+        def create_comp_div():
+            if len(self.df) == 0:
+                return 'No data'
+
+            comp_divs = simeval.get_comp_divs(
+                self.df,
+                self.sim,
+                sim_cols=self.cols,
+                width=CHARTS_WIDTH,
+                start=self.spectrum_start,
+                end=self.spectrum_end,
+                buckets=self.spectrum_buckets,
+                bucket_size=self.spectrum_bucket_size,
+                cs_only=self.spectrum_cs_only,
+                sample=self.spectrum_sample
+            )
+            texts = [comp_div.text for comp_div in comp_divs]
+            return '<br>'.join(texts)
+
+        self.update_chart(self.comp_div, create_comp_div)
 
         # --- Others -----------------------------------------------------------
 
@@ -146,6 +198,7 @@ class SimEvalApp:
         # divs holding the charts
         self.hm_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
         self.hist_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
+        self.bc_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
         self.comp_div = Div(text='', width=CHARTS_WIDTH)
 
         # other divs
@@ -153,11 +206,13 @@ class SimEvalApp:
 
         # controls
         self.search_text_ctrl = TextInput(title=None, value=INIT_SEARCH, width=150)
-        self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=INIT_HM_SAMPLE_SIZE, start=10, end=100, step=5)
+        self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=INIT_HM_SAMPLE_SIZE, start=10, end=50, step=5)
         self.hist_sample_size_ctrl = Slider(title="Histogram sample size", value=INIT_HIST_SAMPLE_SIZE, start=10, end=1000, step=10)
         self.sim_ctrl = Select(title="Similarity metric", options=[all_sims.get_sim_name(s) for s in all_sims.SIMS], value=all_sims.get_sim_name(INIT_SIM))
         self.analysed_cols_ctrl = CheckboxGroup(labels=COL_OPTIONS, active=[COL_OPTIONS.index(c) for c in INIT_COLS])
         self.sim_params = CheckboxGroup(labels=SIM_PARAMS, active=list(range(len(SIM_PARAMS))))
+        self.bc_sample_size_ctrl = Slider(title="Bar chart sample size", value=INIT_BC_SAMPLE_SIZE, start=10, end=1000, step=5)
+        self.bc_bars_ctrl = Slider(title="Number of bars", value=INIT_NUM_BARS, start=5, end=25, step=1)
 
         self.spectrum_start_ctrl = Slider(title="Similarity from", value=INIT_SPECTRUM_START, start=0, end=1, step=0.01)
         self.spectrum_end_ctrl = Slider(title="Similarity to", value=INIT_SPECTRUM_END, start=0, end=1, step=0.01)
@@ -198,6 +253,11 @@ class SimEvalApp:
                 self.hist_sample_size_ctrl,
                 Div(text='<hr>'),
 
+                Div(text='<b>Bar chart</b>:'),
+                self.bc_sample_size_ctrl,
+                self.bc_bars_ctrl,
+                Div(text='<hr>'),
+
                 Div(text='<b>Example questions pairs</b>:'),
                 self.spectrum_start_ctrl,
                 self.spectrum_end_ctrl,
@@ -205,7 +265,6 @@ class SimEvalApp:
                 self.spectrum_bucket_size_ctrl,
                 self.spectrum_cs_only_ctrl,
                 self.spectrum_spectrum_sample_size_ctrl,
-                Div(text='<hr>'),
 
 
             ],
@@ -222,6 +281,9 @@ class SimEvalApp:
 
             [Div(text='<h2>Histogram of similarity scores</h2>', width=CHARTS_WIDTH)],
             self.hist_divs,
+
+            [Div(text='<h2>Bar chart of most similar q. pairs</h2>', width=CHARTS_WIDTH)],
+            self.bc_divs,
 
             [Div(text='<h2>Example question pairs</h2>', width=CHARTS_WIDTH)],
             [self.comp_div],

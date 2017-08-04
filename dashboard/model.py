@@ -135,9 +135,6 @@ class Model:
 
     @classmethod
     def _create_comp_df(cls, qx, qy):
-        qx['uuid'] = qx.name
-        qy['uuid'] = qy.name
-
         col2doc_sim = [(c, cls.sim.get_text_sim) for c in ANALYSED_COLS + ['survey_name']]
         exact_sim = ExactSim()
         col2doc_sim.extend([(c, exact_sim.get_text_sim) for c in ['survey_id', 'form_type', 'tr_code']])
