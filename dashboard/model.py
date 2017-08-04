@@ -1,4 +1,3 @@
-from os.path import dirname, join
 import helpers.bokeh_helper as bh
 import helpers.path_helper as path_helper
 import siman.simeval as simeval

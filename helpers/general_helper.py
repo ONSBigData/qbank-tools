@@ -1,13 +1,21 @@
 import datetime
 import collections
 import os
+import sys
+
+
+def print_and_flush(s):
+    print(s)
+    sys.stdout.flush()
 
 
 def get_date():
     return datetime.datetime.now().strftime("%y-%m-%d")
 
+
 def get_time():
     return datetime.datetime.now().strftime("%H-%M-%S")
+
 
 def uniquify(df, col):
     sr = df[col]

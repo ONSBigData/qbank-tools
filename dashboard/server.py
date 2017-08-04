@@ -85,34 +85,14 @@ def index():
     return render_template('frame.html', content=html)
 
 
-
-import sys
-def _print(s):
-    print(s)
-    sys.stdout.flush()
-
 if __name__ == '__main__':
     import tornado.wsgi
     import tornado.httpserver
-    import tornado.ioloop
-    import tornado.options
-    import tornado.autoreload
-
-    _print('in main')
 
     http_server = tornado.httpserver.HTTPServer(
         tornado.wsgi.WSGIContainer(flask_app)
     )
     http_server.listen(5000)
+    print('Flask application on http://localhost:5000/')
 
-    io_loop = tornado.ioloop.IOLoop.instance()
-
-    run_app(io_loop=io_loop)
-    io_loop.start()
-else:
-    _print('out of main')
-
-    import threading
-
-    bokeh_thread = threading.Thread(target=run_app)
-    bokeh_thread.start()
+    run_app(show=False)

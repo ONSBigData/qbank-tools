@@ -11,9 +11,12 @@ git add -A
 dt=`date +"%Y-%m-%d_%H-%M"`
 git commit -m "$dt"
 
+heroku ps:scale web=0
 
 git push heroku master
 
 ##heroku run python 'scripts/dl_nltk.py' --app=qbank-dashboard
+
+heroku ps:scale web=1
 
 heroku open
