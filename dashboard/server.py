@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 
 from dashboard.model import Model
 from dashboard.presentation import Presentation
-from dashboard.sim_eval_app import run_app
+from dashboard.sim_eval_app import run_app, stop_app
 from dashboard.settings import *
 
 from bokeh.embed import autoload_server
@@ -13,6 +13,7 @@ import threading
 import helpers.bokeh_helper as bh
 import siman.simeval as simeval
 import siman.all_sims as all_sims
+import helpers.log_helper as lg
 
 
 flask_app = Flask(__name__)
@@ -21,7 +22,7 @@ bokeh_thread = None
 
 @atexit.register
 def kill_server():
-    bokeh_thread.stop()
+    stop_app()
 
 
 @flask_app.after_request
@@ -106,9 +107,20 @@ def index():
     return render_template('frame.html', content=html)
 
 if __name__ == '__main__':
-    bokeh_thread = threading.Thread(target=run_app, kwargs={'show': False})
-    bokeh_thread.start()
+    import tornado.wsgi
+    import tornado.httpserver
+    import tornado.ioloop
+    import tornado.options
+    import tornado.autoreload
 
-    print('Opening Flask application on http://localhost:5000/')
-    flask_app.run(port=5000)  # With debug=True, Flask server will auto-reload when there are code changes
+    http_server = tornado.httpserver.HTTPServer(
+        tornado.wsgi.WSGIContainer(flask_app)
+    )
+    http_server.listen(5000)
+
+    io_loop = tornado.ioloop.IOLoop.instance()
+    tornado.autoreload.start(io_loop)
+
+    run_app(io_loop=io_loop)
+    io_loop.start()
 

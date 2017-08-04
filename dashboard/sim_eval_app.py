@@ -10,6 +10,7 @@ from tornado.ioloop import IOLoop
 from helpers.common import *
 from dashboard.settings import *
 import helpers.bokeh_helper as bh
+import helpers.log_helper as lg
 
 import siman.simeval as simeval
 from siman.sims.tfidf_cos import TfidfCosSim
@@ -57,7 +58,7 @@ INIT_SPECTRUM_START = 0
 INIT_SPECTRUM_END = 1
 INIT_SPECTRUM_BUCKETS = 5
 INIT_QUESTIONS_PER_BUCKET = 2
-INIT_SPECTRUM_SAMPLE_SIZE = 250
+INIT_SPECTRUM_SAMPLE_SIZE = 100
 INIT_SEARCH = ''
 
 
@@ -265,13 +266,9 @@ class SimEvalApp:
                 self.spectrum_bucket_size_ctrl,
                 self.spectrum_cs_only_ctrl,
                 self.spectrum_spectrum_sample_size_ctrl,
-
-
             ],
             sizing_mode=sizing_mode, responsive=True, width=WIDGET_BOX_WIDTH
         )
-
-
 
         charts = layout([
             [self.top_div],
@@ -297,26 +294,36 @@ class SimEvalApp:
         return l
 
 
-def run_app(show=True):
+io_loop = None
+
+
+def stop_app():
+    io_loop.stop()
+
+
+def run_app(io_loop=None):
+    lg.qbank.info('Attempting to start Bokeh App')
+
     def modify_doc(doc):
         app = SimEvalApp()
 
         l = app.get_layout()
+        # l = layout([[Div(text='fdsfds')]])
         doc.add_root(l)
         doc.title = 'Similarity evaluation dashboard'
 
-    io_loop = IOLoop.current()
+    _io_loop = io_loop if io_loop is not None else IOLoop.current()
 
     bokeh_app = Application(FunctionHandler(modify_doc))
 
-    server = Server({'/': bokeh_app}, io_loop=io_loop, allow_websocket_origin=["*"], port=SIM_EVAL_PORT, host='*', address='0.0.0.0')
+    server = Server({'/': bokeh_app}, io_loop=_io_loop, allow_websocket_origin=["*"], port=SIM_EVAL_PORT, host='*', address='localhost')
     server.start()
 
-    print('Starting Bokeh application on http://localhost:{}/'.format(SIM_EVAL_PORT))
+    lg.qbank.info('Starting Bokeh application on http://localhost:{}/'.format(SIM_EVAL_PORT))
 
-    if show:
-        io_loop.add_callback(server.show, "/")
-    io_loop.start()
+    if io_loop is None:
+        _io_loop.add_callback(server.show, "/")
+        _io_loop.start()
 
 
 if __name__ == '__main__':
