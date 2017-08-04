@@ -7,22 +7,13 @@ from dashboard.settings import *
 
 from bokeh.embed import autoload_server
 
-import atexit
-import threading
-
 import helpers.bokeh_helper as bh
 import siman.simeval as simeval
 import siman.all_sims as all_sims
-import helpers.log_helper as lg
 
 
 flask_app = Flask(__name__)
 Model.init()
-bokeh_thread = None
-
-# @atexit.register
-# def kill_server():
-#     stop_app()
 
 
 @flask_app.after_request
@@ -93,26 +84,20 @@ def index():
     html = render_template('qexplore.html')
     return render_template('frame.html', content=html)
 
-import tornado.wsgi
-import tornado.httpserver
-import tornado.ioloop
-import tornado.options
-import tornado.autoreload
 
-import sys
-def _print(s):
-    print(s)
-    sys.stdout.flush()
+if __name__ == '__main__':
+    import tornado.wsgi
+    import tornado.httpserver
+    import tornado.ioloop
 
-_print('getting IO loop instance')
-io_loop = tornado.ioloop.IOLoop.instance()
+    http_server = tornado.httpserver.HTTPServer(
+        tornado.wsgi.WSGIContainer(flask_app)
+    )
+    http_server.listen(5000)
 
-_print('gonna autoreload')
-tornado.autoreload.start(io_loop)
+    run_app(show=False)
+else:
+    import threading
 
-_print('gonna run app')
-
-run_app(io_loop=io_loop)
-_print('gonna start loop')
-io_loop.start()
-
+    bokeh_thread = threading.Thread(target=run_app, kwargs={'show': False})
+    bokeh_thread.start()
