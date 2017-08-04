@@ -82,9 +82,21 @@ def qcompare():
 
 @flask_app.route('/simeval')
 def simevalroute():
+    # def get_base_bokeh_url(request_url):
+    #     from urllib.parse import urlparse
+    #     up = urlparse(request_url)
+    #     scheme = up.scheme
+    #     host = up.netloc
+    #     port = up.port
+    #     if port:
+    #         host = host[:-(len(str(port)) + 1)]
+    #     return '{scheme}://{host}:5006/'.format(scheme=scheme, host=host)
+    #
+    # url = get_base_bokeh_url(request.url)
+    # script = autoload_server(model=None, url=url)
+    # return render_template('frame.html', content=script)
     script = autoload_server(model=None, url="http://localhost:5006/")
     return render_template('frame.html', content=script)
-
 
 
 @flask_app.route('/')

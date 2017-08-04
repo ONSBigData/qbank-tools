@@ -185,8 +185,8 @@ def get_heatmap(
         tooltip_fields=None,
         js_on_event=None):
 
-    x_range = list(hm_df[x_field].unique())
-    y_range = list(hm_df[y_field].unique())
+    x_range = list(str(v) for v in hm_df[x_field].unique())
+    y_range = list(str(v) for v in hm_df[y_field].unique())
 
     hm = figure(
         tools=DEF_TOOLS + ['hover'],

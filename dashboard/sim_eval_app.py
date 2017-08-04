@@ -1,4 +1,4 @@
-from bokeh.models import Div, Slider, Select, CheckboxGroup, CustomJS
+from bokeh.models import Div, Slider, Select, CheckboxGroup, CustomJS, TextInput
 from bokeh.models.widgets import Button
 from bokeh.layouts import layout, widgetbox
 
@@ -14,7 +14,7 @@ import helpers.bokeh_helper as bh
 import siman.simeval as simeval
 from siman.sims.tfidf_cos import TfidfCosSim
 import siman.all_sims as all_sims
-
+import datetime
 
 # --- constants -----------------------------------------------------------
 
@@ -55,12 +55,16 @@ INIT_SPECTRUM_END = 1
 INIT_SPECTRUM_BUCKETS = 5
 INIT_QUESTIONS_PER_BUCKET = 2
 INIT_SPECTRUM_SAMPLE_SIZE = 250
+INIT_SEARCH = ''
 
 
 
 class SimEvalApp:
     def update(self):
         # update parameters
+        self.search_text = self.search_text_ctrl.value
+        self.df = self.base_df[self.base_df['all_text'].str.contains(self.search_text, na=False, case=False)]
+
         self.hm_sample_size = self.hm_sample_size_ctrl.value
         self.hist_sample_size = self.hist_sample_size_ctrl.value
         self.cols = [COL_OPTIONS[i] for i in self.analysed_cols_ctrl.active]
@@ -104,6 +108,10 @@ class SimEvalApp:
         for i in range(len(hists)):
             self.hist_divs[i].text = bh.get_code(hists[i])
 
+        # --- Bar chart -----------------------------------------------------------
+
+
+
         # --- Comp divs -----------------------------------------------------------
 
         comp_divs = simeval.get_comp_divs(
@@ -121,8 +129,13 @@ class SimEvalApp:
         texts = [comp_div.text for comp_div in comp_divs]
         self.comp_div.text = '<br>'.join(texts)
 
+        # --- Others -----------------------------------------------------------
+
+        current_time = datetime.datetime.now().strftime('%H:%M:%S')
+        self.top_div.text = '<b>Updated at: {}. Searching for: "{}"</b>'.format(current_time, self.search_text)
+
     def __init__(self):
-        self.df = load_clean_df()
+        self.base_df = load_clean_df()
 
         # init parameters
         self.hm_sample_size = INIT_HM_SAMPLE_SIZE
@@ -135,7 +148,11 @@ class SimEvalApp:
         self.hist_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
         self.comp_div = Div(text='', width=CHARTS_WIDTH)
 
+        # other divs
+        self.top_div = Div(text='', width=CHARTS_WIDTH)
+
         # controls
+        self.search_text_ctrl = TextInput(title=None, value=INIT_SEARCH, width=150)
         self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=INIT_HM_SAMPLE_SIZE, start=10, end=100, step=5)
         self.hist_sample_size_ctrl = Slider(title="Histogram sample size", value=INIT_HIST_SAMPLE_SIZE, start=10, end=1000, step=10)
         self.sim_ctrl = Select(title="Similarity metric", options=[all_sims.get_sim_name(s) for s in all_sims.SIMS], value=all_sims.get_sim_name(INIT_SIM))
@@ -160,6 +177,10 @@ class SimEvalApp:
         inputs = widgetbox(
             [
                 self.submit_btn,
+                Div(text='<hr>'),
+
+                Div(text='<b>Search:</i>'),
+                self.search_text_ctrl,
                 Div(text='<hr>'),
 
                 Div(text='<b>Similarity method</b>:<br><i>(Not all params work for all methods)</i>'),
@@ -191,7 +212,11 @@ class SimEvalApp:
             sizing_mode=sizing_mode, responsive=True, width=WIDGET_BOX_WIDTH
         )
 
+
+
         charts = layout([
+            [self.top_div],
+
             [Div(text='<h2>Heatmap of similarities on sample</h2>', width=CHARTS_WIDTH)],
             self.hm_divs,
 
