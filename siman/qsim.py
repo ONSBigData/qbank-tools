@@ -12,7 +12,21 @@ import numpy as np
 
 def get_stop_words():
     sws = set(stopwords.words('english'))
-    for x in ['survey', 'section', 'business', 'period', 'total', 'service', 'services']:
+    for x in [
+        'segment',
+        'inclusions',
+        'exclusions',
+        'text',
+        'id',
+        'context',
+        'survey',
+        'section',
+        'business',
+        'period',
+        'total',
+        'service',
+        'services'
+    ]:
         sws.add(x)
 
     return sws
@@ -40,6 +54,18 @@ def sent2words(sent):
     words = sent.lower().split()
 
     return words
+
+
+def exp_scale(X, base=10):
+    """Scales the values in X (0-1) to a new scale 0-1. If base > 1, values < 1 are reduced as their distance from 1 increases
+
+    X = np.linspace(0, 1, 20)
+    base = 10
+    plt.plot(X, (base**X - 1)/(base - 1), show)
+    plt.grid()
+    """
+
+    return (base**X - 1) / (base - 1)
 
 
 def create_sentences(df, cols):

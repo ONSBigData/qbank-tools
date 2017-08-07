@@ -107,7 +107,7 @@ class SimEvalApp:
                 cs_only=cs_only,
                 sample_size=self.hm_sample_size,
                 width=DIV_WIDTH,
-                js_on_event=('tap', CustomJS(code="""open_qcomparison(cb_obj['x'], cb_obj['y'])"""))
+                js_on_event=('tap', CustomJS(code="""open_qcomparison_from_hm(cb_obj['x'], cb_obj['y'])"""))
             )
 
         for i, cs_only in enumerate([True, False]):
@@ -135,14 +135,7 @@ class SimEvalApp:
             if len(self.df) == 0:
                 return Div(text='No data')
 
-            on_tap_code = """
-                var i = Math.round(cb_obj['x']);
-                var uuid_x = src.data['uuid_x'][i];
-                var uuid_y = src.data['uuid_y'][i];
-                console.log(uuid_x);
-                console.log(uuid_y);
-                open_qcomparison(uuid_x, uuid_y);
-            """
+            on_tap_code = """open_qcomparison_form_bar(cb_obj);"""
 
             return simeval.get_sim_bar_chart(
                 self.df,
@@ -212,7 +205,7 @@ class SimEvalApp:
         self.search_text_ctrl = TextInput(title=None, value=INIT_SEARCH, width=150)
         self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=INIT_HM_SAMPLE_SIZE, start=10, end=50, step=5)
         self.hist_sample_size_ctrl = Slider(title="Histogram sample size", value=INIT_HIST_SAMPLE_SIZE, start=10, end=1000, step=10)
-        self.sim_ctrl = Select(title="Similarity metric", options=[all_sims.get_sim_name(s) for s in all_sims.SIMS], value=all_sims.get_sim_name(INIT_SIM))
+        self.sim_ctrl = Select(title="Similarity metric", options=all_sims.get_sim_names(), value=all_sims.get_sim_name(INIT_SIM))
         self.analysed_cols_ctrl = CheckboxGroup(labels=COL_OPTIONS, active=[COL_OPTIONS.index(c) for c in INIT_COLS])
         self.sim_params = CheckboxGroup(labels=SIM_PARAMS, active=list(range(len(SIM_PARAMS))))
         self.bc_sample_size_ctrl = Slider(title="Bar chart sample size", value=INIT_BC_SAMPLE_SIZE, start=10, end=1000, step=5)

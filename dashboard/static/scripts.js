@@ -24,28 +24,31 @@ function update_plot(id) {
     });
 }
 
-function open_qcomparison_from_bar() {
-    select_id = $('label:contains("Similarity metric")').attr('for')
-    sim = $('#' + select_id).val()
-
+function open_qcomparison(uuid_x, uuid_y, sim, in_new=true) {
     params = {};
     params[SELECTED_HM_X] = uuid_x;
     params[SELECTED_HM_Y] = uuid_y;
     params[SIM] = sim;
 
-    window.open("/qcompare?" + jQuery.param(params));
+    window.open("/qcompare?" + jQuery.param(params), in_new ? null : "_self");
 }
 
-function open_qcomparison(uuid_x, uuid_y) {
-    select_id = $('label:contains("Similarity metric")').attr('for')
-    sim = $('#' + select_id).val()
+function open_qcomparison_from_bar(cv_obj) {
+    var i = Math.round(cb_obj['x']);
+    var uuid_x = src.data['uuid_x'][i];
+    var uuid_y = src.data['uuid_y'][i];
 
-    params = {};
-    params[SELECTED_HM_X] = uuid_x;
-    params[SELECTED_HM_Y] = uuid_y;
-    params[SIM] = sim;
+    select_id = $('label:contains("Similarity metric")').attr('for');
+    sim = $('#' + select_id).val();
 
-    window.open("/qcompare?" + jQuery.param(params));
+    open_qcomparison(uuid_x, uuid_y, sim);
+}
+
+function open_qcomparison_from_hm(uuid_x, uuid_y) {
+    select_id = $('label:contains("Similarity metric")').attr('for');
+    sim = $('#' + select_id).val();
+
+    open_qcomparison(uuid_x, uuid_y, sim);
 }
 
 function search_for_kw(kw) {

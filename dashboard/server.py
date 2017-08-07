@@ -69,7 +69,15 @@ def qcompare():
     comp_df = simeval.create_comp_df(qx, qy, def_sim=sim_class())
     comp_div = simeval.get_comp_div(comp_df, width=PAGE_WIDTH)
 
-    return render_template('frame.html', content=bh.get_code(comp_div))
+    html = render_template(
+        'qcompare.html',
+        content=bh.get_code(comp_div),
+        uuid_x=uuid_x,
+        uuid_y=uuid_y,
+        sim_name=sim_class_name,
+        sims=all_sims.get_sim_names()
+    )
+    return render_template('frame.html', content=html)
 
 
 @flask_app.route('/simeval')
@@ -96,3 +104,5 @@ if __name__ == '__main__':
     print('Flask application on http://localhost:5000/')
 
     run_app(show=False)
+else:
+    run_app()
