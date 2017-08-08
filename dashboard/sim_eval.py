@@ -135,7 +135,7 @@ class SimEvalApp:
             if len(self.df) == 0:
                 return Div(text='No data')
 
-            on_tap_code = """open_qcomparison_form_bar(cb_obj);"""
+            on_tap_code = """open_qcomparison_from_bar(cb_obj);"""
 
             return simeval.get_sim_bar_chart(
                 self.df,

@@ -19,3 +19,10 @@ CS_ONLY = 'cs_only'
 SIM = 'sim'
 
 SIM_EVAL_PORT = 5006
+
+SIM_EVAL_URL = 'http://localhost:5006/'
+
+try:
+    from extra_settings import *
+except:
+    pass

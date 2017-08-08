@@ -15,11 +15,11 @@ cp $cur_dir/../requirements.txt "$DEPLOY_ROOT/"
 remote=""
 if [[ $1 == 'main' || -z "$1" ]]
 then
-    cp "$cur_dir/Procfile_main_app" "$DEPLOY_ROOT/Procfile"
+    cp "$cur_dir/Procfile_main" "$DEPLOY_ROOT/Procfile"
     remote=$QBANK_MAIN
 elif [[ $1 == 'sim-eval' ]]
 then
-    cp "$cur_dir/Procfile_sim_eval_app" "$DEPLOY_ROOT/Procfile"
+    cp "$cur_dir/Procfile_sim_eval" "$DEPLOY_ROOT/Procfile"
     remote=$QBANK_SIM_EVAL
 fi
 

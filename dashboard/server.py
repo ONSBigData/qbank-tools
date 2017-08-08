@@ -82,8 +82,7 @@ def qcompare():
 
 @flask_app.route('/simeval')
 def simevalroute():
-    # script = autoload_server(model=None, url="http://localhost:5006/")
-    script = autoload_server(model=None, url="https://qbank-sim-eval.herokuapp.com/sim_eval_serve")
+    script = autoload_server(model=None, url=SIM_EVAL_URL)
     return render_template('frame.html', content=script)
 
 
