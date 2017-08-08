@@ -48,7 +48,7 @@ SIM_PARAMS = [
 ]
 
 INIT_HM_SAMPLE_SIZE = 30
-INIT_BC_SAMPLE_SIZE = 30
+INIT_BC_SAMPLE_SIZE = 100
 INIT_NUM_BARS = 10
 INIT_HIST_SAMPLE_SIZE = 100
 INIT_SIM = TfidfCosSim
@@ -135,7 +135,7 @@ class SimEvalApp:
             if len(self.df) == 0:
                 return Div(text='No data')
 
-            on_tap_code = """open_qcomparison_from_bar(cb_obj);"""
+            on_tap_code = """open_qcomparison_from_bar(cb_obj, src);"""
 
             return simeval.get_sim_bar_chart(
                 self.df,

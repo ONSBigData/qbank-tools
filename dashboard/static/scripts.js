@@ -33,7 +33,7 @@ function open_qcomparison(uuid_x, uuid_y, sim, in_new=true) {
     window.open("/qcompare?" + jQuery.param(params), in_new ? null : "_self");
 }
 
-function open_qcomparison_from_bar(cv_obj) {
+function open_qcomparison_from_bar(cb_obj, src) {
     var i = Math.round(cb_obj['x']);
     var uuid_x = src.data['uuid_x'][i];
     var uuid_y = src.data['uuid_y'][i];
