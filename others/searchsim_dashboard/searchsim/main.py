@@ -18,7 +18,7 @@ from bokeh.application import Application
 
 from os.path import dirname, join
 
-from siman.simple_cos_sim import SimpleCosSim
+from qsim.simple_cos_sim import SimpleCosSim
 
 from helpers.common import *
 

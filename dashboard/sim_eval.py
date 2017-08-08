@@ -11,9 +11,9 @@ from helpers.common import *
 from dashboard.settings import *
 import helpers.bokeh_helper as bh
 
-import siman.simeval as simeval
-from siman.sims.tfidf_cos import TfidfCosSim
-import siman.all_sims as all_sims
+import qsim.sim_analyze as simeval
+from qsim.sims.tfidf_cos_sim import TfidfCosSim
+import qsim.qsim_common as all_sims
 import datetime
 import traceback
 
@@ -48,16 +48,16 @@ SIM_PARAMS = [
 ]
 
 INIT_HM_SAMPLE_SIZE = 30
-INIT_BC_SAMPLE_SIZE = 100
+INIT_BC_SAMPLE_SIZE = 50
 INIT_NUM_BARS = 10
-INIT_HIST_SAMPLE_SIZE = 100
+INIT_HIST_SAMPLE_SIZE = 50
 INIT_SIM = TfidfCosSim
 INIT_COLS = ['suff_qtext', 'type']
 INIT_SPECTRUM_START = 0
 INIT_SPECTRUM_END = 1
 INIT_SPECTRUM_BUCKETS = 5
 INIT_QUESTIONS_PER_BUCKET = 2
-INIT_SPECTRUM_SAMPLE_SIZE = 100
+INIT_SPECTRUM_SAMPLE_SIZE = 30
 INIT_SEARCH = ''
 
 
@@ -81,6 +81,7 @@ class SimEvalApp:
         self.cols = [COL_OPTIONS[i] for i in self.analysed_cols_ctrl.active]
         sim_class = all_sims.get_sim_class_by_name(self.sim_ctrl.value)
         self.sim = sim_class(self.cols)
+        #TODO - add params like lower etc..
         self.bc_sample_size = self.bc_sample_size_ctrl.value
         self.bc_bars = self.bc_bars_ctrl.value
 
@@ -216,7 +217,7 @@ class SimEvalApp:
         self.spectrum_buckets_ctrl = Slider(title="Number of buckets", value=INIT_SPECTRUM_BUCKETS, start=1, end=20, step=1)
         self.spectrum_bucket_size_ctrl = Slider(title="Questions per bucket", value=INIT_QUESTIONS_PER_BUCKET, start=1, end=10, step=1)
         self.spectrum_cs_only_ctrl = CheckboxGroup(labels=['Cross survey only'], active=[])
-        self.spectrum_spectrum_sample_size_ctrl = Slider(title="Sample size", value=INIT_SPECTRUM_SAMPLE_SIZE, start=50, end=5000, step=50)
+        self.spectrum_spectrum_sample_size_ctrl = Slider(title="Sample size", value=INIT_SPECTRUM_SAMPLE_SIZE, start=30, end=3000, step=10)
 
         self.submit_btn = Button(label="Submit", button_type="success")
         self.submit_btn.on_click(self.update)

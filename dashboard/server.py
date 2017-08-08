@@ -8,8 +8,8 @@ from dashboard.settings import *
 from bokeh.embed import autoload_server
 
 import helpers.bokeh_helper as bh
-import siman.simeval as simeval
-import siman.all_sims as all_sims
+import qsim.sim_analyze as simeval
+import qsim.qsim_common as all_sims
 
 
 flask_app = Flask(__name__)

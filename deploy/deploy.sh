@@ -4,6 +4,8 @@ cur_dir=`dirname $0`
 source "$cur_dir/deploy-common.sh"
 
 
+cp -r "$cur_dir/../../data/checkpoints/w2v" "$cur_dir/../dashboard/bundled_data/"
+
 cp -r "$cur_dir/../dashboard" "$DEPLOY_ROOT/"
 cp -r "$cur_dir/../helpers" "$DEPLOY_ROOT/"
 cp -r "$cur_dir/../siman" "$DEPLOY_ROOT/"

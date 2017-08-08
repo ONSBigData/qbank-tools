@@ -1,11 +1,10 @@
 import helpers.bokeh_helper as bh
-import helpers.path_helper as path_helper
-import siman.simeval as simeval
+import qsim.sim_analyze as simeval
 from dashboard.settings import *
 from helpers.common import *
 from helpers.cache import Cache
-from siman.sims.tfidf_cos import TfidfCosSim
-from siman.sims.exact import ExactSim
+from qsim.sims.tfidf_cos_sim import TfidfCosSim
+from qsim.sims.exact_sim import ExactSim
 
 class Model:
     sim = TfidfCosSim()

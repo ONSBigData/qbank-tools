@@ -1,7 +1,7 @@
 import bokeh.palettes as palettes
 from bokeh.models import ColumnDataSource, Div, CustomJS
 from bokeh.models.widgets import DataTable, TableColumn, HTMLTemplateFormatter
-import siman.simeval as simeval
+import qsim.sim_analyze as simeval
 import helpers.log_helper as lg
 import helpers.bokeh_helper as bh
 from dashboard.model import Model
