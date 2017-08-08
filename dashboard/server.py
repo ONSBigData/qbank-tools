@@ -2,7 +2,7 @@ from flask import Flask, render_template, request
 
 from dashboard.model import Model
 from dashboard.presentation import Presentation
-from dashboard.sim_eval_app import run_app
+from dashboard.sim_eval import run_app
 from dashboard.settings import *
 
 from bokeh.embed import autoload_server
@@ -82,7 +82,8 @@ def qcompare():
 
 @flask_app.route('/simeval')
 def simevalroute():
-    script = autoload_server(model=None, url="http://localhost:5006/")
+    # script = autoload_server(model=None, url="http://localhost:5006/")
+    script = autoload_server(model=None, url="https://qbank-sim-eval.herokuapp.com/sim_eval_serve")
     return render_template('frame.html', content=script)
 
 
@@ -104,5 +105,3 @@ if __name__ == '__main__':
     print('Flask application on http://localhost:5000/')
 
     run_app(show=False)
-else:
-    run_app()

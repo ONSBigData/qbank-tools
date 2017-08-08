@@ -3,7 +3,7 @@ import sys
 sys.path.append(os.path.realpath(os.path.dirname(__file__)) + '/../')
 
 from bokeh.io import curdoc
-from dashboard.sim_eval_app import SimEvalApp
+from dashboard.sim_eval import SimEvalApp
 
 app = SimEvalApp()
 

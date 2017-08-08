@@ -6,3 +6,4 @@ dashboard/dashboard/*.csv
 log
 main.html
 *.pyc
+deploydir
