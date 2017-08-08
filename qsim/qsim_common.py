@@ -47,7 +47,7 @@ def pickle_word_vectors(wv_dict, model_name):
 
 
 def load_word_vectors(model_name):
-    load_pickled_obj(_get_wv_dict_pickle_name(model_name))
+    return load_pickled_obj(_get_wv_dict_pickle_name(model_name))
 
 
 def _get_1st_pc_pickle_name(name):
@@ -59,7 +59,7 @@ def pickle_1st_pc(first_pc, name):
 
 
 def load_1st_pc(name):
-    load_pickled_obj(_get_1st_pc_pickle_name(name))
+    return load_pickled_obj(_get_1st_pc_pickle_name(name))
 
 
 # --- other helper functions -----------------------------------------------------------

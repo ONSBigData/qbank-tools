@@ -7,3 +7,5 @@ log
 main.html
 *.pyc
 deploydir
+bundled_data/
+histogram.html

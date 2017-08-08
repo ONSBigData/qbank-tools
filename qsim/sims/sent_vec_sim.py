@@ -62,6 +62,11 @@ class SentVecSim(EmbeddingsBasedSim):
 
         return csm[0, 1]
 
+    def preprocess_row(self, row):
+        cols = self._cols if self._cols is not None else list(df.columns)
+
+        return self._preprocess_row(row, cols)
+
     def _get_similarity_matrix_from_texts(self, proc_texts):
         # N = # of items
         # V = # of vocab words

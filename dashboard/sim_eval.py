@@ -13,7 +13,7 @@ import helpers.bokeh_helper as bh
 
 import qsim.sim_analyze as simeval
 from qsim.sims.tfidf_cos_sim import TfidfCosSim
-import qsim.qsim_common as all_sims
+import qsim.all_sims as all_sims
 import datetime
 import traceback
 
@@ -178,7 +178,7 @@ class SimEvalApp:
         # --- Others -----------------------------------------------------------
 
         current_time = datetime.datetime.now().strftime('%H:%M:%S')
-        self.top_div.text = '<b>Updated at: {}. Searching for: "{}"</b>'.format(current_time, self.search_text)
+        self.top_div.text = '<b>Updated at: {} UTC. Searching for: "{}"</b>'.format(current_time, self.search_text)
 
     def __init__(self):
         try:
@@ -203,7 +203,7 @@ class SimEvalApp:
         self.top_div = Div(text='', width=CHARTS_WIDTH)
 
         # controls
-        self.search_text_ctrl = TextInput(title=None, value=INIT_SEARCH, width=150)
+        self.search_text_ctrl = TextInput(title=None, value=INIT_SEARCH, width=WIDGET_BOX_WIDTH - 50)
         self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=INIT_HM_SAMPLE_SIZE, start=10, end=50, step=5)
         self.hist_sample_size_ctrl = Slider(title="Histogram sample size", value=INIT_HIST_SAMPLE_SIZE, start=10, end=1000, step=10)
         self.sim_ctrl = Select(title="Similarity metric", options=all_sims.get_sim_names(), value=all_sims.get_sim_name(INIT_SIM))

@@ -61,6 +61,7 @@ def _load_w2v_keyed_vectors(model_name):
 
 
 def create_and_pickle_word_frequencies():
+    print('creating word frequencies...')
     sentences = get_sentences()
 
     fd = nltk.FreqDist([w for s in sentences for w in s])
@@ -70,6 +71,7 @@ def create_and_pickle_word_frequencies():
 
 
 def get_and_pickle_word_vectors(model_name):
+    print('getting word vectors for {}...'.format(model_name))
     model = _load_w2v_keyed_vectors(model_name)
 
     sentences = get_sentences()
@@ -86,6 +88,7 @@ def get_and_pickle_word_vectors(model_name):
 
 
 def get_and_pickle_1st_pc(sent_vec_sim, name):
+    print('getting 1st PC - {}...'.format(name))
     df = load_clean_df()
 
     first_pc = sent_vec_sim.get_first_pc(df)
@@ -95,10 +98,10 @@ def get_and_pickle_1st_pc(sent_vec_sim, name):
 if __name__ == '__main__':
     # train_w2v()
     #
-    create_and_pickle_word_frequencies()
-    #
-    get_and_pickle_word_vectors(W2vModelName.PretrainedGoogleNews)
-    get_and_pickle_word_vectors(W2vModelName.QbankTrained)
+    # create_and_pickle_word_frequencies()
+
+    # get_and_pickle_word_vectors(W2vModelName.PretrainedGoogleNews)
+    # get_and_pickle_word_vectors(W2vModelName.QbankTrained)
 
     get_and_pickle_1st_pc(SentVecSim(rem_stopwords=False, first_pc_name=None), qsim.FIRST_PC_INC_STOP_NAME)
     get_and_pickle_1st_pc(SentVecSim(rem_stopwords=True, first_pc_name=None), qsim.FIRST_PC_EXC_STOP_NAME)
