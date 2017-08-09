@@ -1,4 +1,4 @@
-from bokeh.models import Div, Slider, Select, CheckboxGroup, CustomJS, TextInput
+from bokeh.models import Div, Slider, Select, CheckboxGroup, CustomJS, TextInput, RadioGroup
 from bokeh.models.widgets import Button
 from bokeh.layouts import layout, widgetbox
 
@@ -12,10 +12,12 @@ from dashboard.settings import *
 import helpers.bokeh_helper as bh
 
 import qsim.sim_analyze as simeval
+import qsim.qsim_common as qsim
 from qsim.sims.tfidf_cos_sim import TfidfCosSim
 import qsim.all_sims as all_sims
 import datetime
 import traceback
+import inspect
 
 # --- constants -----------------------------------------------------------
 
@@ -40,26 +42,7 @@ SIM_PARAM_REM_STOP = 'remove stopwords'
 SIM_PARAM_STEM = 'stemming'
 SIM_PARAM_ONLY_ALPHA_NUM = 'only alphanum. chars'
 SIM_PARAM_LOWER_CASE = 'lowercase'
-SIM_PARAMS = [
-    SIM_PARAM_REM_STOP,
-    SIM_PARAM_STEM,
-    SIM_PARAM_ONLY_ALPHA_NUM,
-    SIM_PARAM_LOWER_CASE
-]
-
-INIT_HM_SAMPLE_SIZE = 30
-INIT_BC_SAMPLE_SIZE = 50
-INIT_NUM_BARS = 10
-INIT_HIST_SAMPLE_SIZE = 50
-INIT_SIM = TfidfCosSim
-INIT_COLS = ['suff_qtext', 'type']
-INIT_SPECTRUM_START = 0
-INIT_SPECTRUM_END = 1
-INIT_SPECTRUM_BUCKETS = 5
-INIT_QUESTIONS_PER_BUCKET = 2
-INIT_SPECTRUM_SAMPLE_SIZE = 30
-INIT_SEARCH = ''
-
+SIM_PARAMS_CHECKOPTS = [SIM_PARAM_REM_STOP, SIM_PARAM_STEM, SIM_PARAM_ONLY_ALPHA_NUM, SIM_PARAM_LOWER_CASE]
 
 class SimEvalApp:
     def update_chart(self, holding_div, create_chart_code_method):
@@ -71,42 +54,89 @@ class SimEvalApp:
         except Exception as e:
             holding_div.text = 'Exception occured: {}\n{}'.format(e, traceback.format_exc())
 
+    def get_sim(self, sim_class, cols):
+        signature = inspect.signature(sim_class.__init__)
+        sig_args = [p for p in signature.parameters]
+
+        sim_params = {}
+
+        for i, checkbox_param in enumerate(['rem_stopwords', 'stem', 'only_alphanum', 'lower']):
+            if checkbox_param in sig_args:
+                sim_params[checkbox_param] = i in self.sim_params_ctrl.active
+
+        WV_DICT_MODEL_PARAM = 'wv_dict_model_name'
+        if WV_DICT_MODEL_PARAM in sig_args:
+            sim_params[WV_DICT_MODEL_PARAM] = [e for e in qsim.W2vModelName][self.wv_dict_model_ctrl.active]
+
+        sim = sim_class(cols=cols, **sim_params)
+
+        return sim
+
     def update(self):
-        # update parameters
-        self.search_text = self.search_text_ctrl.value
-        self.df = self.base_df[self.base_df['all_text'].str.contains(self.search_text, na=False, case=False)]
+        search_text = self.search_text_ctrl.value
+        df = self.base_df[self.base_df['all_text'].str.contains(search_text, na=False, case=False)]
 
-        self.hm_sample_size = self.hm_sample_size_ctrl.value
-        self.hist_sample_size = self.hist_sample_size_ctrl.value
-        self.cols = [COL_OPTIONS[i] for i in self.analysed_cols_ctrl.active]
         sim_class = all_sims.get_sim_class_by_name(self.sim_ctrl.value)
-        self.sim = sim_class(self.cols)
-        #TODO - add params like lower etc..
-        self.bc_sample_size = self.bc_sample_size_ctrl.value
-        self.bc_bars = self.bc_bars_ctrl.value
+        cols = [COL_OPTIONS[i] for i in self.analysed_cols_ctrl.active]
+        sim = self.get_sim(sim_class, cols)
 
-        self.spectrum_start = self.spectrum_start_ctrl.value
-        self.spectrum_end = self.spectrum_end_ctrl.value
-        self.spectrum_buckets = self.spectrum_buckets_ctrl.value
-        self.spectrum_bucket_size = self.spectrum_bucket_size_ctrl.value
-        self.spectrum_cs_only = 0 in self.spectrum_cs_only_ctrl.active
-        self.spectrum_sample = self.spectrum_spectrum_sample_size_ctrl.value
+        sim_input_nres = self.sim_input_nres_ctrl.value
+        sim_input_text = self.sim_input_text_ctrl.value
+        sim_input_sample_size = self.sim_input_sample_size_ctrl.value
+
+        hm_sample_size = self.hm_sample_size_ctrl.value
+
+        hist_sample_size = self.hist_sample_size_ctrl.value
+
+        bc_sample_size = self.bc_sample_size_ctrl.value
+        bc_bars = self.bc_bars_ctrl.value
+
+        spectrum_start = self.spectrum_start_ctrl.value
+        spectrum_end = self.spectrum_end_ctrl.value
+        spectrum_buckets = self.spectrum_buckets_ctrl.value
+        spectrum_bucket_size = self.spectrum_bucket_size_ctrl.value
+        spectrum_cs_only = 0 in self.spectrum_cs_only_ctrl.active
+        spectrum_sample = self.spectrum_spectrum_sample_size_ctrl.value
 
         for div in self.hm_divs + self.bc_divs + self.hist_divs + [self.comp_div]:
             div.text = 'Awaiting update...'
 
+        # --- Top results -----------------------------------------------------------
+
+        def create_sim_input_div():
+            rows = []
+
+            sdf = df.copy()
+            if len(sdf) > sim_input_sample_size:
+                sdf = sdf.sample(sim_input_sample_size)
+
+            for _, row in sdf.iterrows():
+                row_text = sim.preprocess_question(row)
+                similarity = sim.get_text_sim(row_text, sim_input_text)
+                if similarity is None:
+                    similarity = 0
+
+                rows.append((row, similarity))
+
+            rows.sort(key=lambda x: x[1], reverse=True)
+
+            res_df = pd.DataFrame([r[0] for r in rows[:sim_input_nres]], columns=cols)
+            return res_df.to_html(justify='left')
+
+        self.update_chart(self.sim_input_div, create_sim_input_div)
+
         # --- Heatmaps -----------------------------------------------------------
 
         def create_hm(cs_only):
-            if len(self.df) == 0:
+            if len(df) == 0:
                 return Div(text='No data')
 
             return simeval.get_sim_heatmap(
-                self.df,
-                self.sim,
-                tooltip_fields=self.cols + ['survey_name', 'uuid'],
+                df,
+                sim,
+                tooltip_fields=cols + ['survey_name', 'uuid'],
                 cs_only=cs_only,
-                sample_size=self.hm_sample_size,
+                sample_size=hm_sample_size,
                 width=DIV_WIDTH,
                 js_on_event=('tap', CustomJS(code="""open_qcomparison_from_hm(cb_obj['x'], cb_obj['y'])"""))
             )
@@ -117,14 +147,14 @@ class SimEvalApp:
         # --- Histograms -----------------------------------------------------------
 
         def create_hist(cs_only):
-            if len(self.df) == 0:
+            if len(df) == 0:
                 return Div(text='No data')
 
             return simeval.get_sim_hist(
-                self.df,
-                self.sim,
+                df,
+                sim,
                 cs_only=cs_only,
-                sample_size=self.hist_sample_size,
+                sample_size=hist_sample_size,
                 width=DIV_WIDTH
             )
         for i, cs_only in enumerate([True, False]):
@@ -133,20 +163,20 @@ class SimEvalApp:
         # --- Bar chart -----------------------------------------------------------
 
         def create_bar_chart(cs_only):
-            if len(self.df) == 0:
+            if len(df) == 0:
                 return Div(text='No data')
 
             on_tap_code = """open_qcomparison_from_bar(cb_obj, src);"""
 
             return simeval.get_sim_bar_chart(
-                self.df,
-                self.sim,
+                df,
+                sim,
                 cs_only=cs_only,
-                sample_size=self.bc_sample_size,
-                bars=self.bc_bars,
+                sample_size=bc_sample_size,
+                bars=bc_bars,
                 width=DIV_WIDTH,
                 x_rot=1.5,
-                tooltip_fields=self.cols + ['survey_name', 'uuid', 'similarity'],
+                tooltip_fields=cols + ['survey_name', 'uuid', 'similarity'],
                 js_on_event=('tap', CustomJS(code=on_tap_code))
             )
         for i, cs_only in enumerate([True, False]):
@@ -155,20 +185,20 @@ class SimEvalApp:
         # --- Comp divs -----------------------------------------------------------
 
         def create_comp_div():
-            if len(self.df) == 0:
+            if len(df) == 0:
                 return 'No data'
 
             comp_divs = simeval.get_comp_divs(
-                self.df,
-                self.sim,
-                sim_cols=self.cols,
+                df,
+                sim,
+                sim_cols=cols,
                 width=CHARTS_WIDTH,
-                start=self.spectrum_start,
-                end=self.spectrum_end,
-                buckets=self.spectrum_buckets,
-                bucket_size=self.spectrum_bucket_size,
-                cs_only=self.spectrum_cs_only,
-                sample=self.spectrum_sample
+                start=spectrum_start,
+                end=spectrum_end,
+                buckets=spectrum_buckets,
+                bucket_size=spectrum_bucket_size,
+                cs_only=spectrum_cs_only,
+                sample=spectrum_sample
             )
             texts = [comp_div.text for comp_div in comp_divs]
             return '<br>'.join(texts)
@@ -178,22 +208,19 @@ class SimEvalApp:
         # --- Others -----------------------------------------------------------
 
         current_time = datetime.datetime.now().strftime('%H:%M:%S')
-        self.top_div.text = '<b>Updated at: {} UTC. Searching for: "{}"</b>'.format(current_time, self.search_text)
+        self.top_div.text = '<b>Updated at: {} UTC. Searching for: "{}"</b>'.format(current_time, search_text)
 
     def __init__(self):
+        pd.set_option('display.max_colwidth', -1)
+
         try:
             self.base_df = load_clean_df()
         except:
             fpath = BUNDLED_DATA_DIR + '/clean-light.csv'
             self.base_df = load_clean_df(fpath=fpath)
 
-        # init parameters
-        self.hm_sample_size = INIT_HM_SAMPLE_SIZE
-        self.hist_sample_size = INIT_HIST_SAMPLE_SIZE
-        self.cols = INIT_COLS
-        self.sim = INIT_SIM(cols=self.cols)
-
         # divs holding the charts
+        self.sim_input_div = Div(text='', width=CHARTS_WIDTH)
         self.hm_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
         self.hist_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
         self.bc_divs = [Div(text='', width=DIV_WIDTH) for _ in range(2)]
@@ -203,21 +230,30 @@ class SimEvalApp:
         self.top_div = Div(text='', width=CHARTS_WIDTH)
 
         # controls
-        self.search_text_ctrl = TextInput(title=None, value=INIT_SEARCH, width=WIDGET_BOX_WIDTH - 50)
-        self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=INIT_HM_SAMPLE_SIZE, start=10, end=50, step=5)
-        self.hist_sample_size_ctrl = Slider(title="Histogram sample size", value=INIT_HIST_SAMPLE_SIZE, start=10, end=1000, step=10)
-        self.sim_ctrl = Select(title="Similarity metric", options=all_sims.get_sim_names(), value=all_sims.get_sim_name(INIT_SIM))
-        self.analysed_cols_ctrl = CheckboxGroup(labels=COL_OPTIONS, active=[COL_OPTIONS.index(c) for c in INIT_COLS])
-        self.sim_params = CheckboxGroup(labels=SIM_PARAMS, active=list(range(len(SIM_PARAMS))))
-        self.bc_sample_size_ctrl = Slider(title="Bar chart sample size", value=INIT_BC_SAMPLE_SIZE, start=10, end=1000, step=5)
-        self.bc_bars_ctrl = Slider(title="Number of bars", value=INIT_NUM_BARS, start=5, end=25, step=1)
+        self.search_text_ctrl = TextInput(title=None, value='', width=WIDGET_BOX_WIDTH - 50)
 
-        self.spectrum_start_ctrl = Slider(title="Similarity from", value=INIT_SPECTRUM_START, start=0, end=1, step=0.01)
-        self.spectrum_end_ctrl = Slider(title="Similarity to", value=INIT_SPECTRUM_END, start=0, end=1, step=0.01)
-        self.spectrum_buckets_ctrl = Slider(title="Number of buckets", value=INIT_SPECTRUM_BUCKETS, start=1, end=20, step=1)
-        self.spectrum_bucket_size_ctrl = Slider(title="Questions per bucket", value=INIT_QUESTIONS_PER_BUCKET, start=1, end=10, step=1)
+        self.sim_ctrl = Select(title="Similarity metric", options=all_sims.get_sim_names(), value=all_sims.get_sim_name(TfidfCosSim))
+        self.analysed_cols_ctrl = CheckboxGroup(labels=COL_OPTIONS, active=[COL_OPTIONS.index(c) for c in ['suff_qtext', 'type']])
+        self.sim_params_ctrl = CheckboxGroup(labels=list(SIM_PARAMS_CHECKOPTS), active=list(range(len(SIM_PARAMS_CHECKOPTS))))
+        self.wv_dict_model_ctrl = RadioGroup(labels=[e.name for e in qsim.W2vModelName], active=0)
+
+        self.sim_input_nres_ctrl = Slider(title="Number of search results", value=10, start=1, end=100, step=1)
+        self.sim_input_sample_size_ctrl = Slider(title="Sample size", value=1000, start=100, end=10000, step=100)
+        self.sim_input_text_ctrl = TextInput(title='Text', value='', width=WIDGET_BOX_WIDTH - 50)
+
+        self.hm_sample_size_ctrl = Slider(title="Heatmap sample size", value=30, start=10, end=50, step=5)
+
+        self.hist_sample_size_ctrl = Slider(title="Histogram sample size", value=30, start=10, end=1000, step=10)
+
+        self.bc_sample_size_ctrl = Slider(title="Bar chart sample size", value=30, start=10, end=1000, step=5)
+        self.bc_bars_ctrl = Slider(title="Number of bars", value=10, start=5, end=25, step=1)
+
+        self.spectrum_start_ctrl = Slider(title="Similarity from", value=0, start=0, end=1, step=0.01)
+        self.spectrum_end_ctrl = Slider(title="Similarity to", value=1, start=0, end=1, step=0.01)
+        self.spectrum_buckets_ctrl = Slider(title="Number of buckets", value=5, start=1, end=20, step=1)
+        self.spectrum_bucket_size_ctrl = Slider(title="Questions per bucket", value=2, start=1, end=10, step=1)
         self.spectrum_cs_only_ctrl = CheckboxGroup(labels=['Cross survey only'], active=[])
-        self.spectrum_spectrum_sample_size_ctrl = Slider(title="Sample size", value=INIT_SPECTRUM_SAMPLE_SIZE, start=30, end=3000, step=10)
+        self.spectrum_spectrum_sample_size_ctrl = Slider(title="Sample size", value=30, start=30, end=3000, step=10)
 
         self.submit_btn = Button(label="Submit", button_type="success")
         self.submit_btn.on_click(self.update)
@@ -238,9 +274,17 @@ class SimEvalApp:
 
                 Div(text='<b>Similarity method</b>:<br><i>(Not all params work for all methods)</i>'),
                 self.sim_ctrl,
-                self.sim_params,
+                self.sim_params_ctrl,
+                Div(text='Word vector model:'),
+                self.wv_dict_model_ctrl,
                 Div(text='Analysed columns:'),
                 self.analysed_cols_ctrl,
+                Div(text='<hr>'),
+
+                Div(text='<b>Similarities to input</b>:'),
+                self.sim_input_text_ctrl,
+                self.sim_input_nres_ctrl,
+                self.sim_input_sample_size_ctrl,
                 Div(text='<hr>'),
 
                 Div(text='<b>Heatmap</b>:'),
@@ -269,6 +313,10 @@ class SimEvalApp:
 
         charts = layout([
             [self.top_div],
+
+            [Div(text='<h2>Top {} similarities to input: "{}"</h2>'.format(
+                self.sim_input_nres_ctrl.value, self.sim_input_text_ctrl.value), width=CHARTS_WIDTH)],
+            [self.sim_input_div],
 
             [Div(text='<h2>Heatmap of similarities on sample</h2>', width=CHARTS_WIDTH)],
             self.hm_divs,

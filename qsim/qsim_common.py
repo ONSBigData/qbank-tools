@@ -19,8 +19,6 @@ class W2vModelName(Enum):
 
 
 DEF_WF_DICT_NAME = 'wf.dict'
-FIRST_PC_INC_STOP_NAME = 'inc-stop'
-FIRST_PC_EXC_STOP_NAME = 'exc-stop'
 
 
 # --- pickling -----------------------------------------------------------
@@ -50,16 +48,16 @@ def load_word_vectors(model_name):
     return load_pickled_obj(_get_wv_dict_pickle_name(model_name))
 
 
-def _get_1st_pc_pickle_name(name):
-    return '1pc.{}'.format(name)
+def _get_1st_pc_pickle_name(model_name, rem_stopwords):
+    return '1pc.{}.{}'.format(model_name.name, 'exc-stop' if rem_stopwords else 'inc-stop')
 
 
-def pickle_1st_pc(first_pc, name):
-    save_pickled_obj(first_pc, _get_1st_pc_pickle_name(name))
+def pickle_1st_pc(first_pc, model_name, rem_stopwords):
+    save_pickled_obj(first_pc, _get_1st_pc_pickle_name(model_name, rem_stopwords))
 
 
-def load_1st_pc(name):
-    return load_pickled_obj(_get_1st_pc_pickle_name(name))
+def load_1st_pc(model_name, rem_stopwords):
+    return load_pickled_obj(_get_1st_pc_pickle_name(model_name, rem_stopwords))
 
 
 # --- other helper functions -----------------------------------------------------------

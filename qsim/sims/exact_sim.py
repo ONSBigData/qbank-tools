@@ -34,11 +34,19 @@ class ExactSim(BaseSim):
 
         return ' '.join(words)
 
+    def _preprocess_question(self, question_series, cols):
+        return ' ||||| '.join(str(x) for x in question_series[cols])
+
+    def preprocess_question(self, question_series):
+        cols = self._cols if self._cols is not None else list(question_series.index)
+
+        return self._preprocess_question(question_series, cols)
+
     def _preprocess_df(self, df):
         texts = []
         cols = self._cols if self._cols is not None else list(df.columns)
         for _, row in df.iterrows():
-            text = ' ||||| '.join(str(x) for x in row[cols])
+            text = self._preprocess_question(row, cols)
             texts.append(text)
 
         proc_texts = [self._preprocess_text(text) for text in texts]

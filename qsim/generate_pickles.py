@@ -31,7 +31,7 @@ def train_w2v():
 
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-    num_features = 400    # Word vector dimensionality
+    num_features = 300    # Word vector dimensionality
     min_word_count = 30   # Minimum word count
     num_workers = 4       # Number of threads to run in parallel
     context = 7           # Context window size
@@ -87,12 +87,12 @@ def get_and_pickle_word_vectors(model_name):
     qsim.pickle_word_vectors(wv_dict, model_name)
 
 
-def get_and_pickle_1st_pc(sent_vec_sim, name):
-    print('getting 1st PC - {}...'.format(name))
+def get_and_pickle_1st_pc(sent_vec_sim, model_name, rem_stopwords):
+    print('getting 1st PC - {}/{}...'.format(model_name, rem_stopwords))
     df = load_clean_df()
 
     first_pc = sent_vec_sim.get_first_pc(df)
-    qsim.pickle_1st_pc(first_pc, name)
+    qsim.pickle_1st_pc(first_pc, model_name, rem_stopwords)
 
 
 if __name__ == '__main__':
@@ -103,5 +103,7 @@ if __name__ == '__main__':
     # get_and_pickle_word_vectors(W2vModelName.PretrainedGoogleNews)
     # get_and_pickle_word_vectors(W2vModelName.QbankTrained)
 
-    get_and_pickle_1st_pc(SentVecSim(rem_stopwords=False, first_pc_name=None), qsim.FIRST_PC_INC_STOP_NAME)
-    get_and_pickle_1st_pc(SentVecSim(rem_stopwords=True, first_pc_name=None), qsim.FIRST_PC_EXC_STOP_NAME)
+    for model_name in W2vModelName:
+        for rem_stopwords in [True, False]:
+            sim = SentVecSim(wv_dict_model_name=model_name, rem_stopwords=rem_stopwords, first_pc_model_name=None)
+            get_and_pickle_1st_pc(sim, model_name, rem_stopwords)

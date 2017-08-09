@@ -18,7 +18,7 @@ class EmbeddingsBasedSim(BaseSim):
 
         cols = self._cols if self._cols is not None else list(df.columns)
         for _, row in df.iterrows():
-            proc_texts.append(self._preprocess_row(row, cols))
+            proc_texts.append(self._preprocess_question(row, cols))
 
         return np.array(proc_texts)
 
@@ -27,10 +27,15 @@ class EmbeddingsBasedSim(BaseSim):
 
         return qsim.exp_scale(self._get_similarity_matrix_from_texts(proc_texts))
 
-    def _preprocess_row(self, row, cols):
-        text = ' '.join(str(x) for x in row[cols] if pd.notnull(x))
+    def _preprocess_question(self, question_series, cols):
+        text = ' '.join(str(x) for x in question_series[cols] if pd.notnull(x))
         item = self._preprocess_text(text)
         return item
+
+    def preprocess_question(self, question_series):
+        cols = self._cols if self._cols is not None else list(question_series.index)
+
+        return self._preprocess_question(question_series, cols)
 
     def _preprocess_text(self, text):
         sents = qsim.text2sents(text)

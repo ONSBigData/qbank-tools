@@ -28,6 +28,9 @@ class BaseSim:
         except:
             return None
 
+    def preprocess_question(self, question_series):
+        raise NotImplementedError
+
     def get_similarity_matrix(self, df, cs_only=False):
         sim_matrix = self._get_similarity_matrix(df)
 
