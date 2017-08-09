@@ -69,3 +69,15 @@ label {
 hr {
     border-top-color: black;
 }
+
+h1 {
+    margin-top:-15px
+}
+
+.section_title {
+    margin-bottom: -30px;
+}
+
+.section_desc {
+    color: #484848;
+}

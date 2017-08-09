@@ -108,19 +108,7 @@ def get_comp_div(comp_df, palette=bh.DEF_PALETTE, width=bh.DEF_WIDTH):
     if comp_df is None:
         return Div(text='')
 
-    pd.set_option('display.max_colwidth', -1)
-
-    FONT_COLOR_PALETTE = palettes.Greys256
-
-    soup = BeautifulSoup(comp_df.to_html(), 'html5lib')
-    for td in soup.find_all('td', text=re.compile('{}.*'.format(SIM_MARKER))):
-        sim = float(td.text.replace(SIM_MARKER, ''))
-        bg_color = palette[int(sim * (len(palette) - 1))]
-        color = FONT_COLOR_PALETTE[int((1 - sim) * (len(FONT_COLOR_PALETTE) - 1))]
-        td.attrs['style'] = 'background-color: {}; color: {}'.format(bg_color, color)
-        td.string = '{:0.3f}'.format(sim)
-
-    html = str(soup)
+    html = get_df_html_with_similarities_colored(comp_df, palette=palette)
 
     if hasattr(comp_df, 'meta'):
         similarity = comp_df.meta['similarity']
@@ -153,7 +141,7 @@ def create_comp_df(qx, qy, displayed_cols=None, col2doc_sim=None, def_sim=TfidfC
     for c in col2doc_sim:
         similarity = col2doc_sim[c](str(qx.loc[c]), str(qy.loc[c]))
         if similarity is not None:
-            sim_col.loc[c] = '{}{:0.3f}'.format(SIM_MARKER, similarity)
+            sim_col.loc[c] = similarity
 
     df = pd.concat([qx, qy, sim_col], axis=1, ignore_index=True)
     df.columns = COMP_TBL_FIELDS
@@ -172,6 +160,26 @@ def get_comp_divs(df, sim, displayed_cols=DEF_DISPLAYED_COLS, sim_cols=None, wid
         comp_divs.append(comp_div)
 
     return comp_divs
+
+
+def get_df_html_with_similarities_colored(df, similarity_col=COMP_TBL_FIELDS[-1], palette=bh.DEF_PALETTE):
+    df[similarity_col] = df[similarity_col].apply(
+        lambda x: '{}{:0.3f}'.format(SIM_MARKER, x) if isinstance(x, float) or isinstance(x, int) else '')
+
+    FONT_COLOR_PALETTE = palettes.Greys256
+    pd.set_option('display.max_colwidth', -1)
+
+    soup = BeautifulSoup(df.to_html(), 'html5lib')
+    for td in soup.find_all('td', text=re.compile('{}.*'.format(SIM_MARKER))):
+        sim = float(td.text.replace(SIM_MARKER, ''))
+        bg_color = palette[int(sim * (len(palette) - 1))]
+        color = FONT_COLOR_PALETTE[int((1 - sim) * (len(FONT_COLOR_PALETTE) - 1))]
+        td.attrs['style'] = 'background-color: {}; color: {}'.format(bg_color, color)
+        td.string = '{:0.3f}'.format(sim)
+
+    html = str(soup)
+
+    return html
 
 
 # --- Heatmap of similarities -----------------------------------------------------------

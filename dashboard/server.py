@@ -79,14 +79,14 @@ def qcompare():
     )
     return render_template('frame.html', content=html)
 
-
+@flask_app.route('/')
 @flask_app.route('/simeval')
 def simevalroute():
     script = autoload_server(model=None, url=SIM_EVAL_URL)
-    return render_template('frame.html', content=script)
+    html = render_template('simeval.html', script=script)
+    return render_template('frame.html', content=html)
 
 
-@flask_app.route('/')
 @flask_app.route('/qexplore')
 def index():
     html = render_template('qexplore.html')

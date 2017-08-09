@@ -253,4 +253,3 @@ def get_heatmap(
         hm.js_on_event(js_on_event[0], js_on_event[1])
 
     return hm
-

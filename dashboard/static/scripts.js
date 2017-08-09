@@ -33,21 +33,15 @@ function open_qcomparison(uuid_x, uuid_y, sim, in_new=true) {
     window.open("/qcompare?" + jQuery.param(params), in_new ? null : "_self");
 }
 
-function open_qcomparison_from_bar(cb_obj, src) {
+function open_qcomparison_from_bar(cb_obj, src, sim) {
     var i = Math.round(cb_obj['x']);
     var uuid_x = src.data['uuid_x'][i];
     var uuid_y = src.data['uuid_y'][i];
 
-    select_id = $('label:contains("Similarity metric")').attr('for');
-    sim = $('#' + select_id).val();
-
     open_qcomparison(uuid_x, uuid_y, sim);
 }
 
-function open_qcomparison_from_hm(uuid_x, uuid_y) {
-    select_id = $('label:contains("Similarity metric")').attr('for');
-    sim = $('#' + select_id).val();
-
+function open_qcomparison_from_hm(uuid_x, uuid_y, sim) {
     open_qcomparison(uuid_x, uuid_y, sim);
 }
 

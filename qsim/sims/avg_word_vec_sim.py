@@ -3,13 +3,14 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from helpers.common import *
 from qsim.sims.embeddings_based_sim import EmbeddingsBasedSim
+from qsim.qsim_common import W2vModelName
 
 
 class AvgWordVecSim(EmbeddingsBasedSim):
     DEF_COLS = ['suff_qtext', 'type']
 
-    def __init__(self, cols=DEF_COLS, debug=False, wv_dict_name='wv.dict', rem_stopwords=True):
-        super().__init__(cols, debug, wv_dict_name, rem_stopwords)
+    def __init__(self, cols=DEF_COLS, debug=False, wv_dict_model_name=W2vModelName.PretrainedGoogleNews, rem_stopwords=True):
+        super().__init__(cols, debug, wv_dict_model_name, rem_stopwords)
 
     def _get_similarity_matrix_from_texts(self, proc_texts):
         # N = # of items
