@@ -119,8 +119,10 @@ class SimEvalApp:
                 rows.append((row, similarity))
 
             rows.sort(key=lambda x: x[1], reverse=True)
+            for r in rows:
+                r[0]['similarity'] = r[1]
 
-            res_df = pd.DataFrame([r[0] for r in rows[:sim_input_nres]], columns=cols)
+            res_df = pd.DataFrame([r[0] for r in rows[:sim_input_nres]], columns=cols + ['similarity'])
             return res_df.to_html(justify='left')
 
         self.update_chart(self.sim_input_div, create_sim_input_div)

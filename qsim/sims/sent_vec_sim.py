@@ -17,7 +17,7 @@ class SentVecSim(EmbeddingsBasedSim):
                  debug=False,
                  wv_dict_model_name=W2vModelName.PretrainedGoogleNews,
                  wf_dict_name=qsim.DEF_WF_DICT_NAME,
-                 first_pc_model_name=W2vModelName.PretrainedGoogleNews,
+                 use_precomputed_first_pc=True,
                  alpha=0.001,
                  rem_stopwords=True):
         super().__init__(cols, debug, wv_dict_model_name, rem_stopwords)
@@ -28,7 +28,7 @@ class SentVecSim(EmbeddingsBasedSim):
             self._wf_dict = dict((w, f) for w, f in self._wf_dict.items() if w not in sws)
         self._total_words = sum(self._wf_dict.values())
         self._alpha = alpha
-        self._first_pc = None if first_pc_model_name is None else qsim.load_1st_pc(first_pc_model_name, rem_stopwords)
+        self._first_pc = qsim.load_1st_pc(wv_dict_model_name, rem_stopwords) if use_precomputed_first_pc else None
 
     def _get_question_vec(self, question_proc_text):
         if len(question_proc_text) == 0:
@@ -54,11 +54,11 @@ class SentVecSim(EmbeddingsBasedSim):
         if pd.isnull(x) or pd.isnull(y) or x == '' or y == '':
             return None
 
-        sent_vectors = self._get_sent_vectors([x, y])
+        sv_matrix = np.array(self._get_sent_vectors([x, y]))
         if self._first_pc is not None:
-            sent_vectors = sent_vectors - sent_vectors.dot(self._first_pc.T).dot(self._first_pc)
+            sv_matrix = sv_matrix - sv_matrix.dot(self._first_pc.T).dot(self._first_pc)
 
-        csm = cosine_similarity(sent_vectors, sent_vectors)
+        csm = cosine_similarity(sv_matrix, sv_matrix)
 
         return csm[0, 1]
 
@@ -125,10 +125,10 @@ class SentVecSim(EmbeddingsBasedSim):
 if __name__ == '__main__':
     df = load_clean_df().iloc[:100]
     # print(df)
-    sim = SentVecSim(debug=True)
+    sim = SentVecSim(debug=True, wv_dict_model_name=W2vModelName.QbankTrained, rem_stopwords=True)
 
-    value = sim.get_text_sim(df['all_text'][0], df['all_text'][20])
-    print(value)
+    s = sim.get_text_sim('hydropower', 'power')
+    print(s)
 
     # sm = sim._get_similarity_matrix(df)
     # proc_texts = [

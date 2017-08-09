@@ -31,8 +31,8 @@ def train_w2v():
 
     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
-    num_features = 300    # Word vector dimensionality
-    min_word_count = 30   # Minimum word count
+    num_features = 400    # Word vector dimensionality
+    min_word_count = 10   # Minimum word count
     num_workers = 4       # Number of threads to run in parallel
     context = 7           # Context window size
     downsampling = 1e-3   # Downsample setting for frequent words
@@ -96,14 +96,14 @@ def get_and_pickle_1st_pc(sent_vec_sim, model_name, rem_stopwords):
 
 
 if __name__ == '__main__':
-    # train_w2v()
+    train_w2v()
     #
     # create_and_pickle_word_frequencies()
 
     # get_and_pickle_word_vectors(W2vModelName.PretrainedGoogleNews)
-    # get_and_pickle_word_vectors(W2vModelName.QbankTrained)
+    get_and_pickle_word_vectors(W2vModelName.QbankTrained)
 
     for model_name in W2vModelName:
         for rem_stopwords in [True, False]:
-            sim = SentVecSim(wv_dict_model_name=model_name, rem_stopwords=rem_stopwords, first_pc_model_name=None)
+            sim = SentVecSim(wv_dict_model_name=model_name, rem_stopwords=rem_stopwords, use_precomputed_first_pc=False)
             get_and_pickle_1st_pc(sim, model_name, rem_stopwords)
