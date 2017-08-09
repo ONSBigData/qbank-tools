@@ -3,7 +3,6 @@
 cur_dir=`dirname $0`
 source "$cur_dir/deploy-common.sh"
 
-
 cp -r $cur_dir/../../data/checkpoints/*.pkl "$cur_dir/../dashboard/bundled_data/"
 cp -r "$cur_dir/../../data/clean-light.csv" "$cur_dir/../dashboard/bundled_data/"
 
