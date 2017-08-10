@@ -3,7 +3,7 @@ data
 node_modules
 bower_components
 dashboard/dashboard/*.csv
-log
+log/
 main.html
 *.pyc
 deploydir
