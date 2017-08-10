@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 import collections
-import helpers.general_helper as gh
+import support.general_helper as gh
 import re
 import pickle
 

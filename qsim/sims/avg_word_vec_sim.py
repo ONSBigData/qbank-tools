@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from helpers.common import *
+from support.common import *
 from qsim.sims.embeddings_based_sim import EmbeddingsBasedSim
 from qsim.qsim_common import W2vModelName
 

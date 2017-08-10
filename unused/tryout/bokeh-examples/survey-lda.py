@@ -9,7 +9,7 @@ sys.path.append('/home/ons21553/wspace/dstools')
 sys.path.append('/home/ons21553/wspace/qbank/code')
 from dstools import *
 
-from helpers.common import *
+from support.common import *
 
 import gensim as gs
 import numpy as np

@@ -1,6 +1,6 @@
 import nltk
 from nltk.downloader import Downloader
-from helpers.common import *
+from support.common import *
 
 nltk.data.path.append(BUNDLED_DATA_DIR + '/nltk_data/')
 

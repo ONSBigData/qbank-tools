@@ -1,7 +1,7 @@
 import bokeh.palettes as palettes
 from bokeh.models import Div, LinearColorMapper
 import numpy as np
-import helpers.bokeh_helper as bh
+import support.bokeh_helper as bh
 from bs4 import BeautifulSoup
 import random
 import qsim.qsim_common as qsim
@@ -291,7 +291,7 @@ def get_sim_hist(df, sim, sample_size=500, cs_only=False, bins=15, **kwargs):
 
 
 if __name__ == '__main__':
-    from helpers.common import *
+    from support.common import *
 
     df = load_clean_df()
     COLS = ['suff_qtext', 'type']

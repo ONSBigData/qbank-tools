@@ -3,7 +3,7 @@ In this module we can train word vector models, open pre-trained models to extra
 all relevant info in pickled objects
 """
 
-from helpers.common import *
+from support.common import *
 
 import logging
 import gensim as gs

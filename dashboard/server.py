@@ -7,7 +7,7 @@ from dashboard.settings import *
 
 from bokeh.embed import autoload_server
 
-import helpers.bokeh_helper as bh
+import support.bokeh_helper as bh
 import qsim.sim_analyze as simeval
 import qsim.all_sims as all_sims
 

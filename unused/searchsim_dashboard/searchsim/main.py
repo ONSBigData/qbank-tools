@@ -20,9 +20,9 @@ from os.path import dirname, join
 
 from qsim.simple_cos_sim import SimpleCosSim
 
-from helpers.common import *
+from support.common import *
 
-import helpers.log_helper as lg
+import support.log_helper as lg
 
 # --- constants -----------------------------------------------------------
 

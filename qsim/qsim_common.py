@@ -1,12 +1,12 @@
-from utilities.dl_nltk import dl_nltk
+from support.dl_nltk import dl_nltk
 dl_nltk()
 
 
 from nltk.corpus import stopwords
-from helpers.common import *
+from support.common import *
 import pandas as pd
 import re
-import utilities.json2df.dataframing as dataframing
+import json2df.dataframing as dataframing
 import nltk
 from gensim.models import Phrases
 import numpy as np

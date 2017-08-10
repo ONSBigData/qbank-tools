@@ -1,4 +1,4 @@
-from helpers.common import *
+from support.common import *
 from qsim.sims.exact_sim import ExactSim
 from pyjarowinkler import distance as pyjarodist
 import pathos.multiprocessing as mp

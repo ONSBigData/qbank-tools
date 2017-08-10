@@ -1,5 +1,5 @@
-import helpers.general_helper as general_helper
-import helpers.path_helper as path_helper
+import support.general_helper as general_helper
+import support.path_helper as path_helper
 import logging as lg
 import sys
 

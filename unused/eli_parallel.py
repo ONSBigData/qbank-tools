@@ -1,7 +1,7 @@
 import sys
 sys.path.append('/home/ons21553/wspace/dstools')
 
-from helpers.common import *
+from support.common import *
 import pandas as pd
 import multiprocessing as mp
 from pyjarowinkler import distance as ds

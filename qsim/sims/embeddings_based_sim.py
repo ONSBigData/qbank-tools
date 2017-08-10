@@ -1,6 +1,6 @@
 import numpy as np
 import qsim.qsim_common as qsim
-from helpers.common import *
+from support.common import *
 from qsim.sims.base_sim import BaseSim
 
 

@@ -1,7 +1,8 @@
 import copy
 import traceback
-from utilities.json2df.common import *
-from helpers.common import *
+
+from support.common import *
+from json2df.common import *
 
 
 # ---------------------------------------------------------------------

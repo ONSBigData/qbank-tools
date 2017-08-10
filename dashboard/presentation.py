@@ -2,11 +2,11 @@ import bokeh.palettes as palettes
 from bokeh.models import ColumnDataSource, Div, CustomJS
 from bokeh.models.widgets import DataTable, TableColumn, HTMLTemplateFormatter
 import qsim.sim_analyze as simeval
-import helpers.log_helper as lg
-import helpers.bokeh_helper as bh
+import support.log_helper as lg
+import support.bokeh_helper as bh
 from dashboard.model import Model
 from dashboard.settings import *
-from helpers.common import *
+from support.common import *
 
 NARROW_COL_W = 100
 WIDE_COL_W = 600

@@ -1,4 +1,4 @@
-from helpers.common import *
+from support.common import *
 
 
 MAX = 100

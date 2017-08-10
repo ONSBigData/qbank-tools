@@ -2,7 +2,7 @@ import numpy as np
 import qsim.qsim_common as qsim
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.decomposition import PCA
-from helpers.common import *
+from support.common import *
 from qsim.sims.embeddings_based_sim import EmbeddingsBasedSim
 from qsim.qsim_common import W2vModelName
 

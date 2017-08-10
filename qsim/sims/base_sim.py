@@ -1,5 +1,5 @@
 import logging
-import helpers.log_helper as lg
+import support.log_helper as lg
 import qsim.qsim_common as qsim
 import pandas as pd
 

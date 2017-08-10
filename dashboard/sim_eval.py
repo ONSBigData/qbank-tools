@@ -7,9 +7,9 @@ from bokeh.application.handlers import FunctionHandler
 from bokeh.application import Application
 from tornado.ioloop import IOLoop
 
-from helpers.common import *
+from support.common import *
 from dashboard.settings import *
-import helpers.bokeh_helper as bh
+import support.bokeh_helper as bh
 
 import qsim.sim_analyze as simeval
 import qsim.qsim_common as qsim
