@@ -14,6 +14,7 @@ import support.bokeh_helper as bh
 import qsim.sim_analyze as simeval
 import qsim.qsim_common as qsim
 from qsim.sims.tfidf_cos_sim import TfidfCosSim
+from qsim.sims.jaro_sim import JaroSim
 import qsim.all_sims as all_sims
 import datetime
 import traceback
@@ -103,6 +104,12 @@ class SimEvalApp:
         spectrum_bucket_size = self.spectrum_bucket_size_ctrl.value
         spectrum_cs_only = 0 in self.spectrum_cs_only_ctrl.active
         spectrum_sample = self.spectrum_spectrum_sample_size_ctrl.value
+
+        # restrict sample size in Jaro case, as its computationally intensive
+        max_sample_size = 200 if sim_class == JaroSim else len(self.base_df)
+        bc_sample_size = min(max_sample_size, bc_sample_size)
+        hist_sample_size = min(max_sample_size, hist_sample_size)
+        spectrum_sample = min(max_sample_size, spectrum_sample)
 
         self.top_div.text = '<b style="color: red;">UPDATING STILL IN PROGRESS...</b>'
         for div in self.hm_divs + self.bc_divs + self.hist_divs + [self.comp_div, self.sim_input_div, self.sim_input_desc_div]:

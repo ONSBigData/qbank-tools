@@ -20,6 +20,12 @@ Then:
 Finally:
 * in support->common.py, change the DATA constants so that they point to locations, where you have/want to have data stored 
 
+# unit tests
+
+Just run: `nosetests --nocapture`
+
+Currently, only (most of) `json_to_df` is tested
+
 # What's in this repo
 
 ![architecture image](./qbank-tools-arch.png "Main folders in this repo and links between them")
@@ -115,5 +121,3 @@ Then:
 
 The deploying actually deploys 2 Heroku apps - one running the Flask server and one running the Bokeh server for
  Sim-eval app (embedded in the first one). Thus 2 browser tabs should popup during the deployment (one for each).
- 
- 
