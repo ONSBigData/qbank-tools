@@ -1,1 +1,1 @@
-qa_team
+Some useful code and tools for Question Bank project: script to convert JSON files to single clean CSV, clean implementation several similarity metrics and an interactive dashboard to explore the question bank
