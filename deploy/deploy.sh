@@ -10,7 +10,7 @@ cp -r $CLEAN_LIGHT_FPATH "$cur_dir/../dashboard/bundled_data/"
 cp -r "$cur_dir/../dashboard" "$DEPLOY_ROOT/"
 cp -r "$cur_dir/../support" "$DEPLOY_ROOT/"
 cp -r "$cur_dir/../qsim" "$DEPLOY_ROOT/"
-cp -r "$cur_dir/../json2df" "$DEPLOY_ROOT/"
+cp -r "$cur_dir/../json_to_df" "$DEPLOY_ROOT/"
 cp $cur_dir/../deploy/* "$DEPLOY_ROOT/"
 cp $cur_dir/../requirements.txt "$DEPLOY_ROOT/"
 

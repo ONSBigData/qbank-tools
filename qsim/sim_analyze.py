@@ -136,9 +136,11 @@ def create_comp_df(qx, qy, displayed_cols=None, col2doc_sim=None, def_sim=TfidfC
     if col2doc_sim is None:
         col2doc_sim = dict((c, def_sim.get_text_sim) for c in displayed_cols)
 
-    sim_col = pd.Series([''] * len(qx), index=qx.index)
+    sim_col = pd.Series([''] * len(qx), index=displayed_cols)
 
     for c in col2doc_sim:
+        if c not in displayed_cols:
+            continue
         similarity = col2doc_sim[c](str(qx.loc[c]), str(qy.loc[c]))
         if similarity is not None:
             sim_col.loc[c] = similarity
@@ -154,8 +156,10 @@ def get_comp_divs(df, sim, displayed_cols=DEF_DISPLAYED_COLS, sim_cols=None, wid
 
     comp_divs = []
 
+    d_cols = displayed_cols + [c for c in sim_cols if c not in displayed_cols]
+
     for q_pair in q_pairs:
-        comp_df = get_sample_comp_df(sim, q_pair, displayed_cols=displayed_cols, sim_cols=sim_cols)
+        comp_df = get_sample_comp_df(sim, q_pair, displayed_cols=d_cols, sim_cols=sim_cols)
         comp_div = get_comp_div(comp_df, width=width)
         comp_divs.append(comp_div)
 

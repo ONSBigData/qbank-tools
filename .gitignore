@@ -7,6 +7,6 @@ log/
 main.html
 *.pyc
 deploydir
-bundled_data/
+dashboard/bundled_data/
 histogram.html
 .ipynb_checkpoints
