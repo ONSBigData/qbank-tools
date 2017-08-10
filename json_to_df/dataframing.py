@@ -1,7 +1,7 @@
 import io
 
 from support.common import *
-from json2df.common import *
+from json_to_df.common import *
 
 MINOR_SEP = ' | '
 MAJOR_SEP = ' ||| '
@@ -208,7 +208,7 @@ def create_df(tc_nodes, note_nodes, problems=[]):
 
 
 if __name__ == '__main__':
-    import json2df.traversing as traversing
+    import json_to_df.traversing as traversing
     import pandas as pd
 
     pd.set_option('max_colwidth', 1800)

@@ -1,6 +1,6 @@
 import nose.tools as nstools
 
-from json2df import dataframing
+from json_to_df import dataframing
 
 
 class TestExtractUsefulAttrs:

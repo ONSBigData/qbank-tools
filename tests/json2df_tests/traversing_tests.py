@@ -3,7 +3,7 @@ import json
 import nose.tools as nstools
 
 import tests.helpers.patch_helper as patch_helper
-from json2df import traversing
+from json_to_df import traversing
 
 # ---------------------------------------------------------------------
 # --- general traversing

@@ -1,9 +1,9 @@
 import copy
 
-import utilities.json2df.traversing as traversing
+import json_to_df.traversing as traversing
 
 from support.common import *
-from json2df.common import *
+from json_to_df.common import *
 
 VALID_PATH_WORDS = [
     'Affiliate Company',

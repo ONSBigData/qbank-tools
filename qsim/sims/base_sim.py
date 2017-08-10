@@ -28,6 +28,12 @@ class BaseSim:
         except:
             return None
 
+    def get_question_sim(self, qx, qy):
+        x = self.preprocess_question(qx)
+        y = self.preprocess_question(qy)
+
+        return self.get_text_sim(x, y)
+
     def preprocess_question(self, question_series):
         raise NotImplementedError
 

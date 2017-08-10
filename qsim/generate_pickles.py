@@ -54,7 +54,7 @@ def train_w2v():
 
 def _load_w2v_keyed_vectors(model_name):
     if model_name == W2vModelName.PretrainedGoogleNews:
-        return gs.models.KeyedVectors.load_word2vec_format(DATA_DIR + '/pretrained-w2v/GoogleNews-vectors-negative300.bin', binary=True)
+        return gs.models.KeyedVectors.load_word2vec_format(GOOGLE_NEWS_WORD_VECS, binary=True)
 
     if model_name == W2vModelName.QbankTrained:
         return gs.models.Word2Vec.load(QBANK_TRAINED_MODEL_FPATH).wv
@@ -98,9 +98,9 @@ def get_and_pickle_1st_pc(sent_vec_sim, model_name, rem_stopwords):
 if __name__ == '__main__':
     train_w2v()
     #
-    # create_and_pickle_word_frequencies()
+    create_and_pickle_word_frequencies()
 
-    # get_and_pickle_word_vectors(W2vModelName.PretrainedGoogleNews)
+    get_and_pickle_word_vectors(W2vModelName.PretrainedGoogleNews)
     get_and_pickle_word_vectors(W2vModelName.QbankTrained)
 
     for model_name in W2vModelName:

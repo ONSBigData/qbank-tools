@@ -3,17 +3,19 @@
 cur_dir=`dirname $0`
 source "$cur_dir/deploy-common.sh"
 
-cp -r $cur_dir/../../data/checkpoints/*.pkl "$cur_dir/../dashboard/bundled_data/"
-cp -r "$cur_dir/../../data/clean-light.csv" "$cur_dir/../dashboard/bundled_data/"
+# copy in some data to bundle with the app -----------------------------------
+cp -r $CHECKPOINTS_DIR/*.pkl "$cur_dir/../dashboard/bundled_data/"
+cp -r $CLEAN_LIGHT_FPATH "$cur_dir/../dashboard/bundled_data/"
 
 cp -r "$cur_dir/../dashboard" "$DEPLOY_ROOT/"
-cp -r "$cur_dir/../helpers" "$DEPLOY_ROOT/"
+cp -r "$cur_dir/../support" "$DEPLOY_ROOT/"
 cp -r "$cur_dir/../qsim" "$DEPLOY_ROOT/"
-cp -r "$cur_dir/../utilities" "$DEPLOY_ROOT/"
+cp -r "$cur_dir/../json2df" "$DEPLOY_ROOT/"
 cp $cur_dir/../deploy/* "$DEPLOY_ROOT/"
 cp $cur_dir/../requirements.txt "$DEPLOY_ROOT/"
 
 
+# based on what's deployed, use relevant Procfile -----------------------------------
 remote=""
 if [[ $1 == 'main' || -z "$1" ]]
 then
@@ -25,7 +27,7 @@ then
     remote=$QBANK_SIM_EVAL
 fi
 
-
+# deploy to Heroku -----------------------------------
 cd $DEPLOY_ROOT
 
 git add -A

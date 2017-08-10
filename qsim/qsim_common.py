@@ -6,7 +6,7 @@ from nltk.corpus import stopwords
 from support.common import *
 import pandas as pd
 import re
-import json2df.dataframing as dataframing
+import json_to_df.dataframing as dataframing
 import nltk
 from gensim.models import Phrases
 import numpy as np

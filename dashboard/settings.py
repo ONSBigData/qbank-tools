@@ -23,6 +23,6 @@ SIM_EVAL_PORT = 5006
 SIM_EVAL_URL = 'http://localhost:5006/'
 
 try:
-    from extra_settings import *
+    from extra_settings import *  # extra settings file is present only in deployed version
 except:
     pass

@@ -6,22 +6,44 @@ import re
 import pickle
 
 ROOT_DIR = os.path.realpath(os.path.dirname(__file__)) + '/..'
-DATA_DIR = ROOT_DIR + '/../data'
-
 BUNDLED_DATA_DIR = ROOT_DIR + '/dashboard/bundled_data'
 
+# --- DATA -----------------------------------------------------------
+
+# point the following constants to folders where you want to have data
+
+# root folder for your data
+DATA_DIR = ROOT_DIR + '/../data'
+
+# folder where trained models or pickled files are to be stored
 CHECKPT_DIR = DATA_DIR + '/checkpoints'
+
+# folder where scraped JSONs are located
 JSON_DIR = DATA_DIR + '/jsons'
 
+# folder where JSON validation problems should be reported
+PROBLEM_REPORTS_DIR = DATA_DIR + '/problem-reports'
+
+# pretrained word vectors from Google news articles.
+# can be downloaded from e.g. https://github.com/mmihaltz/word2vec-GoogleNews-vectors
+GOOGLE_NEWS_WORD_VECS = DATA_DIR + '/pretrained-w2v/GoogleNews-vectors-negative300.bin'
+
+# path to a CSV containing the table from confluence of scrape statuses for scraping surveys
 SCRAPE_STATUS_CSV_FPATH = DATA_DIR + '/scraped-status.csv'
 
+# path where full CSV should be output by json2df
 CLEAN_FULL_FPATH = DATA_DIR + '/clean-full.csv'
+
+# path where light (only main columns) CSV should be output by json2df
 CLEAN_LIGHT_FPATH = DATA_DIR + '/clean-light.csv'
-PROBLEM_REPORTS_DIR = DATA_DIR + '/problem-reports'
+
+# NOTE! update also the paths in deploy-common.sh
 
 
 # --- pickling -----------------------------------------------------------
 
+# quick helpers to persist and load back objects. Used to store e.g. word vector dictionaries or first principal component
+# of sentence vectors, so that they don't have to be re-computed every time
 
 def _get_standard_pickle_fpath(name):
     return '{}/{}.pkl'.format(CHECKPT_DIR, name)
@@ -49,7 +71,7 @@ def load_pickled_obj(name):
         return pickle.load(f)
 
 
-# ---  -----------------------------------------------------------
+# --- others -----------------------------------------------------------
 
 
 def get_survey_name_map():

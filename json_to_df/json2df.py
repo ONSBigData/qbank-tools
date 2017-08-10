@@ -1,10 +1,10 @@
 import io
 
-import utilities.json2df.dataframing as dataframing
-import utilities.json2df.traversing as traversing
-from utilities.json2df.common import *
+import json_to_df.dataframing as dataframing
+import json_to_df.traversing as traversing
+from json_to_df.common import *
 
-import json2df.validation as validation
+import json_to_df.validation as validation
 from support.common import *
 
 
@@ -117,5 +117,5 @@ if __name__ == '__main__':
     # df = json2df(fpath, save_csv=True)
     # print(list(df.columns).index('notes'))
 
-    create_full_df()
-    # print(get_problems_report())
+    # create_full_df()
+    print(get_problems_report())

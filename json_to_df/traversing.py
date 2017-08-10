@@ -2,7 +2,7 @@ import copy
 import traceback
 
 from support.common import *
-from json2df.common import *
+from json_to_df.common import *
 
 
 # ---------------------------------------------------------------------
