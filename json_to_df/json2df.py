@@ -117,5 +117,5 @@ if __name__ == '__main__':
     # df = json2df(fpath, save_csv=True)
     # print(list(df.columns).index('notes'))
 
-    # create_full_df()
-    print(get_problems_report())
+    create_full_df()
+    # print(get_problems_report())
