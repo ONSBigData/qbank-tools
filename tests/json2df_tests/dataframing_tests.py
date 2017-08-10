@@ -28,7 +28,7 @@ class TestExtractUsefulAttrs:
     }
 
     def test_extracts_correctly(self):
-        actual = dataframing.extract_useful_attrs(self.TC_NODE)
+        actual = dataframing.extract_useful_attrs(self.TC_NODE, {})
         expected = {
             'sci_download_date': '24/03/2017',
             'sci_file_name': 'ex_sel002-ft0001.pdf',
