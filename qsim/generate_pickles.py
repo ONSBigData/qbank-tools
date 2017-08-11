@@ -1,6 +1,6 @@
 """
-In this module we can train word vector models, open pre-trained models to extract relevant word vectors, and save
-all relevant info in pickled objects
+This module is for training word vector model on Question bank, and creating word vectors (also from other pre-trained
+models)
 """
 
 from support.common import *
@@ -97,7 +97,7 @@ def get_and_pickle_1st_pc(sent_vec_sim, model_name, rem_stopwords):
 
 if __name__ == '__main__':
     train_w2v()
-    #
+
     create_and_pickle_word_frequencies()
 
     get_and_pickle_word_vectors(W2vModelName.PretrainedGoogleNews)

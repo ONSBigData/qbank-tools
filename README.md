@@ -5,7 +5,7 @@ This repo contains some useful code and tools for Question Bank project, mainly:
 
 For further details, see below
 
-# Setting up this repp
+# setting up this repo
 
 You need to have:
 * Python3
@@ -26,7 +26,7 @@ Just run: `nosetests --nocapture`
 
 Currently, only (most of) `json_to_df` is tested
 
-# What's in this repo
+# what's in this repo
 
 ![architecture image](./qbank-tools-arch.png "Main folders in this repo and links between them")
 
@@ -109,6 +109,8 @@ by front end javascript that asynchronously calls Flask routes. There, Bokeh is 
  to the front-end - which updates inner-html of a given element. This approach requires little more work 
  (for example, one has to create widgets in actual HTML, or use bit more javascript), 
  but it eventually offers more flexibility
+ 
+![architecture image](./dashboard-arch.png "Main elements of the Dashboard and links between them")
 
 ### deploying dashboard
 

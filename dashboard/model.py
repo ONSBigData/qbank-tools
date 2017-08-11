@@ -6,6 +6,7 @@ from support.cache import Cache
 from qsim.sims.tfidf_cos_sim import TfidfCosSim
 from qsim.sims.exact_sim import ExactSim
 
+
 class Model:
     sim = TfidfCosSim()
     base_df = None

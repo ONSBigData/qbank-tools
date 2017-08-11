@@ -31,6 +31,7 @@ DEF_TOOL_LOC = 'right'
 
 
 def get_code(obj):
+    """Creates html/JS code from Bokeh chart object"""
     js, div = components(obj)
     return js + ' ' + div
 
@@ -61,7 +62,6 @@ def get_bar_chart(
         width=DEF_WIDTH,
         title=None,
         js_on_event=None,
-        jscode_on_event=None,
         x_rot=1):
 
     tools = list(DEF_TOOLS)

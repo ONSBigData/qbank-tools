@@ -12,6 +12,7 @@ FILE_NAME = '{}/{}_{}.log'.format(
     general_helper.get_date(),
     general_helper.get_time())
 
+
 def get_logger(name=DEFAULT_LOGGER):
     logger = lg.getLogger(name)
 

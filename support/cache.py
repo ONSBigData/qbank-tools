@@ -1,6 +1,7 @@
 import hashlib
 import queue
 
+
 class Cache:
     MAX_ITEMS = 1000
 

@@ -1,3 +1,6 @@
+"""
+Used to download relevant NLTK packages
+"""
 import nltk
 from nltk.downloader import Downloader
 from support.common import *

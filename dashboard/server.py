@@ -29,7 +29,7 @@ def add_header(r):  #this is just to prevent caching of JS code
 
 
 @flask_app.route('/component')
-def nresults_div():
+def get_component():
     id = request.args.get('id')
     payload = request.args.to_dict()
 
